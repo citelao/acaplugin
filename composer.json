@@ -7,26 +7,18 @@
             "email": "ben@stolovitz.com"
         }
     ],
-    "repositories": [
-        {
-          "type": "composer",
-          "url": "https://wpackagist.org"
-      }
-    ],
     "require": {
-        "wpackagist-plugin/cmb2": "2.2.*"
+        "webdevstudios/cmb2": "^2.2",
+        "webdevstudios/cmb2-attached-posts": "^1.2"
     },
     "autoload": {
         "files": [
-          "vendor/cmb2/init.php"
+          "vendor/webdevstudios/cmb2/init.php",
+          "vendor/webdevstudios/cmb2-attached-posts/init.php"
         ],
         "psr-4": {
             "Acaplugin\\": "src/"
         }
-    },
-    "extra": {
-        "installer-paths": {
-            "vendor/{$name}/": ["type:wordpress-plugin", "type:wordpress-theme"]
-        }
     }
+    
 }

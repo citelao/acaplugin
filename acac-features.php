@@ -9,10 +9,11 @@
  License: Proprietary
  */
 namespace Acaplugin;
-require_once('src/types.php');
+// require_once('src/types.php');
+require __DIR__ . '/vendor/autoload.php';
 
 // Init
 add_action('init', 'Acaplugin\init');
 function init() {
-	Types\init();
+	Types::init();
 }
