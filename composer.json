@@ -1,0 +1,16 @@
+{
+    "name": "citelao/acac-features",
+    "description": "ACAC features plugin :)",
+    "authors": [
+        {
+            "name": "Ben",
+            "email": "ben@stolovitz.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+		"psr-4": {
+			"Acaplugin\\": "src/"
+		}
+	}
+}
