@@ -9,7 +9,6 @@
  License: Proprietary
  */
 namespace Acaplugin;
-// require_once('src/types.php');
 require __DIR__ . '/vendor/autoload.php';
 
 /**
@@ -18,8 +17,3 @@ require __DIR__ . '/vendor/autoload.php';
 new Types\Auditionees();
 new Types\Groups();
 new Types\Songs();
-
-// add_action('cmb2_admin_init', 'Acaplugin\cmb2_admin_init');
-// function cmb2_admin_init() {
-// 	Types::metaboxes();
-// }

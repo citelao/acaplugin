@@ -1,6 +1,7 @@
 {
     "name": "citelao/acac-features",
     "description": "ACAC features plugin :)",
+    "type": "wordpress-plugin",
     "authors": [
         {
             "name": "Ben",
@@ -8,6 +9,8 @@
         }
     ],
     "require": {
+        "php": ">=5.3",
+        "composer/installers": "v1.0.*",
         "webdevstudios/cmb2": "^2.2",
         "webdevstudios/cmb2-attached-posts": "^1.2"
     },
@@ -19,6 +22,10 @@
         "psr-4": {
             "Acaplugin\\": "src/"
         }
+    },
+    "extra" : {
+        "installer-paths" : {
+            "vendor/{$vendor}/{$name}/": ["type:wordpress-plugin"]
+        }
     }
-    
 }
