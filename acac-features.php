@@ -30,38 +30,3 @@ new Types\Songs();
 // add columns per type
 // add export functionality
 // add audition admin features for webmaster
-
-// Auditionee
-// - name (first, last)
-// - email
-// - date added/year
-// - phone #
-// - schedule conflicts, each day
-// - callback groups
-// - preferences
-// - final group
-// - key
-//
-// Cols:
-// - name
-// - phone?
-//
-// Filters:
-// - has callback/# callbacks
-// - has conflicts?
-// - preffed a certain group
-
-// Group
-// - name
-// - description
-// - tags?
-// - callback auditionees
-// - members
-// - songs
-
-// Song
-// - title
-// - arranger(s)
-// - original singer(s)
-// - group
-// - date sung

@@ -5,6 +5,26 @@ class Auditionees {
 
 	private $type;
 
+	// Auditionee
+	// - name (first, last)
+	// - email
+	// - date added/year
+	// - phone #
+	// - schedule conflicts, each day
+	// - callback groups
+	// - preferences
+	// - final group
+	// - key
+	//
+	// Cols:
+	// - name
+	// - phone?
+	//
+	// Filters:
+	// - has callback/# callbacks
+	// - has conflicts?
+	// - preffed a certain group
+
 	function __construct() {
 		$this->type = new Type( 'auditionee', 'auditionees', array(
 			'personal_info' => array(
@@ -56,8 +76,13 @@ class Auditionees {
 			)
 		),
 		array( 
-			'description' => 'Auditionees are all the people who try out for groups',
-			'icon' => 'dashicons-smiley'
+			'description' => 'Anyone who tries out for a group',
+			'icon' => 'dashicons-smiley',
+			'title_column_title' => 'Name',
+			'title_column_cb' => function( $id ) { 
+				return get_post_meta($id, '_acac_auditionee_last_name', true)
+				. ', ' . get_post_meta($id, '_acac_auditionee_first_name', true);
+			}
 		) );
 	}
 }
