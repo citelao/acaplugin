@@ -2,48 +2,62 @@
 namespace Acaplugin\Types;
 
 class Auditionees {
+
+	private $type;
+
 	function __construct() {
-		add_action('init', array($this, 'init'));
-		add_action('cmb2_admin_init', array($this, 'metabox'));
-	}
-
-	public function init() {
-		$labels = TypeHelpers::generate_labels('auditionee', 'auditionees');
-		$args = array(
-			'labels' => $labels,
+		$this->type = new Type( 'auditionee', 'auditionees', array(
+			'personal_info' => array(
+				'title' => 'Personal Info',
+				'fields' => array(
+					'first_name' => array(
+						'name' => 'First Name',
+						'type' => 'text'
+					),
+					'last_name' => array(
+						'name' => 'Last Name',
+						'type' => 'text'
+					),
+					'email' => array(
+						'name' => 'Email',
+						'type' => 'text_email'
+					),
+					'telephone' => array(
+						'name' => 'Telephone Number',
+					    'type' => 'text',
+					    'attributes' => array(
+					    	'type' => 'tel'
+						)
+				    )
+			    )
+			),
+			'conflicts' => array(
+				'title' => 'Conflicts'
+			),
+			'group' => array(
+				'title' => 'Group Selection',
+				'fields' => array(
+					'callbacks' => array(
+						'name' => 'Callback Groups',
+						'type' => 'title',
+						'description' => 'TODO: a list of all groups calling this person back'
+					),
+					'preferences' => array(
+						'name' => 'Group Preferences',
+						'type' => 'title',
+						'description' => 'TODO: an ordered list of group preferences'
+					),
+					'acceptance' => array(
+						'name' => 'Accepted Group',
+						'type' => 'title',
+						'description' => 'TODO: a dropdown to select their final group :)'
+					)
+				)
+			)
+		),
+		array( 
 			'description' => 'Auditionees are all the people who try out for groups',
-			'public' => false,
-			'exclude_from_search' => true,
-			'publicly_queryable' => false,
-			'show_ui' => true,
-			'show_in_menu' => true,
-			'menu_icon' => 'dashicons-smiley',
-			'query_var' => false,
-			// 'capability_type' => 'auditionee'
-			'supports' => array('revisions')
-		);
-		register_post_type('auditionee', $args);
-	}
-
-	public function metabox() {
-		$cmb = new_cmb2_box(array(
-			'id' => 'acac_auditionee_metabox',
-			'title' => 'Personal Info',
-			'object_types' => array('auditionee'),
-			// 'priority' => 'high',
-			// 'show_names' => true
-		));
-
-		$cmb->add_field(array(
-			'name' => 'First Name',
-		    'id' => '_acac_auditionee_first_name',
-		    'type' => 'text'
-		));
-
-		$cmb->add_field(array(
-			'name' => 'Last Name',
-		    'id' => '_acac_auditionee_last_name',
-		    'type' => 'text'
-		));
+			'icon' => 'dashicons-smiley'
+		) );
 	}
 }
