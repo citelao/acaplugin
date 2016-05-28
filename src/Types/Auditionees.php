@@ -16,10 +16,6 @@ class Auditionees {
 	// - final group
 	// - key
 	//
-	// Cols:
-	// - name
-	// - phone?
-	//
 	// Filters:
 	// - has callback/# callbacks
 	// - has conflicts?
@@ -75,13 +71,64 @@ class Auditionees {
 				)
 			)
 		),
-		array( 
+		array(
+			'columns' => array(
+				'email' => array(
+					'title' => 'Email',
+					'cb' => function( $id ) {
+						return get_post_meta( $id, 
+							$this->type->get_meta_key( 'email' ), 
+							true );
+					}
+				),
+				'telephone' => array(
+					'title' => 'Telephone',
+					'cb' => function( $id ) {
+						return get_post_meta( $id, 
+							$this->type->get_meta_key( 'telephone' ), 
+							true );
+					}
+				),
+				'callbacks' => array(
+					'title' => '# Callbacks',
+					'cb' => function( $id ) {
+						return 0; // TODO
+					}
+				),
+				'pref_card' => array(
+					'title' => 'Pref. Card Status',
+					'cb' => function( $id ) {
+						// TODO
+						$called_back = false;
+						$complete = false;
+
+						if ( $called_back ) {
+							return ( $complete ) ? 'Complete' : 'Incomplete';
+						} else {
+							return '--';
+						}
+					}
+				),
+				'group' => array(
+					'title' => 'Accepted Group',
+					'cb' => function( $id ) {
+						return '--'; // TODO
+					}
+				),
+			),
 			'description' => 'Anyone who tries out for a group',
 			'icon' => 'dashicons-smiley',
 			'title_column_title' => 'Name',
 			'title_column_cb' => function( $id ) { 
-				return get_post_meta($id, '_acac_auditionee_last_name', true)
-				. ', ' . get_post_meta($id, '_acac_auditionee_first_name', true);
+				$last = get_post_meta( $id, $this->type->get_meta_key( 'last_name' ), true );
+				$first = get_post_meta( $id, $this->type->get_meta_key( 'first_name' ), true );
+				if ( !$last ) {
+					$last = '--';
+				}
+				if ( !$first ) {
+					$first = '--';
+				}
+				return "{$last}, {$first}";
 			}
 		) );
 	}

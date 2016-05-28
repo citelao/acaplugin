@@ -10,17 +10,43 @@ class Type {
 	private /* Array */ $fields;
 	private /* Array */ $args;
 
-	public function __construct( /* string */ $name,  /* string */ $plural,
+	public function __construct( /* string */ $name,  
+		/* string */ $plural,
 		$fields, 
 		$args = array() ) {
 
 		$defaults = array(
+			/* 
+				Array of `id` => array(
+					`title`: column title,
+
+					`key`: meta key to display,
+						OR
+					`cb`: column content callback,
+					`sort_cb`: column sort callback
+				) for custom columns 
+			*/
 			'columns' => array(),
+
+			/* Standard Wordpress custom type description */
 			'description' => 'A custom post type',
+
+			/* Standard Wordpress custom type icon */
 			'icon' => 'dashicons-dismiss',
+
+			/* Standard Wordpress custom type labels */
 			'labels' => Type::generate_labels( $name, $plural ),
+
+			/* Standard Wordpress "supports" for custom type. */
 			'supports' => array( 'revisions' ),
+
+			/* A replacement for the "Title" column label. */
 			'title_column_title' => 'Title',
+
+			/* 
+				A callback function to generate an alternative title.
+				Only used if your type does not support a title.
+			*/
 			'title_column_cb' => function( $id ) { return 'n/a'; }
 		);
 		$this->args = wp_parse_args( $args, $defaults );
@@ -32,14 +58,31 @@ class Type {
 
 		// Add admin forms
 		add_action( 'cmb2_admin_init', array( $this, 'on_metaboxes' ) );
+		if ( in_array( 'revisions', $this->args['supports'] ) ) {
+			// Add revisioning of metadata.
+			// https://johnblackbourn.com/post-meta-revisions-wordpress
+			// add_action( 'save_post', array( $this, 'on_save_post' ), 10, 2 );
+			// add_action( 'wp_restore_post_revision', array( $this, 'on_restore_revision'), 10, 2 );
+			// add_filter( '_wp_post_revision_fields', array( $this, 'on_revision_fields' ) );
+			// add_action( '_wp_post_revision_field_my_meta', array( $this, 'on_') );
+
+		}
 
 		// Add columns
-		add_filter( "manage_{$this->name}_posts_columns", array( $this, 'on_column_titles' ) );
-		add_action( "manage_{$this->name}_posts_custom_column", array( $this, 'on_column_content' ), 10, 2 );
+		add_filter( "manage_{$this->name}_posts_columns", 
+			array( $this, 'on_column_titles' ) );
+		add_action( "manage_{$this->name}_posts_custom_column", 
+			array( $this, 'on_column_content' ), 
+			10, 2 );
+		add_filter( "manage_edit-{$this->name}_sortable_columns",
+			array( $this, 'on_sortable_column_titles' ) );
+		add_filter( 'request', array( $this, 'on_sort_columns' ) );
 		if ( ! in_array( 'title', $this->args['supports'] ) ) {
 			// https://wordpress.stackexchange.com/questions/152971/replacing-the-title-in-admin-list-table
 			add_action( 'admin_head-edit.php', array( $this, 'on_edit_post' ) );
 		}
+		// TODO extend search context: 
+		// https://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
 
 		// Add filter links
 		add_action( 'restrict_manage_posts', array( $this, 'on_list_filters' ) );
@@ -76,6 +119,10 @@ class Type {
 		return $labels;
 	}
 
+	public function get_meta_key( $field ) {
+		return Type::WRAPPED_PREFIX . $this->name . '_' . $field;
+	}
+
 	// Register post type
 	public function on_init() {
 		$args = array(
@@ -102,17 +149,17 @@ class Type {
 				'object_types' => array($this->name),
 				'fields' => array()
 			);
-			$parsed_metabox_options = wp_parse_args($metabox_options, $default_metabox);
+			$parsed_metabox_options = wp_parse_args( $metabox_options, $default_metabox );
 			$fields = $parsed_metabox_options['fields'];
-			unset($parsed_metabox_options['fields']);
-			$cmb = new_cmb2_box($parsed_metabox_options);
+			unset( $parsed_metabox_options['fields'] );
+			$cmb = new_cmb2_box( $parsed_metabox_options );
 
-			foreach ($fields as $field_name => $field_options) {
+			foreach ( $fields as $field_name => $field_options ) {
 				$default_field = array(
-					'id' => Type::WRAPPED_PREFIX . $this->name . '_' . $field_name,
+					'id' => $this->get_meta_key( $field_name ),
 				);
-				$parsed_field_options = wp_parse_args($field_options, $default_field);
-				$cmb->add_field($parsed_field_options);
+				$parsed_field_options = wp_parse_args( $field_options, $default_field );
+				$cmb->add_field( $parsed_field_options );
 			}
 		}
 	}
@@ -121,22 +168,50 @@ class Type {
 	// http://code.tutsplus.com/articles/add-a-custom-column-in-posts-and-custom-post-types-admin-screen--wp-24934
 	// https://www.smashingmagazine.com/2013/12/modifying-admin-post-lists-in-wordpress/
 	public function on_column_titles( $columns ) {
-		$columns['hello'] = 'Name';
-		if( ! in_array( 'title', $this->args['supports'] ) ) {
-			$columns['title'] = $this->args['title_column_title']; // TODO
+		
+		foreach ($this->args['columns'] as $id => $column) {
+			$columns[$id] = $column['title'];
 		}
+
+		$columns['title'] = $this->args['title_column_title'];
+
 		return $columns;
 	}
 
 	// Register column content.
 	public function on_column_content( $column_name, $post_id ) {
-		if ( $column_name == 'hello' ) {
-			echo 'Bubba';
+		foreach ($this->args['columns'] as $id => $column) {
+			if ( $column_name == $id ) {
+				echo $column['cb']( $post_id );
+			} 
+		}
+	}
+
+	public function on_sortable_column_titles( $columns ) {
+		
+		foreach ($this->args['columns'] as $id => $column) {
+			if ( isset( $column['sort_cb'] ) || isset( $column['sort'] ) ) {
+				$columns[$id] = $column['title'];
+			}
 		}
 
-		if ( $column_name == 'title' && ! in_array( 'title', $this->args['supports'] ) ) {
-			echo 'ffu';
+		return $columns;
+	}
+
+	public function on_sort_columns( $vars ) {
+		if ( isset( $vars['orderby'] ) ) {
+			foreach ($this->args['columns'] as $id => $column) {
+				if ( $id == $vars['orderby'] ) {
+					if ( isset( $column['sort_cb'] ) ) {
+						return $column['sort_cb']( $vars );
+					}
+
+					return $vars;
+				}
+			}
 		}
+
+		return $vars;
 	}
 
 	public function on_edit_post() {
