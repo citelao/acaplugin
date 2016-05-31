@@ -10,7 +10,7 @@ class Type {
 	private /* Array */ $fields;
 	private /* Array */ $args;
 
-	public function __construct( /* string */ $name,  
+	public function __construct( /* string */ $name, 
 		/* string */ $plural,
 		$fields, 
 		$args = array() ) {
@@ -215,7 +215,7 @@ class Type {
 	}
 
 	public function on_edit_post() {
-		add_filter( 'the_title', array( $this, 'on_the_title' ), 100, 2 );
+		add_filter( 'the_title', array( $this, 'on_the_title' ), 10, 2 );
 	}
 	public function on_the_title( $title, $id ) {
 		if ( get_post_type( $id ) == $this->name ) {
