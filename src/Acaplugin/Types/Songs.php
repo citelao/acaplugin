@@ -11,72 +11,68 @@ class Songs {
 	// - original singer(s)
 	// - group
 	// - date sung
-	function __construct() {
-		$this->type = new Type( 'song', 'songs', array(
-			'metadata' => array(
-				'title' => 'Song Metadata',
-				'fields' => array(
-					'artists' => array(
-						'name' => 'Original Artist(s)',
-						'type' => 'text',
-						'repeatable' => true
-					)
-				)
-			),
-			'group' => array(
-				'title' => 'Group Information',
-				'fields' => array(
+	function __construct($prefix) {
+		$this->type = bstypes()->create($prefix, 'song', 'songs',
+			array(
+				'columns' => array(
 					'group' => array(
-						'name' => 'Group',
-						'description' => 'TODO: dropdown of groups',
-						'type' => 'title'
+						'title' => 'Group',
+						'cb' => function( $id ) {
+							return '--'; // TODO
+						}
 					),
 					'arrangers' => array(
-						'name' => 'Arranger(s)',
-						'type' => 'text',
-						'repeatable' => true
-					)
-				)
-			)
-		),
-		array(
-			'columns' => array(
-				'group' => array(
-					'title' => 'Group',
-					'cb' => function( $id ) {
-						return '--'; // TODO
-					}
-				),
-				'arrangers' => array(
-					'title' => 'Arranger(s)',
-					'cb' => function( $id ) {
-						$arrangers = get_post_meta( 
-								$id, 
-								$this->type->get_meta_key( 'arrangers' ), 
-								true );
+						'title' => 'Arranger(s)',
+						'cb' => function( $id ) {
+							$arrangers = $this->type->get( $id, 'arrangers' );
 
-						if ( ! $arrangers ) {
-							return '--';
+							if ( ! $arrangers ) {
+								return '--';
+							}
+							return join( ', ', $arrangers);
 						}
-						return join( ', ', $arrangers);
-					}
+					),
+					'artists' => array(
+						'title' => 'Artist(s)',
+						'cb' => function( $id ) {
+							return join( ', ',
+								$this->type->get( $id, 'artists' )
+							);
+						}
+					)
 				),
-				'artists' => array(
-					'title' => 'Artist(s)',
-					'cb' => function( $id ) {
-						return join( ', ',
-							get_post_meta( 
-								$id, 
-								$this->type->get_meta_key( 'artists' ), 
-								true ) 
-						);
-					}
-				)
-			),
-			'description' => 'Songs that a group sang, sings, or plans on singing',
-			'icon' => 'dashicons-format-audio',
-			'supports' => array('title', 'revisions')
-		) );
+				'description' => 'Songs that a group sang, sings, or plans on singing',
+				'icon' => 'dashicons-format-audio',
+				'fields' => array(
+					'metadata' => array(
+						'title' => 'Song Metadata',
+						'fields' => array(
+							'artists' => array(
+								'name' => 'Original Artist(s)',
+								'type' => 'text',
+								'repeatable' => true
+							)
+						)
+					),
+					'group' => array(
+						'title' => 'Group Information',
+						'fields' => array(
+							'group' => array(
+								'name' => 'Group',
+								'description' => 'TODO: dropdown of groups',
+								'type' => 'title'
+							),
+							'arrangers' => array(
+								'name' => 'Arranger(s)',
+								'type' => 'text',
+								'repeatable' => true
+							)
+						)
+					)
+				),
+				'supports' => array('title', 'revisions')
+			)
+		);
 
 		add_action( 'enter_title_here', array( $this, 'edit_title' ) );
 	}

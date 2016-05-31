@@ -19,10 +19,6 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 		}
 
 		private function __construct() {
-			if ( defined('CMB2_LOADED') ) {
-				print("uhoh");
-			}
-
 			if ( ! defined( 'BSTYPES_LOADED' ) ) {
 				define( 'BSTYPES_LOADED', true );
 			}

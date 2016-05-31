@@ -15,15 +15,15 @@ class BSTypes_Types {
 
 	private function __construct() {}
 
-	// public function get( $name = '' ) {
-	// 	if ( ! $name ) {
-	// 		return $this->types;
-	// 	}
+	public function get( $prefix, $name ) {
+		$id = BSTypes_Util::get_type_id($prefix, $name);
 
-	// 	if ( array_key_exists( $name, $this->get_types() ) )  {
-	// 		return $this->get_types()[$name];
-	// 	}
-	// }
+		if ( array_key_exists( $id, $this->types ) )  {
+			return $this->types[$id];
+		}
+
+		return false;
+	}
 
 	public function create(
 		/* string */ $prefix,
@@ -31,11 +31,17 @@ class BSTypes_Types {
 		/* string */ $plural,
 		$args = array() ) {
 
+		$id = BSTypes_Util::get_type_id($prefix, $name);
+
 		// if already exists, throw error
+		if ( $this->get($prefix, $name) ) {
+			throw new InvalidArgumentException(
+				"Cannot recreate type {$name} (id: {$id}). Use get() instead.");
+		}
 
 		// create the class
 		$type = new BSType( $prefix, $name, $plural, $args );
-		// $this->types[]
+		$this->types[$type->get_id()] = $type;
 
 		return $type;
 	}

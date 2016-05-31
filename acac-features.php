@@ -22,14 +22,10 @@ if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 add_action('bstypes_init', 'acaplugin_register_types');
 function acaplugin_register_types() {
 	$prefix = 'acac';
-	$auditionees = new Acaplugin\Auditionees($prefix);
+	$auditionees = new Acaplugin\Types\Auditionees($prefix);
+	$groups = new Acaplugin\Types\Groups($prefix);
+	$songs = new Acaplugin\Types\Songs($prefix);
 }
 
-new Acaplugin\Types\Groups();
-new Acaplugin\Types\Songs();
-
-// register types
-// add metaboxes per type
-// add columns per type
 // add export functionality
 // add audition admin features for webmaster

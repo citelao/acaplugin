@@ -35,7 +35,7 @@ class BSType {
 			'icon' => 'dashicons-dismiss',
 
 			/* Standard Wordpress custom type labels */
-			'labels' => self::generate_labels( $name, $plural ),
+			'labels' => BSTypes_Util::get_labels( $name, $plural ),
 
 			/* Standard Wordpress "supports" for custom type. */
 			'supports' => array( 'revisions' ),
@@ -50,6 +50,7 @@ class BSType {
 			'title_column_cb' => function( $id ) { return 'n/a'; }
 		);
 		$this->args = wp_parse_args( $args, $default_args );
+		$this->prefix = $prefix;
 		$this->name = $name;
 
 		// Register type
@@ -63,14 +64,15 @@ class BSType {
 			'show_in_menu' => true,
 			'menu_icon' => $this->args['icon'],
 			'query_var' => false,
-			// 'capability_type' => 'auditionee'
+			// 'capability_type' => 'auditionee',
+			'rewrite' => array( 'slug' => $this->name ),
 			'supports' => $this->args['supports']
 		);
-		register_post_type( $this->name, $args );
+		register_post_type( $this->get_id(), $args );
 
-		// Add admin forms
+		// Add admin editing metaboxes
 		add_action( 'cmb2_admin_init', array( $this, 'on_metaboxes' ) );
-			
+
 		if ( in_array( 'revisions', $this->args['supports'] ) ) {
 			// Add revisioning of metadata.
 			// https://johnblackbourn.com/post-meta-revisions-wordpress
@@ -80,13 +82,13 @@ class BSType {
 			// add_action( '_wp_post_revision_field_my_meta', array( $this, 'on_') );
 		}
 
-		// Add columns
-		add_filter( "manage_{$this->name}_posts_columns", 
+		// Columns
+		add_filter( "manage_{$this->get_id()}_posts_columns", 
 			array( $this, 'on_column_titles' ) );
-		add_action( "manage_{$this->name}_posts_custom_column", 
+		add_action( "manage_{$this->get_id()}_posts_custom_column", 
 			array( $this, 'on_column_content' ), 
 			10, 2 );
-		add_filter( "manage_edit-{$this->name}_sortable_columns",
+		add_filter( "manage_edit-{$this->get_id()}_sortable_columns",
 			array( $this, 'on_sortable_column_titles' ) );
 		add_filter( 'request', array( $this, 'on_sort_columns' ) );
 		if ( ! in_array( 'title', $this->args['supports'] ) ) {
@@ -106,40 +108,26 @@ class BSType {
 
 	public function get( $post_id, $field ) {
 		// if post is not this type, error
-		// if field not in this type, error
+		
+		$type = get_post_type($post_id);
+		if ( $type != $this->get_id() ) {
+			throw new InvalidArgumentException(
+				"Post {$post_id} is not a(n) {$this->name} (id: {$this->get_id()}). " .
+				"It is a(n) {$type}.");
+		}
 
-		// return data
+		return get_post_meta( 
+			$post_id,
+			$this->get_meta_key( $field ),
+			true );
 	}
 
-
-	// TODO also generate labels for post_updated_messages. Yup. We need another hook.
-	public static function generate_labels( /* string */ $singular, /* string */ $plural ) {
-		$singular = lcfirst($singular);
-		$plural = lcfirst($plural);
-		$usingular = ucfirst($singular);
-		$uplural = ucfirst($plural);
-		$labels = array(
-			'name' => $uplural,
-			'singular_name' => $usingular,
-			'menu_name' => $uplural,
-			'name_admin_bar' => $usingular,
-			'add_new' => 'Add New',
-			'add_new_item' => 'Add New ' . $usingular,
-			'new_item' => 'New ' . $usingular,
-			'edit_item' => 'Edit ' . $usingular,
-			'view_item' => 'View ' . $usingular,
-			'search_items' => 'Search ' . $uplural,
-			'not_found' => 'No ' . $plural . ' found',
-			'not_found_in_trash' => 'No ' . $plural . ' found in trash',
-			'all_items' => 'All ' . $uplural,
-			'archives' => $usingular . ' Archives'
-		);
-
-		return $labels;
+	public function get_id() {
+		return BSTypes_Util::get_type_id($this->prefix, $this->name);
 	}
 
 	public function get_meta_key( $field ) {
-		return "_{$this->prefix}_{$this->name}_{$field}";
+		return BSTypes_Util::get_field_id($this->prefix, $this->name, $field);
 	}
 
 	// Register metaboxes
@@ -147,7 +135,7 @@ class BSType {
 		foreach ( $this->args['fields'] as $box_name => $metabox_options ) {
 			$default_metabox = array(
 				'id' => $this->prefix . '_' . $this->name . '_metabox_' . $box_name,
-				'object_types' => array($this->name),
+				'object_types' => array($this->get_id()),
 				'fields' => array()
 			);
 			$parsed_metabox_options = wp_parse_args( $metabox_options, $default_metabox );
@@ -219,7 +207,7 @@ class BSType {
 		add_filter( 'the_title', array( $this, 'on_the_title' ), 10, 2 );
 	}
 	public function on_the_title( $title, $id ) {
-		if ( get_post_type( $id ) == $this->name ) {
+		if ( get_post_type( $id ) == $this->get_id() ) {
 			return call_user_func( $this->args['title_column_cb'], $id);
 		}
 

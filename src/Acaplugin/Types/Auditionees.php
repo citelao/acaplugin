@@ -1,5 +1,5 @@
 <?php
-namespace Acaplugin;
+namespace Acaplugin\Types;
 
 // Auditionee
 // - name (first, last)
