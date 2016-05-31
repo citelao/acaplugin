@@ -107,14 +107,14 @@ class BSType {
 	}
 
 	public function get( $post_id, $field ) {
-		// if post is not this type, error
-		
 		$type = get_post_type($post_id);
 		if ( $type != $this->get_id() ) {
 			throw new InvalidArgumentException(
 				"Post {$post_id} is not a(n) {$this->name} (id: {$this->get_id()}). " .
 				"It is a(n) {$type}.");
 		}
+
+		// If post does not have this field, this is an error.
 
 		return get_post_meta( 
 			$post_id,
@@ -141,15 +141,16 @@ class BSType {
 			$parsed_metabox_options = wp_parse_args( $metabox_options, $default_metabox );
 			$fields = $parsed_metabox_options['fields'];
 			unset( $parsed_metabox_options['fields'] );
+
 			$cmb = new_cmb2_box( $parsed_metabox_options );
 
-			$fs = array();
 			foreach ( $fields as $field_name => $field_options ) {
 				$default_field = array(
 					'id' => $this->get_meta_key( $field_name ),
 				);
 				$parsed_field_options = wp_parse_args( $field_options, $default_field );
-				$fs[] = $cmb->add_field( $parsed_field_options );
+
+				$cmb->add_field( $parsed_field_options );
 			}
 		}
 	}
