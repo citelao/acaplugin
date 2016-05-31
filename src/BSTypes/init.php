@@ -6,7 +6,7 @@
 // see https://github.com/WebDevStudios/CMB2/blob/master/init.php
 if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 	class BSTypes_Bootstrap_00 {
-		const PRIORITY = 9999;
+		const PRIORITY = 8999;
 
 		private static $instance = null;
 
@@ -19,6 +19,10 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 		}
 
 		private function __construct() {
+			if ( defined('CMB2_LOADED') ) {
+				print("uhoh");
+			}
+
 			if ( ! defined( 'BSTYPES_LOADED' ) ) {
 				define( 'BSTYPES_LOADED', true );
 			}

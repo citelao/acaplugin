@@ -19,19 +19,12 @@ if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 /**
  * Register types
  */
-
 add_action('bstypes_init', 'acaplugin_register_types');
 function acaplugin_register_types() {
-	const PREFIX = 'acac';
-	$auditionees = bstypes()->create( 
-		PREFIX, 'auditionee', 'auditionees', 
-		array(
-			
-		)
-	);
+	$prefix = 'acac';
+	$auditionees = new Acaplugin\Auditionees($prefix);
 }
 
-new Acaplugin\Types\Auditionees();
 new Acaplugin\Types\Groups();
 new Acaplugin\Types\Songs();
 
