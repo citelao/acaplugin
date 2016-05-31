@@ -8,16 +8,24 @@
             "email": "ben@stolovitz.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/origgami/CMB2-grid"
+        }
+    ],
     "require": {
         "php": ">=5.3",
         "composer/installers": "v1.0.*",
         "webdevstudios/cmb2": "^2.2",
-        "webdevstudios/cmb2-attached-posts": "^1.2"
+        "webdevstudios/cmb2-attached-posts": "^1.2",
+        "origgami/CMB2-grid": "dev-master"
     },
     "autoload": {
         "files": [
           "vendor/webdevstudios/cmb2/init.php",
           "vendor/webdevstudios/cmb2-attached-posts/init.php",
+          "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php",
           "src/BSTypes/init.php"
         ],
         "psr-4": {

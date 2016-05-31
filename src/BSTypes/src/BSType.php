@@ -103,7 +103,7 @@ class BSType {
 		add_action( 'pre_get_posts', array( $this, 'on_filter' ) );
 
 		// Quick edit :)
-		add_action( 'quick_edit_custom_box', array( $this, 'on_quick_edit' ) );
+		add_action( 'quick_edit_custom_box', array( $this, 'on_quick_edit' ), 10, 2 );
 	}
 
 	public function get( $post_id, $field ) {
@@ -143,12 +143,13 @@ class BSType {
 			unset( $parsed_metabox_options['fields'] );
 			$cmb = new_cmb2_box( $parsed_metabox_options );
 
+			$fs = array();
 			foreach ( $fields as $field_name => $field_options ) {
 				$default_field = array(
 					'id' => $this->get_meta_key( $field_name ),
 				);
 				$parsed_field_options = wp_parse_args( $field_options, $default_field );
-				$cmb->add_field( $parsed_field_options );
+				$fs[] = $cmb->add_field( $parsed_field_options );
 			}
 		}
 	}
