@@ -9,8 +9,6 @@ Author URI: http://ben.stolovitz.com
 License: Proprietary
 */
 
-namespace Acaplugin;
-
 if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 } else {
@@ -21,9 +19,21 @@ if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 /**
  * Register types
  */
-new Types\Auditionees();
-new Types\Groups();
-new Types\Songs();
+
+add_action('bstypes_init', 'acaplugin_register_types');
+function acaplugin_register_types() {
+	const PREFIX = 'acac';
+	$auditionees = bstypes()->create( 
+		PREFIX, 'auditionee', 'auditionees', 
+		array(
+			
+		)
+	);
+}
+
+new Acaplugin\Types\Auditionees();
+new Acaplugin\Types\Groups();
+new Acaplugin\Types\Songs();
 
 // register types
 // add metaboxes per type

@@ -17,10 +17,11 @@
     "autoload": {
         "files": [
           "vendor/webdevstudios/cmb2/init.php",
-          "vendor/webdevstudios/cmb2-attached-posts/init.php"
+          "vendor/webdevstudios/cmb2-attached-posts/init.php",
+          "src/BSTypes/init.php"
         ],
         "psr-4": {
-            "Acaplugin\\": "src/"
+            "Acaplugin\\": "src/Acaplugin"
         }
     },
     "extra" : {
