@@ -3,6 +3,7 @@ class BSType {
 
 	private /* string */ $prefix;	
 	private /* string */ $name;
+	private /* string */ $plural;
 	private /* Array */ $args;
 
 	public function __construct(
@@ -23,6 +24,30 @@ class BSType {
 				) for custom columns 
 			*/
 			'columns' => array(),
+			'capabilities' => array(
+				'administrator' => array(
+					'edit_post',
+					'read_post',
+					'delete_post',
+					'edit_posts',
+					'edit_others_posts',
+					'publish_posts',
+					'read_private_posts'),
+				'editor' => array(
+					'edit_post',
+					'read_post',
+					'delete_post',
+					'edit_posts',
+					'edit_others_posts',
+					'publish_posts',
+					'read_private_posts'),
+				'author' => array(
+					'edit_post',
+					'read_post',
+					'delete_post',
+					'edit_posts',
+					'publish')
+			),
 
 			/* Standard Wordpress custom type description */
 			'description' => 'A custom post type',
@@ -52,6 +77,7 @@ class BSType {
 		$this->args = wp_parse_args( $args, $default_args );
 		$this->prefix = $prefix;
 		$this->name = $name;
+		$this->plural = $plural;
 
 		// Register type
 		$args = array(
@@ -64,11 +90,25 @@ class BSType {
 			'show_in_menu' => true,
 			'menu_icon' => $this->args['icon'],
 			'query_var' => false,
-			// 'capability_type' => 'auditionee',
+			'capabilities' => $this->get_capabilities(),
 			'rewrite' => array( 'slug' => $this->name ),
 			'supports' => $this->args['supports']
 		);
 		register_post_type( $this->get_id(), $args );
+
+		// Capabilities
+		foreach( $this->args['capabilities'] as $role_name => $permissions ) {
+			$role = get_role( $role_name );
+
+			$caps = array_intersect_key( $this->get_capabilities(), 
+				array_flip( $permissions ) );
+
+			foreach ( $caps as $key => $capability ) {
+				$role->add_cap( $capability );
+			}
+		}
+		// TODO what does this do
+		add_filter( 'map_meta_cap', array( $this, 'on_check_capabilities'), 10, 4 );
 
 		// Add admin editing metaboxes
 		add_action( 'cmb2_admin_init', array( $this, 'on_metaboxes' ) );
@@ -122,12 +162,59 @@ class BSType {
 			true );
 	}
 
+	public function get_capabilities() {
+		return BSTypes_Util::get_capabilities($this->prefix,
+			$this->name, $this->plural);
+	}
+
 	public function get_id() {
 		return BSTypes_Util::get_type_id($this->prefix, $this->name);
 	}
 
 	public function get_meta_key( $field ) {
 		return BSTypes_Util::get_field_id($this->prefix, $this->name, $field);
+	}
+
+	public function on_check_capabilities( $caps, $cap, $user_id, $args ) {
+
+		/* If editing, deleting, or reading a auditionee, get the post and post type object. */
+		if ( 'edit_auditionee' == $cap || 'delete_auditionee' == $cap || 'read_auditionee' == $cap ) {
+			$post = get_post( $args[0] );
+			$post_type = get_post_type_object( $post->post_type );
+
+			/* Set an empty array for the caps. */
+			$caps = array();
+		}
+
+		/* If editing a auditionee, assign the required capability. */
+		if ( 'edit_auditionee' == $cap ) {
+			if ( $user_id == $post->post_author )
+				$caps[] = $post_type->cap->edit_posts;
+			else
+				$caps[] = $post_type->cap->edit_others_posts;
+		}
+
+		/* If deleting a auditionee, assign the required capability. */
+		elseif ( 'delete_auditionee' == $cap ) {
+			if ( $user_id == $post->post_author )
+				$caps[] = $post_type->cap->delete_posts;
+			else
+				$caps[] = $post_type->cap->delete_others_posts;
+		}
+
+		/* If reading a private auditionee, assign the required capability. */
+		elseif ( 'read_auditionee' == $cap ) {
+
+			if ( 'private' != $post->post_status )
+				$caps[] = 'read';
+			elseif ( $user_id == $post->post_author )
+				$caps[] = 'read';
+			else
+				$caps[] = $post_type->cap->read_private_posts;
+		}
+
+		/* Return the capabilities required by the user. */
+		return $caps;
 	}
 
 	// Register metaboxes

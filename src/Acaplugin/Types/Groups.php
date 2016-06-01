@@ -13,17 +13,31 @@ class Groups {
 	// - callback auditionees
 	// - members
 	// - songs
-	function __construct() {
+	public function __construct($prefix) {
 		$this->type = bstypes()->create($prefix, 'group', 'groups',
 			array( 
 				'description' => 'Any a cappella group',
 				'icon' => 'dashicons-groups',
 				'fields' => array(
 					'info' => array(
-						'title' => 'Group Information'
+						'title' => 'Group Information',
+						'fields' => array(
+							'description' => array(
+								'name' => 'Description',
+								'type' => 'wysiwyg'
+							)
+						)
 					),
 					'auditions' => array(
-						'title' => 'Auditions'
+						'title' => 'Auditions',
+						'fields' => array(
+							'callbacks' => array(
+								'name' => 'Callbacks',
+								'type' => 'multicheck',
+								'options' => array("a" => "Callback is never called"),
+								'options_cb' => 'ew_callback_list'
+							)
+						)
 					),
 					'songs' => array(
 						'title' => 'Songs',
@@ -41,3 +55,15 @@ class Groups {
 		);
 	}
 }
+
+function ew_callback_list( $field, $fe ) {
+		print($field);
+		$options = array(
+        'sapphire' => 'Sapphire Blue',
+        'sky'      => 'Sky Blue',
+        'navy'     => 'Navy Blue',
+        'ruby'     => 'Ruby Red',
+        'purple'   => 'Amethyst Purple',
+    );
+		return $options;
+	}

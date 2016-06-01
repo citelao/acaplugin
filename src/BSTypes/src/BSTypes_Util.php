@@ -34,4 +34,22 @@ class BSTypes_Util {
 
 		return $labels;
 	}
+
+	public static function get_capabilities( /* string */ $prefix, 
+		/* string */ $singular,
+		/* string */ $plural) {
+
+		$singular = lcfirst($singular);
+		$plural = lcfirst($plural);
+
+		return array(
+			'edit_post' => "edit_{$prefix}_{$singular}",
+			'read_post' => "read_{$prefix}_{$singular}",
+			'delete_post' => "read_{$prefix}_{$singular}",
+			'edit_posts' => "edit_many_{$prefix}_{$plural}",
+			'edit_others_posts' => "edit_others_{$prefix}_{$plural}",
+			'publish_posts' => "publish_{$prefix}_{$plural}",
+			'read_private_posts' => "read_private_{$prefix}_{$plural}"
+		);
+	}
 }
