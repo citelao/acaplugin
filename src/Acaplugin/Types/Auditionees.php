@@ -115,6 +115,7 @@ class Auditionees {
 					)
 				),
 				'icon' => 'dashicons-smiley',
+				'supports' => array('revisions'),
 				'title_column_title' => 'Name',
 				'title_column_cb' => function( $id ) { 
 					$last = $this->type->get( 'last_name' );

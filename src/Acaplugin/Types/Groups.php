@@ -18,6 +18,9 @@ class Groups {
 			array( 
 				'description' => 'Any a cappella group',
 				'icon' => 'dashicons-groups',
+				'columns' => array(
+					'author' => array( 'title' => 'Added by' )
+				),
 				'fields' => array(
 					'info' => array(
 						'title' => 'Group Information',
@@ -50,7 +53,7 @@ class Groups {
 						)
 					)
 				),
-				'supports' => array('title', 'revisions')
+				'supports' => array('title', 'revisions', 'author')
 			)
 		);
 	}

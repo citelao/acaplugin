@@ -63,7 +63,7 @@ class BSType {
 			'labels' => BSTypes_Util::get_labels( $name, $plural ),
 
 			/* Standard Wordpress "supports" for custom type. */
-			'supports' => array( 'revisions' ),
+			'supports' => array( 'revisions', 'author' ),
 
 			/* A replacement for the "Title" column label. */
 			'title_column_title' => 'Title',
@@ -107,7 +107,6 @@ class BSType {
 				$role->add_cap( $capability );
 			}
 		}
-		// TODO what does this do
 		add_filter( 'map_meta_cap', array( $this, 'on_check_capabilities'), 10, 4 );
 
 		// Add admin editing metaboxes
@@ -175,42 +174,71 @@ class BSType {
 		return BSTypes_Util::get_field_id($this->prefix, $this->name, $field);
 	}
 
+	// http://justintadlock.com/archives/2010/07/10/meta-capabilities-for-custom-post-types
+	// But, since that was a poor explanation:
+	// Wordpress will say what it's trying to do:
+	// - edit a post,
+	// - delete a post, or
+	// - read a post.
+	//
+	// It's up to us to figure out how to map that to the miriad rules we
+	// created for this type.
+	//
+	// That's where this function comes in.
+	//
+	// Given a capability, $cap, we can modify what *actual* capabilities it
+	// requires to perform that action.
+	// 
+	// For example, if $cap is 'read_song', we can look at that song and do
+	// some thinking:
+	//
+	// - if the song is private, but the author is the current user, just say 
+	//   you need to be able to read things.
+	// - if the song is private, but you are not the author, you need to be
+	//   able to read private songs.
+	// - otherwise, you just need to be able to read things.
+	//
+	// If we wanted, we could customize this function to have specific checks
+	// for specific users, etc, for interesting behavior. But that's too
+	// interesting for me.
+	//
 	public function on_check_capabilities( $caps, $cap, $user_id, $args ) {
+		$capabilities = $this->get_capabilities();
 
-		/* If editing, deleting, or reading a auditionee, get the post and post type object. */
-		if ( 'edit_auditionee' == $cap || 'delete_auditionee' == $cap || 'read_auditionee' == $cap ) {
-			$post = get_post( $args[0] );
-			$post_type = get_post_type_object( $post->post_type );
-
-			/* Set an empty array for the caps. */
-			$caps = array();
+		// If we aren't looking at the current post type, pay this no heed.
+		if ( $cap != $capabilities['edit_post'] &&
+			 $cap != $capabilities['delete_post'] &&
+			 $cap != $capabilities['read_post'] ) {
+			return $caps;
 		}
 
-		/* If editing a auditionee, assign the required capability. */
-		if ( 'edit_auditionee' == $cap ) {
-			if ( $user_id == $post->post_author )
+		// Otherwise start filtering :)
+		$post = get_post( $args[0] );
+		$post_type = get_post_type_object( $post->post_type );
+
+		$caps = array();
+
+		// If we want to edit
+		if ( $cap == $capabilities['edit_post'] ) {
+			if ( $user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
-			else
+			} else {
 				$caps[] = $post_type->cap->edit_others_posts;
-		}
-
-		/* If deleting a auditionee, assign the required capability. */
-		elseif ( 'delete_auditionee' == $cap ) {
-			if ( $user_id == $post->post_author )
+			}
+		} elseif ( $cap == $capabilities['delete_post'] ) {
+			if ( $user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->delete_posts;
-			else
+			} else {
 				$caps[] = $post_type->cap->delete_others_posts;
-		}
-
-		/* If reading a private auditionee, assign the required capability. */
-		elseif ( 'read_auditionee' == $cap ) {
-
-			if ( 'private' != $post->post_status )
+			}
+		} elseif ( $cap == $capabilities['read_post'] ) {
+			if ( 'private' != $post->post_status ) {
 				$caps[] = 'read';
-			elseif ( $user_id == $post->post_author )
+			} elseif ( $user_id == $post->post_author ) {
 				$caps[] = 'read';
-			else
+			} else {
 				$caps[] = $post_type->cap->read_private_posts;
+			}
 		}
 
 		/* Return the capabilities required by the user. */

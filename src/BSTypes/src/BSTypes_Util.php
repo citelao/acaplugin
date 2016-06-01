@@ -45,7 +45,7 @@ class BSTypes_Util {
 		return array(
 			'edit_post' => "edit_{$prefix}_{$singular}",
 			'read_post' => "read_{$prefix}_{$singular}",
-			'delete_post' => "read_{$prefix}_{$singular}",
+			'delete_post' => "delete_{$prefix}_{$singular}",
 			'edit_posts' => "edit_many_{$prefix}_{$plural}",
 			'edit_others_posts' => "edit_others_{$prefix}_{$plural}",
 			'publish_posts' => "publish_{$prefix}_{$plural}",

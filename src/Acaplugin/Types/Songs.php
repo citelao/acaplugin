@@ -39,7 +39,8 @@ class Songs {
 								$this->type->get( $id, 'artists' )
 							);
 						}
-					)
+					),
+					'author' => array( 'title' => 'Added by' )
 				),
 				'description' => 'Songs that a group sang, sings, or plans on singing',
 				'icon' => 'dashicons-format-audio',
@@ -70,7 +71,7 @@ class Songs {
 						)
 					)
 				),
-				'supports' => array('title', 'revisions')
+				'supports' => array('title', 'revisions', 'author')
 			)
 		);
 
