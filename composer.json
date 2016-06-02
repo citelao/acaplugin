@@ -24,7 +24,7 @@
     "autoload": {
         "files": [
           "vendor/webdevstudios/cmb2/init.php",
-          "vendor/webdevstudios/cmb2-attached-posts/init.php",
+          "vendor/webdevstudios/cmb2-attached-posts/cmb2-attached-posts-field.php",
           "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php",
           "src/BSTypes/init.php"
         ],

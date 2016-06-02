@@ -63,16 +63,7 @@ class BSType {
 			'labels' => BSTypes_Util::get_labels( $name, $plural ),
 
 			/* Standard Wordpress "supports" for custom type. */
-			'supports' => array( 'revisions', 'author' ),
-
-			/* A replacement for the "Title" column label. */
-			'title_column_title' => 'Title',
-
-			/* 
-				A callback function to generate an alternative title.
-				Only used if your type does not support a title.
-			*/
-			'title_column_cb' => function( $id ) { return 'n/a'; }
+			'supports' => array( 'revisions', 'author' )
 		);
 		$this->args = wp_parse_args( $args, $default_args );
 		$this->prefix = $prefix;
@@ -83,6 +74,7 @@ class BSType {
 		$args = array(
 			'labels' => $this->args['labels'],
 			'description' => $this->args['description'],
+			'delete_with_user' => false,
 			'public' => false,
 			'exclude_from_search' => true,
 			'publicly_queryable' => false,
@@ -130,9 +122,12 @@ class BSType {
 		add_filter( "manage_edit-{$this->get_id()}_sortable_columns",
 			array( $this, 'on_sortable_column_titles' ) );
 		add_filter( 'request', array( $this, 'on_sort_columns' ) );
-		if ( ! in_array( 'title', $this->args['supports'] ) ) {
+		if ( is_array( $this->args['columns']['title'] ) &&
+			 isset( $this->args['columns']['title']['cb'] ) &&
+			 is_callable( $this->args['columns']['title']['cb'] ) ) {
 			// https://wordpress.stackexchange.com/questions/152971/replacing-the-title-in-admin-list-table
 			add_action( 'admin_head-edit.php', array( $this, 'on_edit_post' ) );
+			// add_filter( 'the_title', array( $this, 'on_the_title' ), 10, 2 );
 		}
 		// TODO extend search context: 
 		// https://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
@@ -146,7 +141,7 @@ class BSType {
 	}
 
 	public function get( $post_id, $field ) {
-		$type = get_post_type($post_id);
+		$type = get_post_type( $post_id );
 		if ( $type != $this->get_id() ) {
 			throw new InvalidArgumentException(
 				"Post {$post_id} is not a(n) {$this->name} (id: {$this->get_id()}). " .
@@ -279,15 +274,16 @@ class BSType {
 			$columns[$id] = $column['title'];
 		}
 
-		$columns['title'] = $this->args['title_column_title'];
-
 		return $columns;
 	}
 
 	// Register column content.
 	public function on_column_content( $column_name, $post_id ) {
 		foreach ($this->args['columns'] as $id => $column) {
-			if ( $column_name == $id ) {
+			if ( $column_name == $id && 
+				 isset( $column['cb'] ) &&
+				 is_callable( $column['cb'] ) ) {
+
 				echo $column['cb']( $post_id );
 			} 
 		}
@@ -325,7 +321,7 @@ class BSType {
 	}
 	public function on_the_title( $title, $id ) {
 		if ( get_post_type( $id ) == $this->get_id() ) {
-			return call_user_func( $this->args['title_column_cb'], $id);
+			return call_user_func( $this->args['columns']['title']['cb'], $id);
 		}
 
 		return $title;

@@ -42,6 +42,12 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 			if ( is_admin() ) {
 				do_action( 'bstypes_admin_init' );
 			}
+
+			/**
+			 * Register new fields
+			 */
+			add_action( 'cmb2_render_many_to_many',
+				array('BSTypes_Forms', 'render_many_to_many'), 10, 5 );
 		}
 	}
 

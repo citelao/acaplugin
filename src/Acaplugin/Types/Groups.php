@@ -19,26 +19,31 @@ class Groups {
 				'description' => 'Any a cappella group',
 				'icon' => 'dashicons-groups',
 				'columns' => array(
-					'author' => array( 'title' => 'Added by' )
+					'author' => array( 'title' => 'Added by' ),
+					'title' => array( 'title' => 'Title' )
 				),
 				'fields' => array(
 					'info' => array(
 						'title' => 'Group Information',
-						'fields' => array(
-							'description' => array(
-								'name' => 'Description',
-								'type' => 'wysiwyg'
-							)
-						)
+						// 'fields' => array(
+						// 	'description' => array(
+						// 		'name' => 'Description',
+						// 		'type' => 'wysiwyg'
+						// 	)
+						// )
 					),
 					'auditions' => array(
 						'title' => 'Auditions',
 						'fields' => array(
 							'callbacks' => array(
 								'name' => 'Callbacks',
-								'type' => 'multicheck',
-								'options' => array("a" => "Callback is never called"),
-								'options_cb' => 'ew_callback_list'
+								'type' => 'custom_attached_posts',
+								'options' => array(
+									'filter_boxes' => true,
+									'query_args' => array(
+										'post_type' => 'acac_auditionee',
+									)
+								)
 							)
 						)
 					),
@@ -58,15 +63,3 @@ class Groups {
 		);
 	}
 }
-
-function ew_callback_list( $field, $fe ) {
-		print($field);
-		$options = array(
-        'sapphire' => 'Sapphire Blue',
-        'sky'      => 'Sky Blue',
-        'navy'     => 'Navy Blue',
-        'ruby'     => 'Ruby Red',
-        'purple'   => 'Amethyst Purple',
-    );
-		return $options;
-	}

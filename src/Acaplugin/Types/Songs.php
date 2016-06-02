@@ -40,7 +40,8 @@ class Songs {
 							);
 						}
 					),
-					'author' => array( 'title' => 'Added by' )
+					'author' => array( 'title' => 'Added by' ),
+					'title' =>  array( 'title' => 'Title' )
 				),
 				'description' => 'Songs that a group sang, sings, or plans on singing',
 				'icon' => 'dashicons-format-audio',

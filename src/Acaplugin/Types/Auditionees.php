@@ -28,13 +28,13 @@ class Auditionees {
 					'email' => array(
 						'title' => 'Email',
 						'cb' => function( $id ) {
-							return $this->type->get( 'email' );
+							return $this->type->get( $id, 'email' );
 						}
 					),
 					'telephone' => array(
 						'title' => 'Telephone',
 						'cb' => function( $id ) {
-							return $this->type->get( 'telephone' );
+							return $this->type->get( $id, 'telephone' );
 						}
 					),
 					'callbacks' => array(
@@ -63,6 +63,20 @@ class Auditionees {
 							return '--'; // TODO
 						}
 					),
+					'title' => array( 
+						'title' => 'Name',
+						'cb' => function( $id ) { 
+							$last = $this->type->get( $id, 'last_name' );
+							$first = $this->type->get( $id, 'first_name' );
+							if ( !$last ) {
+								$last = '--';
+							}
+							if ( !$first ) {
+								$first = '--';
+							}
+							return "{$last}, {$first}";
+						}
+					)
 				),
 				'description' => 'Anyone who tries out for a group',
 				'fields' => array(
@@ -115,19 +129,7 @@ class Auditionees {
 					)
 				),
 				'icon' => 'dashicons-smiley',
-				'supports' => array('revisions'),
-				'title_column_title' => 'Name',
-				'title_column_cb' => function( $id ) { 
-					$last = $this->type->get( 'last_name' );
-					$first = $this->type->get( 'first_name' );
-					if ( !$last ) {
-						$last = '--';
-					}
-					if ( !$first ) {
-						$first = '--';
-					}
-					return "{$last}, {$first}";
-				}
+				'supports' => array('revisions')
 			)
 		);
 	}
