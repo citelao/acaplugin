@@ -64,18 +64,7 @@ class Auditionees {
 						}
 					),
 					'title' => array( 
-						'title' => 'Name',
-						'cb' => function( $id ) { 
-							$last = $this->type->get( $id, 'last_name' );
-							$first = $this->type->get( $id, 'first_name' );
-							if ( !$last ) {
-								$last = '--';
-							}
-							if ( !$first ) {
-								$first = '--';
-							}
-							return "{$last}, {$first}";
-						}
+						'title' => 'Name'
 					)
 				),
 				'description' => 'Anyone who tries out for a group',
@@ -129,6 +118,17 @@ class Auditionees {
 					)
 				),
 				'icon' => 'dashicons-smiley',
+				'title' => function( $id ) { 
+					$last = $this->type->get( $id, 'last_name' );
+					$first = $this->type->get( $id, 'first_name' );
+					if ( !$last ) {
+						$last = '--';
+					}
+					if ( !$first ) {
+						$first = '--';
+					}
+					return "{$last}, {$first}";
+				},
 				'supports' => array('revisions')
 			)
 		);
