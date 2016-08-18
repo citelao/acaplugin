@@ -153,8 +153,13 @@ class BSType {
 			// https://wordpress.stackexchange.com/questions/152971/replacing-the-title-in-admin-list-table
 			add_action( 'admin_head-edit.php', array( $this, 'on_edit_post' ) );
 		}
-		// TODO extend search context: 
+
+		// Extend search context
+		// TODO allow arbitrary fields for search
 		// https://wordpress.stackexchange.com/questions/11758/extending-the-search-context-in-the-admin-list-post-screen
+		add_filter( 'posts_join', array( $this, 'on_posts_join' ) );
+		add_filter( 'posts_where', array( $this, 'on_posts_where' ) );
+		add_filter( 'posts_distinct', array( $this, 'on_posts_distinct' ) );
 
 		// Add filter links
 		add_action( 'restrict_manage_posts', array( $this, 'on_list_filters' ) );
@@ -162,6 +167,10 @@ class BSType {
 
 		// Quick edit :)
 		add_action( 'quick_edit_custom_box', array( $this, 'on_quick_edit' ), 10, 2 );
+	}
+
+	public function add_field( $args = array() ) {
+
 	}
 
 	public function get( $post_id, $field ) {
@@ -192,6 +201,10 @@ class BSType {
 	public function get_meta_key( $field ) {
 		return BSTypes_Util::get_field_id($this->prefix, $this->name, $field);
 	}
+
+	/**
+	 * Begin hooks
+	 **/
 
 	// https://gist.github.com/nickohrn/9352332
 	public function on_save_post( $post_id, $post, $update ) {
@@ -371,6 +384,44 @@ class BSType {
 		}
 
 		return $title;
+	}
+
+	public function on_posts_join( $join ) {
+		global $pagenow, $wpdb;
+		if ( is_admin() && 
+			 $pagenow == 'edit.php' &&
+			 $_GET['post_type'] == $this->get_id() &&
+			 $_GET['s'] != '' ) {
+			$join .= "LEFT JOIN {$wpdb->postmeta} ON " . 
+				"{$wpdb->posts}.ID = {$wpdb->postmeta}.post_id";
+		}
+
+		return $join;
+	}
+	public function on_posts_where( $where ) {
+		global $pagenow, $wpdb;
+		if ( is_admin() && 
+			 $pagenow == 'edit.php' &&
+			 $_GET['post_type'] == $this->get_id() &&
+			 $_GET['s'] != '' ) {    
+			 $where = preg_replace(
+				"/\(\s*{$wpdb->posts}.post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
+				"({$wpdb->posts}.post_title LIKE $1) OR ({$wpdb->postmeta}.meta_value LIKE $1)",
+				$where );
+		}
+
+		return $where;
+	}
+	public function on_posts_distinct( $distinct ) {
+		global $pagenow, $wpdb;
+		if ( is_admin() && 
+			 $pagenow == 'edit.php' &&
+			 $_GET['post_type'] == $this->get_id() &&
+			 $_GET['s'] != '' ) {    
+			 return 'DISTINCT';
+		}
+
+		return $distinct;
 	}
 
 	// https://www.sitepoint.com/customized-wordpress-administration-filters/
