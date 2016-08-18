@@ -31,9 +31,9 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 				define( 'BSTYPES_DIR', trailingslashit( dirname( __FILE__ ) ) );
 			}
 
-			require_once('src/functions.php');
-			require_once('src/BSType.php');
-			spl_autoload_register('bstypes_autoload_class');
+			require_once( 'src/functions.php' );
+			require_once( 'src/BSType.php' );
+			spl_autoload_register( 'bstypes_autoload_class' );
 
 			// These two actions, `bstypes_init` and `bstypes_admin_init` are
 			// the two earliest times you can be sure you have the BSTypes
