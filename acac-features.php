@@ -25,6 +25,8 @@ function acaplugin_register_types() {
 	$auditionees = new Acaplugin\Types\Auditionees($prefix);
 	$groups = new Acaplugin\Types\Groups($prefix);
 	$songs = new Acaplugin\Types\Songs($prefix);
+
+	Acaplugin\Options\Config::get_instance($prefix);
 }
 
 // add export functionality
