@@ -147,6 +147,20 @@ class Auditionees {
 								'name' => 'Last Name',
 								'type' => 'text'
 							),
+							'pronoun' => array(
+								'name' => 'Pronouns',
+								'type' => 'radio',
+								'options' => array(
+									'he' => 'He / Him',
+									'she' => 'She / Her',
+									'they' => 'They / Them',
+									'ey' => 'E(y) / Em',
+									'xeh' => 'Xe / Hir',
+									'xex' => 'Xe / Xir',
+									'zeh' => 'Ze / Hir',
+									'zex' => 'Ze / Zir'
+								)
+							),
 							'email' => array(
 								'name' => 'Email',
 								'type' => 'text_email'
