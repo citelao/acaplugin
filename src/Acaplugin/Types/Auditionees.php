@@ -22,6 +22,23 @@ class Auditionees {
 	private $type;
 
 	function __construct($prefix) {
+		// TODO this system will make certain pre-entered data UNVIEWABLE
+		// on the server if you change callback dates *during* auditions.
+		// I would disable/hide the field on the admin page if I could.
+		$conflicts = array();
+		$callback_dates = get_option( 'acac_config' )['callback_dates'];
+		foreach ($callback_dates as $key => $date) {
+			$date = strtotime($date);
+
+			$nice_date = date('l, F j', $date);
+
+			$conflicts['conflict.' . date('m.d', $date)] = array(
+				'name' => 'Conflicts on ' . $nice_date,
+				'description' => "Please write any (potential) conflicts you have on  {$nice_date}. We use this to help plan your callback schedule.",
+				'type' => 'textarea'
+			);
+		}
+
 		$this->type = bstypes()->create($prefix, 'auditionee', 'auditionees',
 			array(
 				'columns' => array(
@@ -94,7 +111,8 @@ class Auditionees {
 					    )
 					),
 					'conflicts' => array(
-						'title' => 'Conflicts'
+						'title' => 'Conflicts',
+						'fields' => $conflicts
 					),
 					'group' => array(
 						'title' => 'Group Selection',
@@ -102,7 +120,7 @@ class Auditionees {
 							'callbacks' => array(
 								'name' => 'Callback Groups',
 								'type' => 'title',
-								'description' => 'TODO: a list of all groups calling this person back'
+								'description' => 'TODO: a list of all groups calling this person back; hide if not the right stage'
 							),
 							'preferences' => array(
 								'name' => 'Group Preferences',

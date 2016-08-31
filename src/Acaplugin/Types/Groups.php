@@ -8,8 +8,6 @@ class Groups {
 
 	// Group
 	// - name
-	// - description
-	// - tags?
 	// - callback auditionees
 	// - members
 	// - songs
@@ -23,15 +21,15 @@ class Groups {
 					'title' => array( 'title' => 'Title' )
 				),
 				'fields' => array(
-					'info' => array(
-						'title' => 'Group Information',
-						// 'fields' => array(
-						// 	'description' => array(
-						// 		'name' => 'Description',
-						// 		'type' => 'wysiwyg'
-						// 	)
-						// )
-					),
+					// 'info' => array(
+					// 	'title' => 'Group Information',
+					// 	// 'fields' => array(
+					// 	// 	'description' => array(
+					// 	// 		'name' => 'Description',
+					// 	// 		'type' => 'wysiwyg'
+					// 	// 	)
+					// 	// )
+					// ),
 					'auditions' => array(
 						'title' => 'Auditions',
 						'fields' => array(

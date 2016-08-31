@@ -84,21 +84,25 @@ class Config {
 			'default' => 'closed',
 			'options' => array(
 				'closed' => __( 'Closed', $this->prefix ),
-				'auditionees' => __( 
-					'Auditionees can register/groups can choose callbacks',
+				'auditions' => __( 
+					'Auditionees can register/groups can choose callbacks/no pref cards',
 					$this->prefix ),
-				'callbacks' => __( '
-					No registration/groups can view callbacks', 
+				'callbacks' => __( 
+					'No public registration/groups can view callbacks/pref cards open', 
+					$this->prefix ),
+				'draft' => __( 
+					'No public registration/groups can view callbacks & pref cards/pref cards closed', 
 					$this->prefix )
 			),
 		) );
 		
 		$cmb->add_field( array(
 			'name' => __( 'Callback dates', $this->prefix ),
-			'desc' => __( 'What dates are callbacks?', $this->prefix ),
+			'desc' => __( 'What dates are callbacks? NOTE: Changing this while auditions are open may hide data from admin page.', $this->prefix ),
 			'id'   => 'callback_dates',
 			'type' => 'text_date',
-			'repeatable' => true
+			'repeatable' => true,
+			'attributes' => $callback_attributes
 		) );
 	}
 
