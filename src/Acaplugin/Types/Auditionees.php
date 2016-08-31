@@ -79,9 +79,14 @@ class Auditionees {
 
 		$groups['acceptance'] = array(
 			'name' => 'Accepted Group',
-			'type' => 'title',
-			'description' => 'TODO: a dropdown to select their final group :)'
+			'type' => 'select',
+			'description' => 'The final group :)',
+			'options_cb' => 'Acaplugin\Util::get_groups_dropdown'
 		);
+
+		$values = [1,];
+
+		array_map('Acaplugin\Util::get_groups_dropdown', $values);
 
 		$this->type = bstypes()->create($prefix, 'auditionee', 'auditionees',
 			array(
@@ -127,7 +132,13 @@ class Auditionees {
 					'group' => array(
 						'title' => 'Accepted Group',
 						'cb' => function( $id ) {
-							return '--'; // TODO
+							$id = $this->type->get( $id, 'acceptance' );
+
+							if( !$id ) {
+								return '--';
+							}
+
+							return get_post( $id )->post_title;
 						}
 					),
 					'title' => array( 
