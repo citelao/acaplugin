@@ -85,13 +85,13 @@ class Config {
 			'options' => array(
 				'closed' => __( 'Closed', $this->prefix ),
 				'auditions' => __( 
-					'Auditionees can register/groups can choose callbacks/no pref cards',
+					'First round — Auditionees can register/groups can choose callbacks/no pref cards',
 					$this->prefix ),
 				'callbacks' => __( 
-					'No public registration/groups can view callbacks/pref cards open', 
+					'Second round — No public registration/groups can view callbacks/pref cards open', 
 					$this->prefix ),
 				'draft' => __( 
-					'No public registration/groups can view callbacks & pref cards/pref cards closed', 
+					'Draft — No public registration/groups can view callbacks & pref cards/pref cards closed', 
 					$this->prefix )
 			),
 		) );

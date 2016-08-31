@@ -25,19 +25,63 @@ class Auditionees {
 		// TODO this system will make certain pre-entered data UNVIEWABLE
 		// on the server if you change callback dates *during* auditions.
 		// I would disable/hide the field on the admin page if I could.
-		$conflicts = array();
+		$conflicts = array(
+			'conflicts_desc' => array(
+				'name' => 'Callback conflicts',
+				'type' => 'title',
+				'description' => 'Please write any (potential) conflicts you have on these dates. We use this to help plan your callback schedule.'
+			)
+		);
 		$callback_dates = get_option( 'acac_config' )['callback_dates'];
-		foreach ($callback_dates as $key => $date) {
+		foreach ( $callback_dates as $key => $date ) {
 			$date = strtotime($date);
 
 			$nice_date = date('l, F j', $date);
 
-			$conflicts['conflict.' . date('m.d', $date)] = array(
+			$conflicts['conflict-' . date('m-d', $date)] = array(
 				'name' => 'Conflicts on ' . $nice_date,
-				'description' => "Please write any (potential) conflicts you have on  {$nice_date}. We use this to help plan your callback schedule.",
 				'type' => 'textarea'
 			);
 		}
+
+		$stage = get_option( 'acac_config' )['stage'];
+		$groups = array();
+
+		// Only show callbacking groups if callbacks have started or we're
+		// in draft.
+		if( $stage == 'callbacks' || $stage == 'draft' ) {
+			$groups['callbacks'] = array(
+				'name' => 'Callback Groups',
+				'type' => 'title',
+				'description' => 'TODO: a list of all groups calling this person back; hide if not the right stage'
+			);
+		} else {
+			$groups['callbacks_hidden'] = array(
+				'name' => 'Callback Groups',
+				'type' => 'title',
+				'description' => 'Callback lists are not available while first round auditions are in progress.'
+			);
+		}
+
+		if( $stage == 'draft' ) {
+			$groups['preferences'] = array(
+				'name' => 'Group Preferences',
+				'type' => 'title',
+				'description' => 'TODO: an ordered list of group preferences'
+			);
+		} else {
+			$groups['preferences'] = array(
+				'name' => 'Group Preferences',
+				'type' => 'title',
+				'description' => "An auditionee's preferences are not available while pref cards are still being circulated."
+			);
+		}
+
+		$groups['acceptance'] = array(
+			'name' => 'Accepted Group',
+			'type' => 'title',
+			'description' => 'TODO: a dropdown to select their final group :)'
+		);
 
 		$this->type = bstypes()->create($prefix, 'auditionee', 'auditionees',
 			array(
@@ -52,6 +96,12 @@ class Auditionees {
 						'title' => 'Telephone',
 						'cb' => function( $id ) {
 							return $this->type->get( $id, 'telephone' );
+						}
+					),
+					'residence' => array(
+						'title' => 'Residence',
+						'cb' => function( $id ) {
+							return $this->type->get( $id, 'residence' );
 						}
 					),
 					'callbacks' => array(
@@ -107,7 +157,12 @@ class Auditionees {
 							    'attributes' => array(
 							    	'type' => 'tel'
 								)
-						    )
+						    ),
+						    'residence' => array(
+								'name' => 'Residence',
+								'description' => 'Dorm and room number (or address if off-campus)',
+							    'type' => 'text'
+						    ),
 					    )
 					),
 					'conflicts' => array(
@@ -116,23 +171,7 @@ class Auditionees {
 					),
 					'group' => array(
 						'title' => 'Group Selection',
-						'fields' => array(
-							'callbacks' => array(
-								'name' => 'Callback Groups',
-								'type' => 'title',
-								'description' => 'TODO: a list of all groups calling this person back; hide if not the right stage'
-							),
-							'preferences' => array(
-								'name' => 'Group Preferences',
-								'type' => 'title',
-								'description' => 'TODO: an ordered list of group preferences'
-							),
-							'acceptance' => array(
-								'name' => 'Accepted Group',
-								'type' => 'title',
-								'description' => 'TODO: a dropdown to select their final group :)'
-							)
-						)
+						'fields' => $groups
 					)
 				),
 				'icon' => 'dashicons-smiley',
