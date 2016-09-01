@@ -73,8 +73,13 @@ class Auditionees {
 		if( $stage == 'draft' ) {
 			$groups['preferences'] = array(
 				'name' => 'Group Preferences',
-				'type' => 'title',
-				'description' => 'TODO: an ordered list of group preferences'
+				'type' => 'custom_attached_posts',
+				'description' => 'An ordered list of group preferences. The higher the group, the better. A group in the left column is not preffed.',
+				'options' => array(
+					'query_args' => array(
+						'post_type' => 'acac_group',
+					)
+				)
 			);
 		} else {
 			$groups['preferences'] = array(
@@ -136,10 +141,27 @@ class Auditionees {
 							}
 						}
 					),
+					'prefs' => array(
+						'title' => 'Preferences',
+						'cb' => function( $id ) {
+							$groups = $this->type->get( $id, 'preferences' );
+
+							if( empty( $groups ) ) {
+								return '--';
+							}
+
+							$names = array_map( array( $this, 'get_post_title' ), $groups );
+
+							$rtn = '<ol><li>';
+							$rtn .= join( '</li><li>', $names );
+							$rtn .= '</li></ol>';
+							return $rtn;
+						}
+					),
 					'group' => array(
 						'title' => 'Accepted Group',
-						'cb' => function( $id ) {
-							$id = $this->type->get( $id, 'acceptance' );
+						'cb' => function( $user_id ) {
+							$id = $this->type->get( $user_id, 'acceptance' );
 
 							if( !$id ) {
 								return '--';
@@ -221,5 +243,9 @@ class Auditionees {
 				'supports' => array('revisions')
 			)
 		);
+	}
+
+	public function get_post_title( $post ) {
+		return get_post( $post )->post_title;
 	}
 }
