@@ -123,6 +123,12 @@ class Auditionees {
 					),
 					'callbacks' => array(
 						'title' => '# Callbacks',
+						'filter' => function() {
+							return array(
+								'default' => 'Any # of callbacks',
+								'none' => 'TODO'
+							);
+						},
 						'cb' => function( $id ) {
 							return count(
 								$this->type->get( $id, 'preferences' )
@@ -155,10 +161,25 @@ class Auditionees {
 					'preferences' => array(
 						'title' => 'Preferences',
 						'filter' => function() {
-							return array( 'none' => 'Any pref-ed group' ) +
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'draft' ) {
+								return array( 'default' => 'Any pref-ed group' );
+							}
+
+							return array( 'default' => 'Any pref-ed group' ) +
 								\Acaplugin\Util::get_groups_multicheck( null );
 						},
 						'filter_cb' => function( $query, $arg ) {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'draft' ) {
+								return;
+							}
+
+							if( $arg == 'default' ) {
+								return;
+							}
+
+							// I know, I know, this is gross. I'm sorry.
 							$query->query_vars['meta_key'] = $this->type->get_meta_key( 'preferences' );
 							$query->query_vars['meta_value'] = '"' . $arg . '"';
 							$query->query_vars['meta_compare'] = 'LIKE';
@@ -185,6 +206,25 @@ class Auditionees {
 					),
 					'group' => array(
 						'title' => 'Accepted Group',
+						'filter' => function() {
+							return array( 
+								'default' => 'Any accepted group',
+								'none' => 'No accepted group'
+							) +
+								\Acaplugin\Util::get_groups_multicheck( null );
+						},
+						'filter_cb' => function( $query, $arg ) {
+							if( $arg == 'default' ) {
+								return;
+							}
+
+							$query->query_vars['meta_key'] = $this->type->get_meta_key( 'acceptance' );
+							if( $arg == 'none' ) {
+								$query->query_vars['meta_value'] = '0';
+							} else {
+								$query->query_vars['meta_value'] = $arg;
+							}
+						},
 						'cb' => function( $user_id ) {
 							$id = $this->type->get( $user_id, 'acceptance' );
 
