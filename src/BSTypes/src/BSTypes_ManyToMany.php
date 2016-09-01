@@ -43,11 +43,26 @@ class BSTypes_ManyToMany {
 		check_ajax_referer( self::NONCE_STRING );
 
 		// Find correct subaction
+		echo $_REQUEST['operation'];
+		echo ', ';
 		echo $_REQUEST['to'];
 		echo ', ';
 		echo $_REQUEST['from'];
 		echo ', ';
 		echo $_REQUEST['type'];
+
+		$to = $_REQUEST['to'];
+		$from = $_REQUEST['from'];
+
+		if( $_REQUEST['operation'] == 'add' ) {
+			p2p_type( 'group_callbacks' )->connect( $from, $to, array(
+			    'date' => current_time('mysql')
+			) );
+
+			echo( 'added' );
+		} elseif( $_REQUEST['operation'] == 'remove' ) {
+			p2p_type( 'group_callbacks' )->disconnect( $from, $to );
+		}
 
 		wp_die();
 	}
@@ -306,8 +321,6 @@ class BSTypes_ManyToMany {
 		wp_enqueue_script( 'bs-many-to-many-field', $url . 'js/many-to-many.js', $requirements, self::VERSION, true );
 		wp_enqueue_style( 'bs-many-to-many-field', $url . 'css/many-to-many-admin.css', array(), self::VERSION );
 
-		print_r('heh');
-		print_r(wp_create_nonce( self::NONCE_STRING ));
 		wp_localize_script( 'bs-many-to-many-field', 
 			'BS_MANY_TO_MANY_L10N', 
 			array(

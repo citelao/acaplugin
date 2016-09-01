@@ -59,8 +59,13 @@ class Auditionees {
 		if( $stage == 'callbacks' || $stage == 'draft' ) {
 			$groups['callbacks'] = array(
 				'name' => 'Callback Groups',
-				'type' => 'title',
-				'description' => 'TODO: a list of all groups calling this person back; hide if not the right stage'
+				'type' => 'bs_many_to_many',
+				'description' => 'Add groups to call this person back',
+				'options' => array(
+					'query_args' => array(
+						'post_type' => 'acac_group'
+					)
+				)
 			);
 		} else {
 			$groups['callbacks_hidden'] = array(
