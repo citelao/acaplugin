@@ -16,12 +16,15 @@ if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 		. 'Please run the `make` command in ' . __DIR__ );
 }
 
+$prefix = 'acac';
+
 /**
  * Register types
  */
-add_action('bstypes_init', 'acaplugin_register_types');
+add_action( 'bstypes_init', 'acaplugin_register_types' );
 function acaplugin_register_types() {
-	$prefix = 'acac';
+	global $prefix;
+
 	$auditionees = new Acaplugin\Types\Auditionees($prefix);
 	$groups = new Acaplugin\Types\Groups($prefix);
 	$songs = new Acaplugin\Types\Songs($prefix);
@@ -29,5 +32,27 @@ function acaplugin_register_types() {
 	Acaplugin\Options\Config::get_instance($prefix);
 }
 
+add_action( 'p2p_init', 'acaplugin_register_connection_types' );
+function acaplugin_register_connection_types() {
+	global $prefix;
+
+    p2p_register_connection_type( array(
+        'name' => 'group_callbacks',
+        'from' => BSTypes_Util::get_type_id($prefix, 'group'),
+        'to' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
+        'admin_column' => 'to',
+        'admin_dropdown' => 'to',
+        'to_labels' => array(
+        	'column_title' => 'Callback Groups',
+        	'dropdown_title' => 'Any callback group'
+        )
+    ) );
+
+    p2p_register_connection_type( array(
+        'name' => 'group_songs',
+        'from' => BSTypes_Util::get_type_id($prefix, 'group'),
+        'to' => BSTypes_Util::get_type_id($prefix, 'song')
+    ) );
+}
+
 // add export functionality
-// add audition admin features for webmaster
