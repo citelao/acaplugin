@@ -21,6 +21,11 @@ class BSType {
 						OR
 					`cb`: column content callback,
 					`sort_cb`: column sort callback
+
+					`filter`: optional list of value/display name tuples to display
+						in filter list,
+						AND
+					`filter_cb`: filtering callback
 				) for custom columns 
 			*/
 			'columns' => array(),
@@ -351,8 +356,8 @@ class BSType {
 	public function on_sortable_column_titles( $columns ) {
 		
 		foreach ($this->args['columns'] as $id => $column) {
-			if ( isset( $column['sort_cb'] ) || isset( $column['sort'] ) ) {
-				$columns[$id] = $column['title'];
+			if ( isset( $column['sort_cb'] ) ) {
+				$columns[$id] = $id;
 			}
 		}
 
@@ -424,10 +429,33 @@ class BSType {
 		return $distinct;
 	}
 
+	// Add dropdowns for filtering
 	// https://www.sitepoint.com/customized-wordpress-administration-filters/
 	// https://wordpress.stackexchange.com/questions/45436/add-filter-menu-to-admin-list-of-posts-of-custom-type-to-filter-posts-by-custo
 	public function on_list_filters( $query ) {
-		// Add dropdowns for filtering
+		global $post_type;
+		if( !is_admin() || $post_type != $this->get_id() ) {
+			return;
+		}
+
+		foreach ($this->args['columns'] as $key => $col) {
+			if( empty( $col['filter'] ) ) {
+				continue;
+			}
+
+			$selected = '';
+			if(isset($_GET[$key])){
+				$selected = sanitize_text_field($_GET[$key]);
+			}
+
+			?>
+			<select name="<?= $key ?>">
+				<?php foreach( $col['filter']() as $value => $name ): ?>
+				<option <?= ($selected == $value) ? 'selected="selected"' : '' ?> value="<?= $value ?>"><?= $name ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php
+		}
 	}
 
 	public function on_filter() {

@@ -131,13 +131,21 @@ class Auditionees {
 					),
 					'pref_card' => array(
 						'title' => 'Pref. Card Status',
+						'filter' => function( ) {
+							return array(
+								'default' => 'All preference card states',
+								'none' => 'No preference card generated',
+								'incomplete' => 'Uncompleted preference card',
+								'complete' => 'Completed preference card',
+							);
+						},
 						'cb' => function( $id ) {
 							// TODO
 							$called_back = false;
 							$complete = false;
 
 							if ( $called_back ) {
-								return ( $complete ) ? 'Complete' : 'Incomplete';
+								return ( $complete ) ? 'Complete' : 'Uncompleted';
 							} else {
 								return '--';
 							}
