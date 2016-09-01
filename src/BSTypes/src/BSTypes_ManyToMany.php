@@ -14,6 +14,8 @@ class BSTypes_ManyToMany {
 
 	const VERSION = 0.1;
 
+	const NONCE_STRING = 'many-to-many-field';
+
 	private function __construct() {
 		if ( ! defined( 'BS_MANY_TO_MANY_FIELD_DIR' ) ) {
 			define( 'BS_MANY_TO_MANY_FIELD_DIR', dirname( __FILE__ ) . '/' );
@@ -29,11 +31,25 @@ class BSTypes_ManyToMany {
 		add_action( 'cmb2_sanitize_bs_many_to_many', 
 			array( $this, 'sanitize' ), 10, 2 );
 		add_action( 'after_setup_theme', array( $this, 'do_hook' ) );
+		add_action( 'wp_ajax_bs_many_to_many', array( $this, 'on_ajax' )  );
 	}
 
 	public function do_hook() {
 		// Then fire our hook.
 		do_action( 'bs_many_to_many_field_load' );
+	}
+
+	public function on_ajax() {
+		check_ajax_referer( self::NONCE_STRING );
+
+		// Find correct subaction
+		echo $_REQUEST['to'];
+		echo ', ';
+		echo $_REQUEST['from'];
+		echo ', ';
+		echo $_REQUEST['type'];
+
+		wp_die();
 	}
 
 	public function render( $field, 
@@ -42,7 +58,6 @@ class BSTypes_ManyToMany {
 		$object_type, 
 		$field_type ) {
 		
-
 		$this->setup_admin_scripts();
 
 		$query_users = $field->options( 'query_users' );
@@ -105,7 +120,7 @@ class BSTypes_ManyToMany {
 		$count = 0;
 
 		// Wrap our lists
-		echo '<div class="attached-posts-wrap widefat" data-fieldname="'. $field_type->_name() .'">';
+		echo '<div class="many-to-many-wrap widefat" data-type="' . 'heh' .'" data-fieldname="'. $field_type->_name() .'">';
 
 		// Open our retrieved, or found posts, list
 		echo '<div class="retrieved-wrap column-wrap">';
@@ -186,7 +201,7 @@ class BSTypes_ManyToMany {
 			'desc'  => '',
 		) );
 
-		echo '</div><!-- .attached-posts-wrap -->';
+		echo '</div><!-- .many-to-many-wrap -->';
 
 		// Display our description if one exists
 		$field_type->_desc( true, true );
@@ -290,5 +305,13 @@ class BSTypes_ManyToMany {
 
 		wp_enqueue_script( 'bs-many-to-many-field', $url . 'js/many-to-many.js', $requirements, self::VERSION, true );
 		wp_enqueue_style( 'bs-many-to-many-field', $url . 'css/many-to-many-admin.css', array(), self::VERSION );
+
+		print_r('heh');
+		print_r(wp_create_nonce( self::NONCE_STRING ));
+		wp_localize_script( 'bs-many-to-many-field', 
+			'BS_MANY_TO_MANY_L10N', 
+			array(
+				'nonce' => wp_create_nonce( self::NONCE_STRING )
+			));
 	}
 }

@@ -6,7 +6,7 @@
 	padding-top: 0;
 }
 
-.cmb-type-bs-many-to-many .attached-posts-wrap {
+.cmb-type-bs-many-to-many .many-to-many-wrap {
 	display: inline-block;
 	width: 100%;
 }
@@ -56,7 +56,7 @@
 	text-indent: 55px;
 }
 
-.attached-posts-wrap .attached {
+.many-to-many-wrap .attached {
 	float: right;
 }
 
@@ -75,16 +75,16 @@
 	background: #e6e6e6;
 }
 
-.attached-posts-wrap .retrieved li.added {
+.many-to-many-wrap .retrieved li.added {
 	opacity: .5;
 }
 
-.attached-posts-wrap .retrieved li.added:hover {
+.many-to-many-wrap .retrieved li.added:hover {
 	background: #fff;
 	cursor: initial;
 }
 
-.attached-posts-wrap .retrieved li.added:hover .add-remove {
+.many-to-many-wrap .retrieved li.added:hover .add-remove {
 	background-position: 0 -22px;
 }
 

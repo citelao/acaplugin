@@ -6,9 +6,12 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 	var app = { $ : {} };
 
 	app.cache = function() {
-		var $wrap                = $( '.attached-posts-wrap' );
+		var $wrap                = $( '.many-to-many-wrap' );
 		app.$.retrievedPosts     = $wrap.find( '.retrieved' );
 		app.$.attachedPosts      = $wrap.find( '.attached' );
+
+		app.relationship_type    = $wrap.data( 'type' );
+		app.from                 = $('#post_ID').val();
 	};
 
 	app.init = function() {
@@ -36,18 +39,18 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 
 		$( '.cmb2-wrap > .cmb2-metabox' )
 			// Add posts when the plus icon is clicked
-			.on( 'click', '.attached-posts-wrap .retrieved .add-remove', app.addPostToColumn )
+			.on( 'click', '.many-to-many-wrap .retrieved .add-remove', app.addPostToColumn )
 			// Remove posts when the minus icon is clicked
-			.on( 'click', '.attached-posts-wrap .attached .add-remove', app.removePostFromColumn )
+			.on( 'click', '.many-to-many-wrap .attached .add-remove', app.removePostFromColumn )
 			// Listen for search events
-			.on( 'keyup', '.attached-posts-wrap input.search', app.handleSearch );
+			.on( 'keyup', '.many-to-many-wrap input.search', app.handleSearch );
 
 	};
 
 	// Clone our dragged item
 	app.buildItems = function( item ) {
 
-		var $wrap  = $( item ).parents( '.attached-posts-wrap' );
+		var $wrap  = $( item ).parents( '.many-to-many-wrap' );
 		// Get the ID of the item being dragged
 		var itemID = item[0].attributes[0].value;
 
@@ -69,7 +72,7 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 
 		var $li    = $( this ).parent();
 		var itemID = $li.data( 'id' );
-		var $wrap  = $li.parents( '.attached-posts-wrap' );
+		var $wrap  = $li.parents( '.many-to-many-wrap' );
 
 		if ( $li.hasClass( 'added' ) ) {
 			return;
@@ -86,6 +89,23 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 		// Add the item to the right list
 		$wrap.find( '.attached' ).append( $li.clone() );
 
+		// Create connection in DB.
+		var data = {
+			'action': 'bs_many_to_many',
+			'_ajax_nonce': BS_MANY_TO_MANY_L10N.nonce,
+			'operation': 'add',
+			'type': app.relationship_type,
+			'from': app.from,
+			'to': itemID
+		};
+		$.post(ajaxurl, data)
+			.done(function(response) {
+				alert('Got this from the server: ' + response);
+			})
+			.fail(function( e ) {
+				alert('Failed');
+			});
+
 		app.resetAttachedListItems( $wrap );
 	};
 
@@ -95,13 +115,30 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 		// Get the clicked item's ID
 		var $li    = $(this).closest( 'li' );
 		var itemID = $li.data( 'id' );
-		var $wrap  = $li.parents( '.attached-posts-wrap' );
+		var $wrap  = $li.parents( '.many-to-many-wrap' );
 
 		// Remove the list item
 		$(this).parent().remove();
 
 		// Remove the 'added' class from the retrieved column
 		$wrap.find('.retrieved li[data-id="' + itemID +'"]').removeClass('added');
+
+		// Remove connection in DB.
+		var data = {
+			'action': 'bs_many_to_many',
+			'_ajax_nonce': BS_MANY_TO_MANY_L10N.nonce,
+			'operation': 'remove',
+			'type': app.relationship_type,
+			'from': app.from,
+			'to': itemID
+		};
+		$.post(ajaxurl, data)
+			.done(function(response) {
+				alert('Got this from the server: ' + response);
+			})
+			.fail(function( e ) {
+				alert('Failed');
+			});
 
 		app.resetAttachedListItems( $wrap );
 	};
@@ -141,7 +178,7 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 	// Re-order items when items are dragged
 	app.resetItems = function( item ) {
 		var $li = $( item );
-		app.resetAttachedListItems( $li.parents( '.attached-posts-wrap' ) );
+		app.resetAttachedListItems( $li.parents( '.many-to-many-wrap' ) );
 	};
 
 	// Replace the plus icon in the attached posts column
