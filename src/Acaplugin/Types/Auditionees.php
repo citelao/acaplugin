@@ -47,6 +47,13 @@ class Auditionees {
 		$stage = get_option( 'acac_config' )['stage'];
 		$groups = array();
 
+		$groups['auditioned_groups'] = array(
+			'name' => 'Auditioned Groups',
+			'type' => 'multicheck',
+			'description' => 'Which groups is this person auditioning for?',
+			'options_cb' => 'Acaplugin\Util::get_groups_multicheck'
+		);
+
 		// Only show callbacking groups if callbacks have started or we're
 		// in draft.
 		if( $stage == 'callbacks' || $stage == 'draft' ) {
