@@ -89,23 +89,6 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 		// Add the item to the right list
 		$wrap.find( '.attached' ).append( $li.clone() );
 
-		// Create connection in DB.
-		var data = {
-			'action': 'bs_many_to_many',
-			'_ajax_nonce': BS_MANY_TO_MANY_L10N.nonce,
-			'operation': 'add',
-			'type': app.relationship_type,
-			'from': app.from,
-			'to': itemID
-		};
-		$.post(ajaxurl, data)
-			.done(function(response) {
-				alert('Got this from the server: ' + response);
-			})
-			.fail(function( e ) {
-				alert('Failed');
-			});
-
 		app.resetAttachedListItems( $wrap );
 	};
 
@@ -122,23 +105,6 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 
 		// Remove the 'added' class from the retrieved column
 		$wrap.find('.retrieved li[data-id="' + itemID +'"]').removeClass('added');
-
-		// Remove connection in DB.
-		var data = {
-			'action': 'bs_many_to_many',
-			'_ajax_nonce': BS_MANY_TO_MANY_L10N.nonce,
-			'operation': 'remove',
-			'type': app.relationship_type,
-			'from': app.from,
-			'to': itemID
-		};
-		$.post(ajaxurl, data)
-			.done(function(response) {
-				alert('Got this from the server: ' + response);
-			})
-			.fail(function( e ) {
-				alert('Failed');
-			});
 
 		app.resetAttachedListItems( $wrap );
 	};
@@ -172,7 +138,46 @@ window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
 		// Replace the plus icon with a minus icon in the attached column
 		app.replacePlusIcon();
 
+		// Update the DB
+		var oldVal = $input.val().split(',').map(function(x) {
+			return parseInt(x);
+		});
+
+		var added = newVal.filter(function(x) { return oldVal.indexOf(x) < 0 });
+		var deleted = oldVal.filter(function(x) { return newVal.indexOf(x) < 0 });
+
+		console.log(oldVal);
+		console.log(newVal);
+		console.log(added);
+		console.log(deleted);
+
+		for (var i = 0; i < added.length; i++) {
+			app.updateDB(added[i], 'add');
+		}
+
+		for (var i = 0; i < deleted.length; i++) {
+			app.updateDB(deleted[i], 'remove');
+		}
+
 		$input.val( newVal.join( ',' ) );
+	};
+
+	app.updateDB = function(id, operation) {
+		var data = {
+			'action': 'bs_many_to_many',
+			'_ajax_nonce': BS_MANY_TO_MANY_L10N.nonce,
+			'operation': operation,
+			'type': app.relationship_type,
+			'from': app.from,
+			'to': id
+		};
+		$.post(ajaxurl, data)
+			.done(function(response) {
+				// alert('Got this from the server: ' + response);
+			})
+			.fail(function( e ) {
+				alert('Failed');
+			});
 	};
 
 	// Re-order items when items are dragged
