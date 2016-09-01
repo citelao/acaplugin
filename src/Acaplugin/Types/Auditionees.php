@@ -88,7 +88,7 @@ class Auditionees {
 
 			$groups['preferences'] = array(
 				'name' => 'Group Preferences',
-				'type' => 'bs_many_to_many',
+				'type' => 'custom_attached_posts',
 				'description' => 'An ordered list of group preferences. The higher the group, the better. A group in the left column is not preffed.',
 				'options' => array(
 					'query_args' => array(
@@ -148,9 +148,12 @@ class Auditionees {
 							);
 						},
 						'cb' => function( $id ) {
-							return count(
-								$this->type->get( $id, 'preferences' )
-							); // TODO 
+							return count(get_posts( array(
+								'connected_type' => 'group_callbacks',
+								'connected_items' => $id,
+								'nopaging' => true,
+								'suppress_filters' => false
+							) ) );
 						}
 					),
 					'pref_card' => array(

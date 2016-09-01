@@ -1,7 +1,7 @@
 /**
  * Add the drag and drop and sort functionality to the Tiered Template admin
  */
-window.CMBAP = window.CMBAP || (function(window, document, $, undefined) {
+window.BSMTM = window.BSMTM || (function(window, document, $, undefined) {
 
 	var app = { $ : {} };
 

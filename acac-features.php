@@ -45,15 +45,27 @@ function acaplugin_register_connection_types() {
 		'to' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
 		'admin_column' => 'to',
 		'admin_dropdown' => 'to',
-		'admin_box' => array(
-			'show' => 'any',
-			'context' => 'normal'
-		),
 		'to_labels' => array(
 			'column_title' => 'Callback Groups',
 			'dropdown_title' => 'Any callback group'
 		)
 	) );
+
+	// p2p_register_connection_type( array(
+	// 	'name' => 'group_preferences',
+	// 	'from' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
+	// 	'to' => BSTypes_Util::get_type_id($prefix, 'group'),
+	// 	'admin_column' => 'from',
+	// 	'admin_dropdown' => 'from',
+	// 	'admin_box' => array(
+	// 		'show' => 'any',
+	// 		'context' => 'normal'
+	// 	),
+	// 	'from_labels' => array(
+	// 		'column_title' => 'Group Preferences',
+	// 		'dropdown_title' => 'Any pref-ed group'
+	// 	)
+	// ) );
 
 	// TODO replace old group acceptance list with this!
 	// p2p_register_connection_type( array(
