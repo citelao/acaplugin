@@ -62,8 +62,9 @@ class Auditionees {
 				'type' => 'bs_many_to_many',
 				'description' => 'Add groups to call this person back',
 				'options' => array(
+					'connection' => 'group_callbacks',
 					'query_args' => array(
-						'post_type' => 'acac_group'
+						// 'post_type' => 'acac_group'
 					)
 				)
 			);

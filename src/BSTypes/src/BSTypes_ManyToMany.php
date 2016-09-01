@@ -53,15 +53,14 @@ class BSTypes_ManyToMany {
 
 		$to = $_REQUEST['to'];
 		$from = $_REQUEST['from'];
+		$type = $_REQUEST['type'];
+
+		// TODO check user permissions
 
 		if( $_REQUEST['operation'] == 'add' ) {
-			p2p_type( 'group_callbacks' )->connect( $from, $to, array(
-			    'date' => current_time('mysql')
-			) );
-
-			echo( 'added' );
+			echo p2p_type( $type )->connect( $from, $to );
 		} elseif( $_REQUEST['operation'] == 'remove' ) {
-			p2p_type( 'group_callbacks' )->disconnect( $from, $to );
+			echo p2p_type( $type )->disconnect( $from, $to );
 		}
 
 		wp_die();
@@ -79,13 +78,37 @@ class BSTypes_ManyToMany {
 
 		if ( ! $query_users ) {
 
+			// Must be related to a specific Posts2Posts connection.
+			if( empty( $field->options( 'connection' ) ) ) {
+				return;
+			}
+
+			// Make sure that the types are sensible
+			$connection = p2p_type( $field->options( 'connection' ) );
+			$from_types = $connection->side['from']->query_vars['post_type'];
+			$to_types = $connection->side['to']->query_vars['post_type'];
+
+			$current_type = get_post_type($object_id);
+			$fetch_direction = -1;
+			if( in_array( $current_type, $from_types ) ) {
+				$fetch_direction = 'to';
+			} else if( in_array( $current_type, $to_types ) ) {
+				$fetch_direction = 'from';
+			} else {
+				return;
+			}
+
 			// Setup our args
-			$args = wp_parse_args( (array) $field->options( 'query_args' ), array(
-				'post_type'			=> 'post',
-				'posts_per_page'	=> 100,
-				'orderby'			=> 'name',
-				'order'				=> 'ASC',
-			) );
+			$default_args = wp_parse_args( 
+				array(
+					'posts_per_page'	=> 100,
+					'orderby'			=> 'name',
+					'order'				=> 'ASC',
+				),
+				$connection->side[$fetch_direction]->query_vars
+			);
+			$args = wp_parse_args( (array) $field->options( 'query_args' ), 
+				$default_args);
 
 			// loop through post types to get labels for all
 			$post_type_labels = array();
@@ -102,11 +125,13 @@ class BSTypes_ManyToMany {
 				$post_type_labels = implode( '/', $post_type_labels );
 			}
 		} else {
-			// Setup our args
-			$args = wp_parse_args( (array) $field->options( 'query_args' ), array(
-				'number'  => 100,
-			) );
-			$post_type_labels = $field_type->_text( 'users_text', esc_html__( 'Users' ) );
+			// Not configured for many-to-many users connections.
+			return;
+			// // Setup our args
+			// $args = wp_parse_args( (array) $field->options( 'query_args' ), array(
+			// 	'number'  => 100,
+			// ) );
+			// $post_type_labels = $field_type->_text( 'users_text', esc_html__( 'Users' ) );
 		}
 
 		// Check 'filter' setting
@@ -135,7 +160,7 @@ class BSTypes_ManyToMany {
 		$count = 0;
 
 		// Wrap our lists
-		echo '<div class="many-to-many-wrap widefat" data-type="' . 'heh' .'" data-fieldname="'. $field_type->_name() .'">';
+		echo '<div class="many-to-many-wrap widefat" data-type="' . $field->options( 'connection' ) .'" data-fieldname="'. $field_type->_name() .'">';
 
 		// Open our retrieved, or found posts, list
 		echo '<div class="retrieved-wrap column-wrap">';
@@ -206,7 +231,7 @@ class BSTypes_ManyToMany {
 		$value = ! empty( $ids ) ? implode( ',', $ids ) : '';
 
 		// Close up shop
-		echo '</ul><!-- #attached -->';
+		echo '</ul><!-- .attached -->';
 		echo '</div><!-- .attached-wrap -->';
 
 		echo $field_type->input( array(

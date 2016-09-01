@@ -41,12 +41,10 @@ class Groups {
 						'fields' => array(
 							'callbacks' => array(
 								'name' => 'Callbacks',
-								'type' => 'custom_attached_posts',
+								'type' => 'bs_many_to_many',
 								'options' => array(
-									'filter_boxes' => true,
-									'query_args' => array(
-										'post_type' => 'acac_auditionee',
-									)
+									'connection' => 'group_callbacks',
+									'filter_boxes' => true
 								)
 							)
 						)
