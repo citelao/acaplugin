@@ -32,27 +32,55 @@ function acaplugin_register_types() {
 	Acaplugin\Options\Config::get_instance($prefix);
 }
 
+// TODO Refactor into BSTypes. This features shows me that the API *needs*
+// to be `add_field()`, `add_column()` etc. This should not be exposed like
+// this.
 add_action( 'p2p_init', 'acaplugin_register_connection_types' );
 function acaplugin_register_connection_types() {
 	global $prefix;
 
-    p2p_register_connection_type( array(
-        'name' => 'group_callbacks',
-        'from' => BSTypes_Util::get_type_id($prefix, 'group'),
-        'to' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
-        'admin_column' => 'to',
-        'admin_dropdown' => 'to',
-        'to_labels' => array(
-        	'column_title' => 'Callback Groups',
-        	'dropdown_title' => 'Any callback group'
-        )
-    ) );
+	p2p_register_connection_type( array(
+		'name' => 'group_callbacks',
+		'from' => BSTypes_Util::get_type_id($prefix, 'group'),
+		'to' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
+		'admin_column' => 'to',
+		'admin_dropdown' => 'to',
+		'admin_box' => array(
+			'show' => 'any',
+			'context' => 'normal'
+		),
+		'to_labels' => array(
+			'column_title' => 'Callback Groups',
+			'dropdown_title' => 'Any callback group'
+		)
+	) );
 
-    p2p_register_connection_type( array(
-        'name' => 'group_songs',
-        'from' => BSTypes_Util::get_type_id($prefix, 'group'),
-        'to' => BSTypes_Util::get_type_id($prefix, 'song')
-    ) );
+	// TODO replace old group acceptance list with this!
+	// p2p_register_connection_type( array(
+	// 	'name' => 'group_members',
+	// 	'from' => BSTypes_Util::get_type_id($prefix, 'group'),
+	// 	'to' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
+	// 	'cardinality' => 'one-to-many',
+	// 	'admin_column' => 'to',
+	// 	'admin_dropdown' => 'to',
+	// 	'to_labels' => array(
+	// 		'column_title' => 'Accepted Group',
+	// 		'dropdown_title' => 'Any accepted group'
+	// 	)
+	// ) );
+
+	p2p_register_connection_type( array(
+		'name' => 'group_songs',
+		'from' => BSTypes_Util::get_type_id($prefix, 'group'),
+		'to' => BSTypes_Util::get_type_id($prefix, 'song'),
+		'cardinality' => 'one-to-many',
+		'admin_column' => 'to',
+		'admin_dropdown' => 'to',
+		'to_labels' => array(
+			'column_title' => 'Group',
+			'dropdown_title' => 'Any group'
+		)
+	) );
 }
 
 // add export functionality

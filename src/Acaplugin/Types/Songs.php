@@ -15,12 +15,6 @@ class Songs {
 		$this->type = bstypes()->create($prefix, 'song', 'songs',
 			array(
 				'columns' => array(
-					'group' => array(
-						'title' => 'Group',
-						'cb' => function( $id ) {
-							return '--'; // TODO
-						}
-					),
 					'arrangers' => array(
 						'title' => 'Arranger(s)',
 						'cb' => function( $id ) {

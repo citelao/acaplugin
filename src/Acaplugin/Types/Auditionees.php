@@ -71,6 +71,15 @@ class Auditionees {
 		}
 
 		if( $stage == 'draft' ) {
+			 // VERY hacky
+			global $post;
+			$post_id = 0;
+			if( $post ) {
+				$post_id = $post->ID;
+			} else {
+				$post_id = $_GET['post'];
+			}
+
 			$groups['preferences'] = array(
 				'name' => 'Group Preferences',
 				'type' => 'custom_attached_posts',
@@ -78,6 +87,9 @@ class Auditionees {
 				'options' => array(
 					'query_args' => array(
 						'post_type' => 'acac_group',
+						'connected_type' => 'group_callbacks',
+						'connected_items' => $post_id,
+						'nopaging' => true
 					)
 				)
 			);
@@ -252,20 +264,20 @@ class Auditionees {
 								'name' => 'Last Name',
 								'type' => 'text'
 							),
-							'pronoun' => array(
-								'name' => 'Pronouns',
-								'type' => 'radio',
-								'options' => array(
-									'he' => 'He / Him',
-									'she' => 'She / Her',
-									'they' => 'They / Them',
-									'ey' => 'E(y) / Em',
-									'xeh' => 'Xe / Hir',
-									'xex' => 'Xe / Xir',
-									'zeh' => 'Ze / Hir',
-									'zex' => 'Ze / Zir'
-								)
-							),
+							// 'pronoun' => array(
+							// 	'name' => 'Pronouns',
+							// 	'type' => 'radio',
+							// 	'options' => array(
+							// 		'he' => 'He / Him',
+							// 		'she' => 'She / Her',
+							// 		'they' => 'They / Them',
+							// 		'ey' => 'E(y) / Em',
+							// 		'xeh' => 'Xe / Hir',
+							// 		'xex' => 'Xe / Xir',
+							// 		'zeh' => 'Ze / Hir',
+							// 		'zex' => 'Ze / Zir'
+							// 	)
+							// ),
 							'email' => array(
 								'name' => 'Email',
 								'type' => 'text_email',
