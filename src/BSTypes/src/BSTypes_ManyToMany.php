@@ -155,6 +155,13 @@ class BSTypes_ManyToMany {
 
 		// Check to see if we have any meta values saved yet
 		$attached = (array) $escaped_value;
+		$connected = get_posts( array(
+			'connected_type' => $field->options( 'connection' ),
+			'connected_items' => $object_id,
+			'nopaging' => true,
+			'suppress_filters' => false
+		) );
+		$attached = array_map(function($el) { return $el->ID; }, $connected);
 
 		// Set our count class
 		$count = 0;
