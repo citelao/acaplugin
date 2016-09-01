@@ -12,21 +12,29 @@
         {
             "type": "vcs",
             "url": "https://github.com/origgami/CMB2-grid"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/scribu/wp-posts-to-posts"
         }
     ],
     "require": {
         "php": ">=5.3",
-        "composer/installers": "v1.0.*",
+        "composer/installers": "v1.1.*",
+        "origgami/CMB2-grid": "dev-master",
+        "scribu/posts-to-posts": "^1.6.5",
+        "scribu/lib-posts-to-posts": "dev-master",
+        "scribu/scb-framework": "dev-master",
         "webdevstudios/cmb2": "^2.2",
-        "webdevstudios/cmb2-attached-posts": "^1.2",
-        "origgami/CMB2-grid": "dev-master"
+        "webdevstudios/cmb2-attached-posts": "^1.2"
     },
     "autoload": {
         "files": [
-          "vendor/webdevstudios/cmb2/init.php",
-          "vendor/webdevstudios/cmb2-attached-posts/cmb2-attached-posts-field.php",
-          "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php",
-          "src/BSTypes/init.php"
+            "vendor/scribu/posts-to-posts/posts-to-posts.php",
+            "vendor/webdevstudios/cmb2/init.php",
+            "vendor/webdevstudios/cmb2-attached-posts/cmb2-attached-posts-field.php",
+            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php",
+            "src/BSTypes/init.php"
         ],
         "psr-4": {
             "Acaplugin\\": "src/Acaplugin"
