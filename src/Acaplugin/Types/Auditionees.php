@@ -124,7 +124,9 @@ class Auditionees {
 					'callbacks' => array(
 						'title' => '# Callbacks',
 						'cb' => function( $id ) {
-							return 0; // TODO
+							return count(
+								$this->type->get( $id, 'preferences' )
+							); // TODO 
 						}
 					),
 					'pref_card' => array(
@@ -144,6 +146,11 @@ class Auditionees {
 					'prefs' => array(
 						'title' => 'Preferences',
 						'cb' => function( $id ) {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'draft' ) {
+								return '(hidden)';
+							}
+
 							$groups = $this->type->get( $id, 'preferences' );
 
 							if( empty( $groups ) ) {
@@ -152,7 +159,7 @@ class Auditionees {
 
 							$names = array_map( array( $this, 'get_post_title' ), $groups );
 
-							$rtn = '<ol><li>';
+							$rtn = '<ol style="margin:0"><li>';
 							$rtn .= join( '</li><li>', $names );
 							$rtn .= '</li></ol>';
 							return $rtn;
