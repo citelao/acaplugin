@@ -131,12 +131,13 @@ class Auditionees {
 					),
 					'pref_card' => array(
 						'title' => 'Pref. Card Status',
-						'filter' => function( ) {
+						'filter' => function() {
+							// TODO filter_cb
 							return array(
-								'default' => 'All preference card states',
-								'none' => 'No preference card generated',
-								'incomplete' => 'Uncompleted preference card',
-								'complete' => 'Completed preference card',
+								'default' => 'All pref card states',
+								'none' => 'No pref card generated',
+								'incomplete' => 'Uncompleted pref card',
+								'complete' => 'Completed pref card',
 							);
 						},
 						'cb' => function( $id ) {
@@ -151,8 +152,17 @@ class Auditionees {
 							}
 						}
 					),
-					'prefs' => array(
+					'preferences' => array(
 						'title' => 'Preferences',
+						'filter' => function() {
+							return array( 'none' => 'Any pref-ed group' ) +
+								\Acaplugin\Util::get_groups_multicheck( null );
+						},
+						'filter_cb' => function( $query, $arg ) {
+							$query->query_vars['meta_key'] = $this->type->get_meta_key( 'preferences' );
+							$query->query_vars['meta_value'] = '"' . $arg . '"';
+							$query->query_vars['meta_compare'] = 'LIKE';
+						},
 						'cb' => function( $id ) {
 							$stage = get_option( 'acac_config' )['stage'];
 							if( $stage != 'draft' ) {
@@ -218,7 +228,8 @@ class Auditionees {
 							),
 							'email' => array(
 								'name' => 'Email',
-								'type' => 'text_email'
+								'type' => 'text_email',
+								'description' => 'We will send further instructions to this email.'
 							),
 							'telephone' => array(
 								'name' => 'Telephone Number',

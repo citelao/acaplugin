@@ -457,9 +457,28 @@ class BSType {
 			<?php
 		}
 	}
+	// Filter query based on $_GET
+	public function on_filter( $query ) {
+	    global $post_type, $pagenow;
+    	if( !$pagenow == 'edit.php' || 
+    		$post_type != $this->get_id() || 
+    		!$query->is_main_query() ) {
+    		return;
+    	}
 
-	public function on_filter() {
-		// Filter query based on $_GET
+    	foreach ($this->args['columns'] as $key => $col) {
+			if( empty( $col['filter_cb'] ) ) {
+				continue;
+			}
+
+			if( !isset( $_GET[$key] ) ) {
+				continue;
+			}
+
+			$col['filter_cb']( $query, $_GET[$key] );
+    	}
+
+    	return $query;
 	}
 
 	// https://wordpress.stackexchange.com/questions/7291/quick-edit-screen-customization
