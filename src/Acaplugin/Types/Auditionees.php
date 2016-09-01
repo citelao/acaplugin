@@ -82,7 +82,7 @@ class Auditionees {
 
 			$groups['preferences'] = array(
 				'name' => 'Group Preferences',
-				'type' => 'custom_attached_posts',
+				'type' => 'bs_many_to_many',
 				'description' => 'An ordered list of group preferences. The higher the group, the better. A group in the left column is not preffed.',
 				'options' => array(
 					'query_args' => array(

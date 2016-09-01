@@ -46,8 +46,7 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 			/**
 			 * Register new fields
 			 */
-			add_action( 'cmb2_render_many_to_many',
-				array('BSTypes_Forms', 'render_many_to_many'), 10, 5 );
+			BSTypes_ManyToMany::get_instance();
 		}
 	}
 
