@@ -32,6 +32,7 @@ class Auditionees {
 				'description' => 'Please write any (potential) conflicts you have on these dates. We use this to help plan your callback schedule.'
 			)
 		);
+		// TODO null fallback
 		$callback_dates = get_option( 'acac_config' )['callback_dates'];
 		foreach ( $callback_dates as $key => $date ) {
 			$date = strtotime($date);
@@ -418,7 +419,81 @@ class Auditionees {
 				'supports' => array('revisions')
 			)
 		);
+
+		// Bulk actions
+		$bulk_actions = new \Seravo_Custom_Bulk_Action( array( 'post_type' => $this->type->get_id() ) );
+
+		$bulk_actions->register_bulk_action(array(
+			'menu_text' => 'Export',
+			'admin_notice' => array(
+				'single' => '%s auditionee exported.',
+				'plural' => '%s auditionees exported.',
+			),
+			'action_name' => 'export',
+			'callback' => function( $post_ids ) {
+				// Build a CSV file
+				$auditionees = get_posts( array(
+					'post_type' => $this->type->get_id(),
+					'post__in' => $post_ids
+				) );
+
+				// http://code.stephenmorley.org/php/creating-downloadable-csv-files/			
+				header('Content-Type: text/csv; charset=utf-8');
+				header('Content-Disposition: attachment; filename=export.csv');
+
+				// create a file pointer connected to the output stream
+				$output = fopen('php://output', 'w');
+
+				// output the column headings
+				$default_cols = array( 
+					'first_name', 
+					'last_name', 
+					'email', 
+					'callbacks', 
+					'callback_groups'
+				);
+				$callback_dates = get_option( 'acac_config' )['callback_dates'];
+				$callback_cols = array_map(function( $x ) {
+					$date = strtotime($x);
+					return 'conflict-' . date( 'm-d', $date );
+				}, $callback_dates);
+				$cols = array_merge($default_cols, $callback_cols);
+				fputcsv( $output, $cols );
+				foreach( $auditionees as $auditionee ) {
+					$id = $auditionee->ID;
+
+					$connected = get_posts( array(
+					  'connected_type' => 'group_callbacks',
+					  'connected_items' => $id,
+					  'nopaging' => true,
+					  'suppress_filters' => false
+					) );
+
+					$connected_names = array_map(function($x) {
+						return get_post($x->p2p_from)->post_title;
+					}, $connected);
+					$list = implode(', ', $connected_names);
+
+					$columns = array(
+						$this->type->get( $id, 'first_name' ),
+						$this->type->get( $id, 'last_name' ),
+						$this->type->get( $id, 'email' ),
+						count($connected),
+						$list
+					);
+					foreach($callback_cols as $col) {
+						array_push( $columns, $this->type->get( $id, $col ) );
+					}
+					fputcsv($output, $columns);
+				}
+
+				exit();
+			}
+		));
+
+		$bulk_actions->init();
 	}
+
 
 	public function get_post_title( $post ) {
 		return get_post( $post )->post_title;

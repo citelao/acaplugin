@@ -152,6 +152,7 @@ class Registration {
 			'description' => 'Please write any (potential) conflicts you have on these dates. We use this to help plan your callback schedule.'
 		) );
 
+		// TODO null fallback
 		$callback_dates = get_option( 'acac_config' )['callback_dates'];
 		foreach ( $callback_dates as $key => $date ) {
 			$date = strtotime($date);

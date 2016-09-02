@@ -26,10 +26,12 @@
         "scribu/lib-posts-to-posts": "dev-master",
         "scribu/scb-framework": "dev-master",
         "webdevstudios/cmb2": "^2.2",
-        "webdevstudios/cmb2-attached-posts": "^1.2"
+        "webdevstudios/cmb2-attached-posts": "^1.2",
+        "seravo/wp-custom-bulk-actions": "^0.1.3"
     },
     "autoload": {
         "files": [
+            "vendor/seravo/wp-custom-bulk-actions/wp-custom-bulk-actions.php",
             "vendor/scribu/posts-to-posts/posts-to-posts.php",
             "vendor/webdevstudios/cmb2/init.php",
             "vendor/webdevstudios/cmb2-attached-posts/cmb2-attached-posts-field.php",
