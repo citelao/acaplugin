@@ -106,6 +106,11 @@ class Auditionees {
 				'description' => "An auditionee's preferences are not available while pref cards are still being circulated."
 			);
 		}
+		$groups['preferences_submitted'] = array(
+			'name' => 'Preferences Submitted',
+			'desc' => 'Checked if the auditionee has submitted their preferences.',
+			'type' => 'checkbox'
+		);
 
 		$groups['acceptance'] = array(
 			'name' => 'Accepted Group',
@@ -169,11 +174,17 @@ class Auditionees {
 						},
 						'cb' => function( $id ) {
 							// TODO
-							$called_back = false;
-							$complete = false;
+							$callbacks = count(get_posts( array(
+								'connected_type' => 'group_callbacks',
+								'connected_items' => $id,
+								'nopaging' => true,
+								'suppress_filters' => false
+							) ) );
+							$called_back = ($callbacks == 0);
+							$complete = $this->type->get( $id, 'preferences_submitted' );
 
 							if ( $called_back ) {
-								return ( $complete ) ? 'Complete' : 'Uncompleted';
+								return ( $complete ) ? '✓' : 'Not completed';
 							} else {
 								return '--';
 							}

@@ -216,6 +216,9 @@ class Registration {
 				update_post_meta( $new_submission_id, $key, $value );
 			}
 		}
+
+		wp_update_post( array( 'ID' => $new_submission_id ) );
+
 		/*
 		 * Redirect back to the form page with a query variable with the new post ID.
 		 * This will help double-submissions with browser refreshes
