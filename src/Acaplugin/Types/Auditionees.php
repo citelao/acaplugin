@@ -508,9 +508,11 @@ class Auditionees {
 				$default_cols = array( 
 					'first_name', 
 					'last_name', 
-					'email', 
+					'email',
 					'callbacks', 
-					'callback_groups'
+					'callback_groups',
+					'accepted',
+					'preferences_submitted'
 				);
 				$callback_dates = get_option( 'acac_config' )['callback_dates'];
 				$callback_cols = array_map(function( $x ) {
@@ -535,12 +537,20 @@ class Auditionees {
 					}, $connected);
 					$list = implode(', ', $connected_names);
 
+					$accepted_id = $this->type->get( $id, 'acceptance' );
+					$accepted = '';
+					if( $accepted_id ) {
+						$accepted = get_post( $accepted_id )->post_title;
+					}
+
 					$columns = array(
 						$this->type->get( $id, 'first_name' ),
 						$this->type->get( $id, 'last_name' ),
 						$this->type->get( $id, 'email' ),
 						count($connected),
-						$list
+						$list,
+						$accepted,
+						$this->type->get( $id, 'preferences_submitted' )
 					);
 					foreach($callback_cols as $col) {
 						array_push( $columns, $this->type->get( $id, $col ) );
