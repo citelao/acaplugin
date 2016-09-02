@@ -173,20 +173,19 @@ class Auditionees {
 							);
 						},
 						'cb' => function( $id ) {
-							// TODO
 							$callbacks = count(get_posts( array(
 								'connected_type' => 'group_callbacks',
 								'connected_items' => $id,
 								'nopaging' => true,
 								'suppress_filters' => false
 							) ) );
-							$called_back = ($callbacks == 0);
+							$called_back = ($callbacks != 0);
 							$complete = $this->type->get( $id, 'preferences_submitted' );
 
 							if ( $called_back ) {
 								return ( $complete ) ? '✓' : 'Not completed';
 							} else {
-								return '--';
+								return '';
 							}
 						}
 					),

@@ -68,12 +68,16 @@ class Prefs {
 			\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences_submitted' ),
 			true );
 
-		var_dump($submitted);
-
-		if( $submitted == 'on' ) {
+		if( $submitted == 'on' && !isset( $_GET['submitted'] ) ) {
 			$cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You\'ve already submitted your pref card!' ) ) );
 			return;
 		}
+
+		$cmb->add_field(array(
+			'id' => 'post_id',
+			'type' => 'hidden',
+			'default' => $id
+		) );
 
 		$cmb->add_field(array(
 			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences' ),
@@ -105,12 +109,11 @@ class Prefs {
 
 		if ( ( $error = $cmb->prop( 'submission_error' ) ) && is_wp_error( $error ) ) {
 			// If there was an error with the submission, add it to our ouput.
-			$output .= '<p class="alert alert--warning">' . sprintf( __( 'There was an error in the submission: %s', 'wds-post-submit' ), '<strong>'. $error->get_error_message() .'</strong>' ) . '</p>';
+			$output .= '<p class="alert alert--warning">' . sprintf( __( 'There was an error: %s', 'wds-post-submit' ), '<strong>'. $error->get_error_message() .'</strong>' ) . '</p>';
 		}
 		// If the post was submitted successfully, notify the user.
-		if ( isset( $_GET['registered'] ) ) {
-			// TODO this link is hardcoded
-			$output .= '<p class="alert">Thank you for registering! <a href="/register">Start a new registration</a></p>';
+		if ( isset( $_GET['submitted'] ) ) {
+			$output .= '<p class="alert">Thank you for submitting your preference card!</p>';
 			return $output;
 		}
 
@@ -148,22 +151,9 @@ class Prefs {
 			return $cmb->prop( 'submission_error', new \WP_Error( 'security_fail', __( 'Security check failed.' ) ) );
 		}
 
-		// Check name submitted
-		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'first_name')] ) || 
-			empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'last_name')] ) ) {
-			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter a full name.' ) ) );
-		}
-
-		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'email')] ) ) {
-			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter an email.' ) ) );
-		}
-
-		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'telephone')] ) ) {
-			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter a telephone number.' ) ) );
-		}
-
-		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'residence')] ) ) {
-			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter an address of residence.' ) ) );
+		// Check form fields submitted
+		if ( ! isset( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences')] ) ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must submit preferences.' ) ) );
 		}
 
 		/*
@@ -171,32 +161,29 @@ class Prefs {
 		*/
 		$sanitized_values = $cmb->get_sanitized_values( $_POST );
 
-		// Set our post data arguments
-		$post_data['post_type'] = \BSTypes_Util::get_type_id( $this->prefix, $this->type );
+		// Grab the post ID
+		$post_id = $sanitized_values['post_id'];
+		unset( $sanitized_values['post_id'] );
 
-		 // Create the new post
-		$new_submission_id = wp_insert_post( $post_data, true );
-		// If we hit a snag, update the user
-		if ( is_wp_error( $new_submission_id ) ) {
-			return $cmb->prop( 'submission_error', $new_submission_id );
-		}
+		// Add a flag to say we've submitted our preferences
+		$sanitized_values[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences_submitted' )] = 'on';
 
 		// Loop through remaining (sanitized) data, and save to post-meta
 		foreach ( $sanitized_values as $key => $value ) {
 			if ( is_array( $value ) ) {
 				$value = array_filter( $value );
 				if( ! empty( $value ) ) {
-					update_post_meta( $new_submission_id, $key, $value );
+					update_post_meta( $post_id, $key, $value );
 				}
 			} else {
-				update_post_meta( $new_submission_id, $key, $value );
+				update_post_meta( $post_id, $key, $value );
 			}
 		}
 		/*
 		 * Redirect back to the form page with a query variable with the new post ID.
 		 * This will help double-submissions with browser refreshes
 		 */
-		wp_redirect( esc_url_raw( add_query_arg( 'registered', 'true' ) ) );
+		wp_redirect( esc_url_raw( add_query_arg( 'submitted', 'true' ) ) );
 		exit;
 	}
 }
