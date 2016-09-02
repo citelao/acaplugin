@@ -146,6 +146,14 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'auditioned_groups' ),
+			'name' => 'Auditioned Groups',
+			'type' => 'multicheck',
+			'description' => 'What groups are you auditioning for?',
+			'options_cb' => 'Acaplugin\Util::get_groups_multicheck'
+		) );
+
+		$cmb->add_field(array(
 			'id' => 'conflicts_desc',
 			'name' => 'Callback conflicts',
 			'type' => 'title',
@@ -191,7 +199,7 @@ class Registration {
 		// If the post was submitted successfully, notify the user.
 		if ( isset( $_GET['registered'] ) ) {
 			// TODO this link is hardcoded
-			$output .= '<p class="alert">Thank you for registering! <a href="/register">Start a new registration</a></p>';
+			$output .= '<p class="alert">Thank you for registering! You should receive a confirmation email shortly. If you don\'t, contact <a href="mailto:acacpresident@gmail.com">acacpresident@gmail.com</a></p><p class="alert"><a href="/register">Start a new registration</a></p>';
 			return $output;
 		}
 

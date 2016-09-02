@@ -147,12 +147,12 @@ class Auditionees {
 					),
 					'callbacks' => array(
 						'title' => '# Callbacks',
-						'filter' => function() {
-							return array(
-								'default' => 'Any # of callbacks',
-								'none' => 'TODO'
-							);
-						},
+						// 'filter' => function() {
+						// 	return array(
+						// 		'default' => 'Any # of callbacks',
+						// 		'none' => 'TODO'
+						// 	);
+						// },
 						'cb' => function( $id ) {
 							return count(get_posts( array(
 								'connected_type' => 'group_callbacks',
@@ -165,13 +165,35 @@ class Auditionees {
 					'pref_card' => array(
 						'title' => 'Pref. Card Status',
 						'filter' => function() {
-							// TODO filter_cb
 							return array(
 								'default' => 'All pref card states',
-								'none' => 'No pref card generated',
+								// 'none' => 'No pref card generated',
 								'incomplete' => 'Uncompleted pref card',
 								'complete' => 'Completed pref card',
 							);
+						},
+						'filter_cb' => function( $query, $arg ) {
+							if( $arg == 'default' ) {
+								return;
+							}
+
+							if( $arg == 'complete' ) {
+								$query->query_vars['meta_key'] = $this->type->get_meta_key( 'preferences_submitted' );
+							}
+
+							if( $arg == 'incomplete' ) {
+								$query->query_vars['meta_query'] = array(
+								    array(
+										'key' => $this->type->get_meta_key( 'preferences_submitted' ),
+										'compare' => 'NOT EXISTS',
+										'value' => ''
+								    ),
+								);
+								// $query->query_vars['connected_type'] = 'group_callbacks';
+								// $groups = get_posts(array('post_type' => 'acac_group'));
+								// $ids = array_map(function($x) { return $x->ID; }, $groups);
+								// $query->query_vars['connected_items'] = -1;
+							}
 						},
 						'cb' => function( $id ) {
 							$callbacks = count(get_posts( array(
@@ -188,6 +210,23 @@ class Auditionees {
 							} else {
 								return '';
 							}
+						}
+					),
+					'auditioned_groups' => array(
+						'title' => 'Auditioned Groups',
+						'cb' => function( $id ) {
+							$groups = $this->type->get( $id, 'auditioned_groups' );
+
+							if( empty( $groups ) ) {
+								return '--';
+							}
+
+							$names = array_map( array( $this, 'get_post_title' ), $groups );
+
+							$rtn = '<ul style="margin:0"><li>';
+							$rtn .= join( '</li><li>', $names );
+							$rtn .= '</li></ul>';
+							return $rtn;
 						}
 					),
 					'preferences' => array(
@@ -242,13 +281,15 @@ class Auditionees {
 							$stage = get_option( 'acac_config' )['stage'];
 							if( $stage != 'callbacks' && $stage != 'draft' ) {
 								return array( 
-									'default' => 'Any callback group'
+									'default' => 'Any callback group',
+									// 'any' => 'Has callback',
 								);
 							}
 
 							return array( 
 								'default' => 'Any callback group',
-								'none' => 'TODO No callbacks'
+								'any' => 'Has callback group',
+								// 'none' => 'TODO No callbacks'
 							) +
 								\Acaplugin\Util::get_groups_multicheck( null );
 						},
@@ -265,6 +306,10 @@ class Auditionees {
 							$query->query_vars['connected_type'] = 'group_callbacks';
 							if( $arg == 'none' ) {
 								$query->query_vars['connected_items'] = '0';
+							} else if( $arg == 'any' ) {
+								// $groups = get_posts(array('post_type' => 'acac_group'));
+								// $ids = array_map(function($x) { return $x->ID; }, $groups);
+								// $query->query_vars['connected_items'] = 245;
 							} else {
 								$query->query_vars['connected_items'] = (int)$arg;
 							}

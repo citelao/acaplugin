@@ -168,7 +168,7 @@ class BSType {
 
 		// Add filter links
 		add_action( 'restrict_manage_posts', array( $this, 'on_list_filters' ) );
-		add_action( 'pre_get_posts', array( $this, 'on_filter' ) );
+		add_action( 'parse_query', array( $this, 'on_filter' ) );
 
 		// Quick edit :)
 		add_action( 'quick_edit_custom_box', array( $this, 'on_quick_edit' ), 10, 2 );
