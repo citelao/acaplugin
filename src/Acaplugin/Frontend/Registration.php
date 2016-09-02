@@ -13,6 +13,8 @@ class Registration {
 	}
 
 	private $form_id = 'acac-frontend-registration-form';
+	private $prefix = 'acac';
+	private $type = 'auditionee';
 
 	private function __construct() {
 		add_action( 'cmb2_init', array( $this, 'register_form' ) );
@@ -22,7 +24,9 @@ class Registration {
 	}
 
 	public function enqueue_scripts() {
-		wp_register_style( 'acac-form-style', plugins_url( 'Frontend/css/style.css', dirname( __FILE__ ) ) );
+		if( ! wp_script_is( 'acac-form-style', 'registered' ) ) {
+			wp_register_style( 'acac-form-style', plugins_url( 'Frontend/css/style.css', dirname( __FILE__ ) ) );
+		}
 	}
 
 	public function register_form() {
@@ -35,7 +39,7 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
-			'id' => 'first_name',
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'first_name' ),
 			'name' => 'First Name',
 			'type' => 'text',
 			'attributes'  => array(
@@ -44,7 +48,7 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
-			'id' => 'last_name',
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'last_name' ),
 			'name' => 'Last Name',
 			'type' => 'text',
 			'attributes'  => array(
@@ -53,7 +57,7 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
-			'id' => 'email',
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'email' ),
 			'name' => 'Email',
 			'description' => 'We will send callback notifications to this email. Groups may also use this email to contact you during auditions.',
 			'type' => 'text_email',
@@ -63,7 +67,7 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
-			'id' => 'telephone',
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'telephone' ),
 			'name' => 'Telephone Number',
 			'description' => 'We will only use this to contact you in an emergency.',
 			'type' => 'text',
@@ -74,7 +78,7 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
-			'id' => 'residence',
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'residence' ),
 			'name' => 'Residence',
 			'description' => 'Write your full dorm and room number (or address if off-campus).',
 			'type' => 'text',
@@ -97,7 +101,7 @@ class Registration {
 			$nice_date = date('l, F j', $date);
 
 			$cmb->add_field(array(
-				'id' => 'conflict-' . date('m-d', $date),
+				'id' => \BSTypes_Util::get_field_id(  $this->prefix, $this->type, 'conflict-' . date( 'm-d', $date ) ),
 				'name' => 'Conflicts on ' . $nice_date,
 				'type' => 'textarea'
 			) );
@@ -156,57 +160,54 @@ class Registration {
 			return $cmb->prop( 'submission_error', new \WP_Error( 'security_fail', __( 'Security check failed.' ) ) );
 		}
 
-		// // Check title submitted
-		// if ( empty( $_POST['submitted_post_title'] ) ) {
-		// 	return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'New post requires a title.' ) ) );
-		// }
+		// Check name submitted
+		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'first_name')] ) || 
+			empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'last_name')] ) ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter a full name.' ) ) );
+		}
 
-		// // And that the title is not the default title
-		// if ( $cmb->get_field( 'submitted_post_title' )->default() == $_POST['submitted_post_title'] ) {
-		// 	return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'Please enter a new title.' ) ) );
-		// }
-	// /**
-	//  * Fetch sanitized values
-	//  */
-	// $sanitized_values = $cmb->get_sanitized_values( $_POST );
-	// // Set our post data arguments
-	// $post_data['post_title']   = $sanitized_values['submitted_post_title'];
-	// unset( $sanitized_values['submitted_post_title'] );
-	// $post_data['post_content'] = $sanitized_values['submitted_post_content'];
-	// unset( $sanitized_values['submitted_post_content'] );
-	// // Create the new post
-	// $new_submission_id = wp_insert_post( $post_data, true );
-	// // If we hit a snag, update the user
-	// if ( is_wp_error( $new_submission_id ) ) {
-	// 	return $cmb->prop( 'submission_error', $new_submission_id );
-	// }
-	// /**
-	//  * Other than post_type and post_status, we want
-	//  * our uploaded attachment post to have the same post-data
-	//  */
-	// unset( $post_data['post_type'] );
-	// unset( $post_data['post_status'] );
-	// // Try to upload the featured image
-	// $img_id = wds_frontend_form_photo_upload( $new_submission_id, $post_data );
-	// // If our photo upload was successful, set the featured image
-	// if ( $img_id && ! is_wp_error( $img_id ) ) {
-	// 	set_post_thumbnail( $new_submission_id, $img_id );
-	// }
-	// // Loop through remaining (sanitized) data, and save to post-meta
-	// foreach ( $sanitized_values as $key => $value ) {
-	// 	if ( is_array( $value ) ) {
-	// 		$value = array_filter( $value );
-	// 		if( ! empty( $value ) ) {
-	// 			update_post_meta( $new_submission_id, $key, $value );
-	// 		}
-	// 	} else {
-	// 		update_post_meta( $new_submission_id, $key, $value );
-	// 	}
-	// }
-	// /*
-	//  * Redirect back to the form page with a query variable with the new post ID.
-	//  * This will help double-submissions with browser refreshes
-	//  */
+		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'email')] ) ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter an email.' ) ) );
+		}
+
+		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'telephone')] ) ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter a telephone number.' ) ) );
+		}
+
+		if ( empty( $_POST[\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'residence')] ) ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You must enter an address of residence.' ) ) );
+		}
+
+		/*
+		* Fetch sanitized values
+		*/
+		$sanitized_values = $cmb->get_sanitized_values( $_POST );
+
+		// Set our post data arguments
+		$post_data['post_type'] = \BSTypes_Util::get_type_id( $this->prefix, $this->type );
+
+		 // Create the new post
+		$new_submission_id = wp_insert_post( $post_data, true );
+		// If we hit a snag, update the user
+		if ( is_wp_error( $new_submission_id ) ) {
+			return $cmb->prop( 'submission_error', $new_submission_id );
+		}
+
+		// Loop through remaining (sanitized) data, and save to post-meta
+		foreach ( $sanitized_values as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$value = array_filter( $value );
+				if( ! empty( $value ) ) {
+					update_post_meta( $new_submission_id, $key, $value );
+				}
+			} else {
+				update_post_meta( $new_submission_id, $key, $value );
+			}
+		}
+		/*
+		 * Redirect back to the form page with a query variable with the new post ID.
+		 * This will help double-submissions with browser refreshes
+		 */
 		wp_redirect( esc_url_raw( add_query_arg( 'registered', 'true' ) ) );
 		exit;
 	}

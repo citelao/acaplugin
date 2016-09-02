@@ -188,7 +188,8 @@ class BSType {
 
 		// If post does not have this field, this is an error.
 
-		return get_post_meta( 
+		return get_metadata(
+			'post',
 			$post_id,
 			$this->get_meta_key( $field ),
 			true );
