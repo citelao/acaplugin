@@ -227,7 +227,21 @@ class Auditionees {
 							$rtn .= join( '</li><li>', $names );
 							$rtn .= '</li></ul>';
 							return $rtn;
-						}
+						},
+						'filter' => function() {
+							return array( 'default' => 'Any auditioned group' ) +
+								\Acaplugin\Util::get_groups_multicheck( null );
+						},
+						'filter_cb' => function( $query, $arg ) {
+							if( $arg == 'default' ) {
+								return;
+							}
+
+							// I know, I know, this is gross. I'm sorry.
+							$query->query_vars['meta_key'] = $this->type->get_meta_key( 'auditioned_groups' );
+							$query->query_vars['meta_value'] = '"' . $arg . '"';
+							$query->query_vars['meta_compare'] = 'LIKE';
+						},
 					),
 					'preferences' => array(
 						'title' => 'Preferences',
@@ -288,7 +302,7 @@ class Auditionees {
 
 							return array( 
 								'default' => 'Any callback group',
-								'any' => 'Has callback group',
+								// 'any' => 'Has callback group',
 								// 'none' => 'TODO No callbacks'
 							) +
 								\Acaplugin\Util::get_groups_multicheck( null );
