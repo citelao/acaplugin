@@ -30,6 +30,7 @@ function acaplugin_register_types() {
 	$songs = new Acaplugin\Types\Songs($prefix);
 
 	Acaplugin\Options\Config::get_instance($prefix);
+	Acaplugin\Frontend\Registration::get_instance($prefix);
 }
 
 // TODO Refactor into BSTypes. This features shows me that the API *needs*
