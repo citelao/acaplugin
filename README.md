@@ -19,6 +19,7 @@ for you (locally, of course) and install our dependencies.
 
 1. `make` in this directory.
 2. Activate this plugin.
+3. Install [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) to make sure emails go through.
 
 ## Useful links
 http://192.168.33.10/
