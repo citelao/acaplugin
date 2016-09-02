@@ -40,6 +40,41 @@ class Prefs {
 			'cmb_styles' => false
 		) );
 
+		if( empty($_GET['key'] ) ) { 
+			$cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'Missing auditionee key.' ) ) );
+			return;
+		}
+
+		$auditionees = get_posts( array(
+			'post_type' => \BSTypes_Util::get_type_id( $this->prefix, $this->type ),
+			'meta_key' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'key' ),
+			'meta_value' => $_GET['key']
+		) );
+
+		if( count( $auditionees ) == 0 ) {
+			$cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'No auditionee found for key.' ) ) );
+			return;
+		}
+
+		if( count( $auditionees ) != 1 ) {
+			$cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'Duplicate key!' ) ) );
+			return;
+		}
+
+		$auditionee = $auditionees[0];
+		$id = $auditionee->ID;
+
+		$submitted = get_post_meta($id,
+			\BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences_submitted' ),
+			true );
+
+		var_dump($submitted);
+
+		if( $submitted == 'on' ) {
+			$cmb->prop( 'submission_error', new \WP_Error( 'post_data_missing', __( 'You\'ve already submitted your pref card!' ) ) );
+			return;
+		}
+
 		$cmb->add_field(array(
 			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences' ),
 			'name' => 'Group Preferences',
@@ -49,7 +84,7 @@ class Prefs {
 				'query_args' => array(
 					'post_type' => 'acac_group',
 					'connected_type' => 'group_callbacks',
-					'connected_items' => 373,
+					'connected_items' => $id,
 					'nopaging' => true
 				)
 			)

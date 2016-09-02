@@ -385,6 +385,14 @@ class Auditionees {
 									'required' => 'required',
 								)
 							),
+							'key' => array(
+								'name' => 'Key',
+								'description' => 'Unique key for this auditionee\'s pref card. Please do not edit if possible.',
+								'type' => 'text',
+								'attributes'  => array(
+									'required' => 'required',
+								)
+							)
 						)
 					),
 					'conflicts' => array(

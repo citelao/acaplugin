@@ -197,6 +197,7 @@ class Registration {
 
 		// Set our post data arguments
 		$post_data['post_type'] = \BSTypes_Util::get_type_id( $this->prefix, $this->type );
+		$post_data['post_status'] = 'published';
 
 		 // Create the new post
 		$new_submission_id = wp_insert_post( $post_data, true );
@@ -204,6 +205,10 @@ class Registration {
 		if ( is_wp_error( $new_submission_id ) ) {
 			return $cmb->prop( 'submission_error', $new_submission_id );
 		}
+
+		// Generate key
+		$key_meta = \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'key' );
+		$sanitized_values[$key_meta] = md5( 'a simple salt' . $new_submission_id );
 
 		// Loop through remaining (sanitized) data, and save to post-meta
 		foreach ( $sanitized_values as $key => $value ) {
