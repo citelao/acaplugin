@@ -195,9 +195,11 @@ class Registration {
 		*/
 		$sanitized_values = $cmb->get_sanitized_values( $_POST );
 
+		$user_id = get_current_user_id();
+
 		// Set our post data arguments
 		$post_data['post_type'] = \BSTypes_Util::get_type_id( $this->prefix, $this->type );
-		$post_data['post_status'] = 'published';
+		$post_data['post_status'] = 'publish';
 
 		 // Create the new post
 		$new_submission_id = wp_insert_post( $post_data, true );
@@ -222,7 +224,9 @@ class Registration {
 			}
 		}
 
-		wp_update_post( array( 'ID' => $new_submission_id ) );
+		wp_update_post( array( 
+			'ID' => $new_submission_id
+		) );
 
 		/*
 		 * Redirect back to the form page with a query variable with the new post ID.
