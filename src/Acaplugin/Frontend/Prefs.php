@@ -1,7 +1,7 @@
 <?php
 namespace Acaplugin\Frontend;
 
-class Registration {
+class Prefs {
 	private static $instance = null;
 
 	public static function get_instance($prefix) {
@@ -12,7 +12,7 @@ class Registration {
 		return self::$instance;
 	}
 
-	private $form_id = 'acac-frontend-registration-form';
+	private $form_id = 'acac-frontend-prefs-form';
 	private $prefix = 'acac';
 	private $type = 'auditionee';
 
@@ -20,7 +20,7 @@ class Registration {
 		$this->prefix = $prefix;
 
 		add_action( 'cmb2_init', array( $this, 'register_form' ) );
-		add_shortcode( 'acac_registration', array( $this, 'show_form' ) );
+		add_shortcode( 'acac_prefs', array( $this, 'show_form' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'cmb2_after_init', array( $this, 'submit_form' ) );
 	}
@@ -41,84 +41,25 @@ class Registration {
 		) );
 
 		$cmb->add_field(array(
-			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'first_name' ),
-			'name' => 'First Name',
-			'type' => 'text',
-			'attributes'  => array(
-				'required' => 'required',
+			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'preferences' ),
+			'name' => 'Group Preferences',
+			'type' => 'custom_attached_posts',
+			'description' => 'An ordered list of group preferences. The higher the group, the better. A group in the left column is not preffed.',
+			'options' => array(
+				'query_args' => array(
+					'post_type' => 'acac_group',
+					'connected_type' => 'group_callbacks',
+					'connected_items' => 373,
+					'nopaging' => true
+				)
 			)
 		) );
-
-		$cmb->add_field(array(
-			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'last_name' ),
-			'name' => 'Last Name',
-			'type' => 'text',
-			'attributes'  => array(
-				'required' => 'required',
-			)
-		) );
-
-		$cmb->add_field(array(
-			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'email' ),
-			'name' => 'Email',
-			'description' => 'We will send callback notifications to this email. Groups may also use this email to contact you during auditions.',
-			'type' => 'text_email',
-			'attributes'  => array(
-				'required' => 'required',
-			)
-		) );
-
-		$cmb->add_field(array(
-			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'telephone' ),
-			'name' => 'Telephone Number',
-			'description' => 'We will only use this to contact you in an emergency.',
-			'type' => 'text',
-			'attributes'  => array(
-				'type' => 'tel',
-				'required' => 'required'
-			)
-		) );
-
-		$cmb->add_field(array(
-			'id' => \BSTypes_Util::get_field_id( $this->prefix, $this->type, 'residence' ),
-			'name' => 'Residence',
-			'description' => 'Write your full dorm and room number (or address if off-campus).',
-			'type' => 'text',
-			'attributes'  => array(
-				'required' => 'required',
-			)
-		) );
-
-		$cmb->add_field(array(
-			'id' => 'conflicts_desc',
-			'name' => 'Callback conflicts',
-			'type' => 'title',
-			'description' => 'Please write any (potential) conflicts you have on these dates. We use this to help plan your callback schedule.'
-		) );
-
-		$callback_dates = get_option( 'acac_config' )['callback_dates'];
-		foreach ( $callback_dates as $key => $date ) {
-			$date = strtotime($date);
-
-			$nice_date = date('l, F j', $date);
-
-			$cmb->add_field(array(
-				'id' => \BSTypes_Util::get_field_id(  $this->prefix, $this->type, 'conflict-' . date( 'm-d', $date ) ),
-				'name' => 'Conflicts on ' . $nice_date,
-				'type' => 'textarea'
-			) );
-
-			$conflicts['conflict-' . date('m-d', $date)] = array(
-				'name' => 'Conflicts on ' . $nice_date,
-				'type' => 'textarea'
-			);
-		}
 	}
 
 	public function show_form() {
 		$stage = get_option( 'acac_config' )['stage'];
-		if( $stage != 'auditions' ) {
-			return '<p class="alert">Audition registration is closed at this time. Sorry!</p>';
+		if( $stage != 'callbacks' ) {
+			return '<p class="alert">Preference cards are closed at this time. Sorry!</p>';
 		}
 
 		wp_enqueue_style( 'acac-form-style' );
@@ -147,7 +88,7 @@ class Registration {
 
 	public function submit_form() {
 		$stage = get_option( 'acac_config' )['stage'];
-		if( $stage != 'auditions' ) {
+		if( $stage != 'callbacks' ) {
 			return;
 		}
 
