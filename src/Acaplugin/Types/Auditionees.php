@@ -493,7 +493,8 @@ class Auditionees {
 				// Build a CSV file
 				$auditionees = get_posts( array(
 					'post_type' => $this->type->get_id(),
-					'post__in' => $post_ids
+					'post__in' => $post_ids,
+					'nopaging' => true
 				) );
 
 				// http://code.stephenmorley.org/php/creating-downloadable-csv-files/			
@@ -518,6 +519,7 @@ class Auditionees {
 				}, $callback_dates);
 				$cols = array_merge($default_cols, $callback_cols);
 				fputcsv( $output, $cols );
+				$i = 0;
 				foreach( $auditionees as $auditionee ) {
 					$id = $auditionee->ID;
 
