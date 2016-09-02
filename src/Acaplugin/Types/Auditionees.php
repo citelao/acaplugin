@@ -225,6 +225,64 @@ class Auditionees {
 							return $rtn;
 						}
 					),
+					'callback_groups' => array(
+						'title' => 'Callback Groups',
+						'filter' => function() {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'callbacks' && $stage != 'draft' ) {
+								return array( 
+									'default' => 'Any callback group'
+								);
+							}
+
+							return array( 
+								'default' => 'Any callback group',
+								'none' => 'TODO No callbacks'
+							) +
+								\Acaplugin\Util::get_groups_multicheck( null );
+						},
+						'filter_cb' => function( $query, $arg ) {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'callbacks' && $stage != 'draft' ) {
+								return;
+							}
+
+							if( $arg == 'default' ) {
+								return;
+							}
+
+							$query->query_vars['connected_type'] = 'group_callbacks';
+							if( $arg == 'none' ) {
+								$query->query_vars['connected_items'] = '0';
+							} else {
+								$query->query_vars['connected_items'] = (int)$arg;
+							}
+						},
+						'cb' => function( $id ) {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'callbacks' && $stage != 'draft' ) {
+								return '(hidden)';
+							}
+
+							$groups = get_posts( array(
+								'connected_type' => 'group_callbacks',
+								'connected_items' => $id,
+								'nopaging' => true,
+								'suppress_filters' => false
+							) );
+
+							if( empty( $groups ) ) {
+								return '--';
+							}
+
+							$names = array_map( array( $this, 'get_post_title' ), $groups );
+
+							$rtn = '<ul style="margin:0"><li>';
+							$rtn .= join( '</li><li>', $names );
+							$rtn .= '</li></ul>';
+							return $rtn;
+						}
+					),
 					'group' => array(
 						'title' => 'Accepted Group',
 						'filter' => function() {
@@ -267,11 +325,17 @@ class Auditionees {
 						'fields' => array(
 							'first_name' => array(
 								'name' => 'First Name',
-								'type' => 'text'
+								'type' => 'text',
+								'attributes'  => array(
+									'required' => 'required',
+								)
 							),
 							'last_name' => array(
 								'name' => 'Last Name',
-								'type' => 'text'
+								'type' => 'text',
+								'attributes'  => array(
+									'required' => 'required',
+								)
 							),
 							// 'pronoun' => array(
 							// 	'name' => 'Pronouns',
@@ -290,21 +354,27 @@ class Auditionees {
 							'email' => array(
 								'name' => 'Email',
 								'type' => 'text_email',
-								'description' => 'We will send further instructions to this email.'
+								'description' => 'We will send further instructions to this email.',
+								'attributes'  => array(
+									'required' => 'required',
+								)
 							),
 							'telephone' => array(
 								'name' => 'Telephone Number',
-							    'type' => 'text',
-							    'attributes' => array(
-							    	'type' => 'tel'
+								'type' => 'text',
+								'attributes' => array(
+									'type' => 'tel',
 								)
-						    ),
-						    'residence' => array(
+							),
+							'residence' => array(
 								'name' => 'Residence',
 								'description' => 'Dorm and room number (or address if off-campus)',
-							    'type' => 'text'
-						    ),
-					    )
+								'type' => 'text',
+								'attributes'  => array(
+									'required' => 'required',
+								)
+							),
+						)
 					),
 					'conflicts' => array(
 						'title' => 'Conflicts',

@@ -53,9 +53,15 @@ class Groups {
 						'title' => 'Songs',
 						'fields' => array(
 							'song_list' => array(
-								'name' => 'Song List',
-								'type' => 'title',
-								'description' => 'TODO: just list all the songs'
+								'name' => 'Song list',
+								'type' => 'bs_many_to_many',
+								'description' => 'All songs sung in this group.',
+								'options' => array(
+									'connection' => 'group_songs',
+									'query_args' => array(
+										// 'post_type' => 'acac_group'
+									)
+								)
 							)
 						)
 					)

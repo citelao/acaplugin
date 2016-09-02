@@ -43,8 +43,9 @@ function acaplugin_register_connection_types() {
 		'name' => 'group_callbacks',
 		'from' => BSTypes_Util::get_type_id($prefix, 'group'),
 		'to' => BSTypes_Util::get_type_id($prefix, 'auditionee'),
-		'admin_column' => 'to',
-		'admin_dropdown' => 'to',
+		// 'admin_column' => 'to',
+		// 'admin_dropdown' => false,
+		'admin_box' => false,
 		'to_labels' => array(
 			'column_title' => 'Callback Groups',
 			'dropdown_title' => 'Any callback group'
@@ -88,6 +89,7 @@ function acaplugin_register_connection_types() {
 		'cardinality' => 'one-to-many',
 		'admin_column' => 'to',
 		'admin_dropdown' => 'to',
+		'admin_box' => false,
 		'to_labels' => array(
 			'column_title' => 'Group',
 			'dropdown_title' => 'Any group'
