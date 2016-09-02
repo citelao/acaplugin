@@ -1,0 +1,27 @@
+label {
+	font-weight: bold;
+}
+
+textarea {
+	max-width: 100%;
+}
+
+.cmb-row {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+
+.cmb2-metabox-description {
+	margin: 0;
+    color: #777;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.cmb2-metabox-title {
+    font-size: 1.5rem;
+}
+
+.button-primary {
+
+}
