@@ -114,6 +114,11 @@ class Registration {
 	}
 
 	public function show_form() {
+		$stage = get_option( 'acac_config' )['stage'];
+		if( $stage != 'auditions' ) {
+			return '<p class="alert">Audition registration is closed at this time. Sorry!</p>';
+		}
+
 		wp_enqueue_style( 'acac-form-style' );
 
 		$cmb = cmb2_get_metabox( $this->form_id, 'fake-object-id' );
@@ -139,6 +144,11 @@ class Registration {
 	}
 
 	public function submit_form() {
+		$stage = get_option( 'acac_config' )['stage'];
+		if( $stage != 'auditions' ) {
+			return;
+		}
+
 		// If no form submission, bail
 		if ( empty( $_POST ) || ! isset( $_POST['submit-cmb'], $_POST['object_id'] ) ) {
 			return false;
