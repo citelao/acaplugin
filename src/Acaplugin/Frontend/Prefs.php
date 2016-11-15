@@ -119,7 +119,7 @@ class Prefs {
 
 		$output .= cmb2_get_metabox_form( $cmb,
 			'fake-oject-id', 
-			array( 'save_button' => __( 'Register', 'wds-post-submit' ) ) 
+			array( 'save_button' => __( 'Submit preferences', 'wds-post-submit' ) ) 
 		);
 		return $output;
 	}

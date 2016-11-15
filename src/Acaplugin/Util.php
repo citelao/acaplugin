@@ -4,7 +4,9 @@ namespace Acaplugin;
 class Util {
 	public static function get_groups_multicheck( $field ) {
 		$posts = get_posts( array(
-			'post_type' => 'acac_group'
+			'post_type' => 'acac_group',
+			'connected_items' => $post_id,
+			'nopaging' => true
 		) );
 
 		if( empty( $posts ) ) {

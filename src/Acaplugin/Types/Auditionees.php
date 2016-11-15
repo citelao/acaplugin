@@ -154,6 +154,11 @@ class Auditionees {
 						// 	);
 						// },
 						'cb' => function( $id ) {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'draft' && $stage != 'callbacks' ) {
+								return '(hidden)';
+							}
+
 							return count(get_posts( array(
 								'connected_type' => 'group_callbacks',
 								'connected_items' => $id,
@@ -215,6 +220,11 @@ class Auditionees {
 					'auditioned_groups' => array(
 						'title' => 'Auditioned Groups',
 						'cb' => function( $id ) {
+							$stage = get_option( 'acac_config' )['stage'];
+							if( $stage != 'draft' && $stage != 'callbacks' ) {
+								return '(hidden)';
+							}
+
 							$groups = $this->type->get( $id, 'auditioned_groups' );
 
 							if( empty( $groups ) ) {
@@ -509,6 +519,7 @@ class Auditionees {
 					'first_name', 
 					'last_name', 
 					'email',
+					'key',
 					'callbacks', 
 					'callback_groups',
 					'accepted',
@@ -547,6 +558,7 @@ class Auditionees {
 						$this->type->get( $id, 'first_name' ),
 						$this->type->get( $id, 'last_name' ),
 						$this->type->get( $id, 'email' ),
+						$this->type->get( $id, 'key' ),
 						count($connected),
 						$list,
 						$accepted,

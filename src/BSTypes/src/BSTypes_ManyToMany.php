@@ -101,9 +101,9 @@ class BSTypes_ManyToMany {
 			// Setup our args
 			$default_args = wp_parse_args( 
 				array(
-					'posts_per_page'	=> 100,
-					'orderby'			=> 'name',
-					'order'				=> 'ASC',
+					'posts_per_page' => 300,
+					'orderby' => 'name',
+					'order' => 'ASC',
 				),
 				$connection->side[$fetch_direction]->query_vars
 			);
