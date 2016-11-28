@@ -194,6 +194,22 @@ class BSTypes_ManyToMany {
 			// Set a class if our post is in our attached meta
 			$class .= ! empty ( $attached ) && in_array( $object->ID, $attached ) ? ' added' : '';
 
+			// If this is the "one" side of a one-to-many relationship, and the
+			// current retrieved object already has this field, mark the
+			// element as "taken." This is a very slow implementation for
+			// large groups.
+			//
+			// Does not detect relationship type. Instead, works by a
+			// boolean `hide_other_connected` option.
+			if( $field->options( 'hide_other_connected' ) ) {
+				$connected = new WP_Query( array(
+					'connected_type' => $field->options( 'connection' ),
+					'connected_items' => $object->ID,
+					'nopaging' => true
+				) );
+				$class .= $connected->have_posts() ? ' added taken' : '';
+			}
+
 			$thumbnail = '';
 
 			if ( $has_thumbnail ) {

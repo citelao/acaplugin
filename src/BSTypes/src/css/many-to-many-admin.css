@@ -88,6 +88,18 @@
 	background-position: 0 -22px;
 }
 
+.many-to-many-wrap .retrieved li.taken {
+	text-decoration: line-through;
+}
+
+.many-to-many-wrap .retrieved li.taken:before {
+	content: "(claimed) ";
+}
+
+.many-to-many-wrap .retrieved li.taken .add-remove {
+	text-decoration: none;
+}
+
 .connected li .add-remove {
 	display: block;
 	height: 17px;

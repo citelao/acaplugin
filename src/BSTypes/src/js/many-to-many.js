@@ -78,6 +78,10 @@ window.BSMTM = window.BSMTM || (function(window, document, $, undefined) {
 			return;
 		}
 
+		if ( $li.hasClass( 'taken' ) ) {
+			return;
+		}
+
 		// If our item is in our post ID array, stop
 		if ( app.inputHasId( $wrap, itemID ) ) {
 			return;
