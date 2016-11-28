@@ -58,9 +58,7 @@ class Groups {
 								'description' => 'All songs sung in this group.',
 								'options' => array(
 									'connection' => 'group_songs',
-									'query_args' => array(
-										// 'post_type' => 'acac_group'
-									)
+									'hide_other_connected' => true
 								)
 							)
 						)

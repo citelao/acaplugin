@@ -23,15 +23,18 @@ class Songs {
 							if ( ! $arrangers ) {
 								return '--';
 							}
-							return join( ', ', $arrangers);
+							return join( ', ', $arrangers );
 						}
 					),
 					'artists' => array(
 						'title' => 'Artist(s)',
 						'cb' => function( $id ) {
-							return join( ', ',
-								$this->type->get( $id, 'artists' )
-							);
+							$artists = $this->type->get( $id, 'artists' );
+
+							if ( ! $artists ) {
+								return '--';
+							}
+							return join( ', ', $artists );
 						}
 					),
 					'author' => array( 'title' => 'Added by' ),
@@ -55,8 +58,9 @@ class Songs {
 						'fields' => array(
 							'group' => array(
 								'name' => 'Group',
-								'description' => 'TODO: dropdown of groups',
-								'type' => 'title'
+								'type' => 'select',
+								'description' => 'TODO Who\'s singing this?',
+								'options_cb' => 'Acaplugin\Util::get_groups_dropdown'
 							),
 							'arrangers' => array(
 								'name' => 'Arranger(s)',
