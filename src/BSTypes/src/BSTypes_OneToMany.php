@@ -99,19 +99,23 @@ class BSTypes_OneToMany {
 			return;
 		}
 
-		echo '<ul>';
+		echo '<select class="cmb2_select">';
+		echo '<option>--</option>';
 		foreach ( $objects as $object ) {
 			$edit_link = get_edit_post_link( $object );
 			$title = get_the_title( $object );
 
 			printf(
-				'<li data-id="%d"><a title="' . __( 'Edit' ) . '" href="%s">%s</a></li>',
+				'<option data-id="%d"><a title="' . __( 'Edit' ) . '" href="%s">%s</a></option>',
 				$object->ID,
 				$edit_link,
 				$title
 			);
 		}
-		echo '</ul>';
+		echo '</select>';
+
+		// Display our description if one exists
+		$field_type->_desc( true, true );
 	}
 
 	public function sanitize( $sanitized_val, $val ) {
