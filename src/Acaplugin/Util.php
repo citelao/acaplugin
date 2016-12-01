@@ -3,6 +3,7 @@ namespace Acaplugin;
 
 class Util {
 	public static function get_groups_multicheck( $field ) {
+		global $post_id;
 		$posts = get_posts( array(
 			'post_type' => 'acac_group',
 			'connected_items' => $post_id,

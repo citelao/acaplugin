@@ -30,8 +30,9 @@ class BSTypes_OneToMany {
 			array( $this, 'render' ), 10, 5 );
 		add_action( 'cmb2_sanitize_bs_one_to_many', 
 			array( $this, 'sanitize' ), 10, 2 );
+		add_action( 'cmb2_override_meta_save', 
+			array( $this, 'save' ), 10, 4 );
 		add_action( 'after_setup_theme', array( $this, 'do_hook' ) );
-		// add_action( 'wp_ajax_bs_one_to_many', array( $this, 'on_ajax' )  );
 	}
 
 	public function do_hook() {
@@ -108,23 +109,20 @@ class BSTypes_OneToMany {
 		) );
 		$attached = array_map(function($el) { return $el->ID; }, $connected);
 
-		echo '<select class="cmb2_select" required>';
+		echo sprintf('<select class="cmb2_select" name="%s">',
+			$field_type->_name());
+		echo sprintf('<option disabled value="" %s>--</option>',
+			empty( $attached ) ? 'selected' : '');
 
-		if( empty( $attached ) ) {
-			echo '<option disabled selected>--</option>';
-		} else { 
-			echo '<option disabled>--</option>';
-		}
 		foreach ( $objects as $object ) {
 			$selected = in_array( $object->ID, $attached ) ? ' selected' : '';
 			$edit_link = get_edit_post_link( $object );
 			$title = get_the_title( $object );
 
 			printf(
-				'<option data-id="%d" %s><a title="' . __( 'Edit' ) . '" href="%s">%s</a></option>',
-				$selected,
+				'<option value="%d" %s>%s</a></option>',
 				$object->ID,
-				$edit_link,
+				$selected,
 				$title
 			);
 		}
@@ -134,7 +132,39 @@ class BSTypes_OneToMany {
 		$field_type->_desc( true, true );
 	}
 
-	public function sanitize( $sanitized_val, $val ) {
+	public function save( $check, 
+		$args,
+		$field_args,
+		$field ) {
 
+		// Don't update other fields :)
+		if ( $field_args['type'] != 'bs_one_to_many' ) {
+			return $check;
+		}
+
+		// Don't know how you can get here without this, but ok:
+		if( ! $field->options( 'connection' ) ) {
+			throw new InvalidArgumentException( 'Connection is required' );
+		}
+
+		$type = $field->options( 'connection' );
+
+		// Disconnect any previous connections
+		$connected = get_posts( array(
+			'connected_type' => $type,
+			'connected_items' => $args['id'],
+			'nopaging' => true,
+			'suppress_filters' => false
+		) );
+		if( ! empty( $connected ) ) {
+			// There can only be one
+			$to = $connected[0]->ID;
+			p2p_type( $type )->disconnect( $args['id'], $to );
+		}
+
+		return p2p_type( $type )->connect( $args['id'], $args['value'] );
+	}
+
+	public function sanitize( $sanitized_val, $val ) {
 	}
 }

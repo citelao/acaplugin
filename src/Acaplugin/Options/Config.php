@@ -102,7 +102,7 @@ class Config {
 			'id'   => 'callback_dates',
 			'type' => 'text_date',
 			'repeatable' => true,
-			'attributes' => $callback_attributes
+			// 'attributes' => $callback_attributes
 		) );
 	}
 

@@ -10,7 +10,7 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 
 		private static $instance = null;
 
-		public function init() {
+		public static function init() {
 			if( null == BSTypes_Bootstrap_00::$instance) {
 				self::$instance = new self();
 			}
