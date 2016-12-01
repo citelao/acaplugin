@@ -99,14 +99,30 @@ class BSTypes_OneToMany {
 			return;
 		}
 
-		echo '<select class="cmb2_select">';
-		echo '<option>--</option>';
+		// Check to see if we already have a connection
+		$connected = get_posts( array(
+			'connected_type' => $field->options( 'connection' ),
+			'connected_items' => $object_id,
+			'nopaging' => true,
+			'suppress_filters' => false
+		) );
+		$attached = array_map(function($el) { return $el->ID; }, $connected);
+
+		echo '<select class="cmb2_select" required>';
+
+		if( empty( $attached ) ) {
+			echo '<option disabled selected>--</option>';
+		} else { 
+			echo '<option disabled>--</option>';
+		}
 		foreach ( $objects as $object ) {
+			$selected = in_array( $object->ID, $attached ) ? ' selected' : '';
 			$edit_link = get_edit_post_link( $object );
 			$title = get_the_title( $object );
 
 			printf(
-				'<option data-id="%d"><a title="' . __( 'Edit' ) . '" href="%s">%s</a></option>',
+				'<option data-id="%d" %s><a title="' . __( 'Edit' ) . '" href="%s">%s</a></option>',
+				$selected,
 				$object->ID,
 				$edit_link,
 				$title
