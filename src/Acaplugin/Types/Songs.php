@@ -58,9 +58,11 @@ class Songs {
 						'fields' => array(
 							'group' => array(
 								'name' => 'Group',
-								'type' => 'select',
+								'type' => 'bs_one_to_many',
 								'description' => 'TODO Who\'s singing this?',
-								'options_cb' => 'Acaplugin\Util::get_groups_dropdown'
+								'options' => array(
+									'connection' => 'group_songs'
+								)
 							),
 							'arrangers' => array(
 								'name' => 'Arranger(s)',

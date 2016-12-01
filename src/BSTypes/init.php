@@ -47,6 +47,7 @@ if ( ! class_exists( 'BSTypes_Bootstrap_00', false ) ) {
 			 * Register new fields
 			 */
 			BSTypes_ManyToMany::get_instance();
+			BSTypes_OneToMany::get_instance();
 		}
 	}
 

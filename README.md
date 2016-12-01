@@ -21,6 +21,20 @@ for you (locally, of course) and install our dependencies.
 2. Activate this plugin.
 3. Install [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) to make sure emails go through.
 
+## TODO
+
+- Songboard
+	- One-to-many dropdown (for the song "group" dropdown field)
+- Auditions
+	- Signup response body needs to be modifiable
+	- Document the process for next webdev
+	- Document required plugins for running the show
+	- Proper filtering for all fields
+	- Unify dropdown/selection interface for fields in Groups.
+- BSTypes
+	- Refactor to natively support relational types
+	- Refactor to easily make interface changes
+
 ## Useful links
 http://192.168.33.10/
 https://github.com/WebDevStudios/CMB2/wiki/Field-Parameters
