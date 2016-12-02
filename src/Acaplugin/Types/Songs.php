@@ -66,17 +66,17 @@ class Songs {
 								'options' => array(
 									'connection' => 'group_songs'
 								),
-								// 'attributes' => array(
-								// 	'required' => 'required'
-								// )
+								'attributes' => array(
+									'required' => 'required'
+								)
 							),
 							'reserver' => array(
 								'name' => 'Reserver',
 								'type' => 'text',
 								'description' => 'Who\'s reserving this song for the group?',
-								// 'attributes' => array(
-								// 	'required' => 'required'
-								// )
+								'attributes' => array(
+									'required' => 'required'
+								)
 							),
 							'arrangers' => array(
 								'name' => 'Arranger(s)',

@@ -25,6 +25,7 @@ for you (locally, of course) and install our dependencies.
 
 - Songboard
 	- Fix many-to-many field with multiple fields
+	- Repeating fields & required
 - Auditions
 	- Signup response body needs to be modifiable
 	- Document the process for next webdev

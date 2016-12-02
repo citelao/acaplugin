@@ -434,10 +434,7 @@ class Auditionees {
 							'email' => array(
 								'name' => 'Email',
 								'type' => 'text_email',
-								'description' => 'We will send further instructions to this email.',
-								'attributes'  => array(
-									'required' => 'required',
-								)
+								'description' => 'We will send further instructions to this email.'
 							),
 							'telephone' => array(
 								'name' => 'Telephone Number',
