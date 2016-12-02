@@ -24,7 +24,7 @@ for you (locally, of course) and install our dependencies.
 ## TODO
 
 - Songboard
-	- One-to-many dropdown (for the song "group" dropdown field)
+	- Fix many-to-many field with multiple fields
 - Auditions
 	- Signup response body needs to be modifiable
 	- Document the process for next webdev

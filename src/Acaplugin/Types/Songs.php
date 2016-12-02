@@ -49,7 +49,10 @@ class Songs {
 							'artists' => array(
 								'name' => 'Original Artist(s)',
 								'type' => 'text',
-								'repeatable' => true
+								'repeatable' => true,
+								// 'attributes' => array(
+								// 	'required' => 'required'
+								// )
 							)
 						)
 					),
@@ -59,15 +62,29 @@ class Songs {
 							'group' => array(
 								'name' => 'Group',
 								'type' => 'bs_one_to_many',
-								'description' => 'TODO Who\'s singing this?',
+								'description' => 'Which group is singing this?',
 								'options' => array(
 									'connection' => 'group_songs'
-								)
+								),
+								// 'attributes' => array(
+								// 	'required' => 'required'
+								// )
+							),
+							'reserver' => array(
+								'name' => 'Reserver',
+								'type' => 'text',
+								'description' => 'Who\'s reserving this song for the group?',
+								// 'attributes' => array(
+								// 	'required' => 'required'
+								// )
 							),
 							'arrangers' => array(
 								'name' => 'Arranger(s)',
 								'type' => 'text',
-								'repeatable' => true
+								'repeatable' => true,
+								// 'attributes' => array(
+								// 	'required' => 'required'
+								// )
 							)
 						)
 					)

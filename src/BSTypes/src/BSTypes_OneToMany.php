@@ -109,10 +109,13 @@ class BSTypes_OneToMany {
 		) );
 		$attached = array_map(function($el) { return $el->ID; }, $connected);
 
-		echo sprintf('<select class="cmb2_select" name="%s">',
-			$field_type->_name());
-		echo sprintf('<option disabled value="" %s>--</option>',
-			empty( $attached ) ? 'selected' : '');
+		$attribute_string = $field_type->concat_attrs( $field->args['attributes'] );
+
+		echo sprintf( '<select class="cmb2_select" name="%s" %s>',
+			$field_type->_name(),
+			$attribute_string );
+		echo sprintf( '<option disabled value="" %s>--</option>',
+			empty( $attached ) ? 'selected' : '' );
 
 		foreach ( $objects as $object ) {
 			$selected = in_array( $object->ID, $attached ) ? ' selected' : '';
