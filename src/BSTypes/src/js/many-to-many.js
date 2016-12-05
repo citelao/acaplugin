@@ -10,7 +10,6 @@ window.BSMTM = window.BSMTM || (function(window, document, $, undefined) {
 		app.$.retrievedPosts     = $wrap.find( '.retrieved' );
 		app.$.attachedPosts      = $wrap.find( '.attached' );
 
-		app.relationship_type    = $wrap.data( 'type' );
 		app.from                 = $('#post_ID').val();
 	};
 
@@ -90,6 +89,11 @@ window.BSMTM = window.BSMTM || (function(window, document, $, undefined) {
 		// Add the 'added' class when clicked
 		$li.addClass( 'added' );
 
+		// Add 'taken' class if clicked on one-to-many box.
+		if( $wrap.data( 'hideconnected' ) === 1 ) {
+			$li.addClass( 'taken' );			
+		}
+
 		// Add the item to the right list
 		$wrap.find( '.attached' ).append( $li.clone() );
 
@@ -109,6 +113,9 @@ window.BSMTM = window.BSMTM || (function(window, document, $, undefined) {
 
 		// Remove the 'added' class from the retrieved column
 		$wrap.find('.retrieved li[data-id="' + itemID +'"]').removeClass('added');
+
+		// Also remove the 'taken' class if present
+		$wrap.find('.retrieved li[data-id="' + itemID +'"]').removeClass('taken');
 
 		app.resetAttachedListItems( $wrap );
 	};
@@ -147,31 +154,33 @@ window.BSMTM = window.BSMTM || (function(window, document, $, undefined) {
 			return parseInt(x);
 		});
 
+		var relationship = $wrap.data( 'type' );
 		var added = newVal.filter(function(x) { return oldVal.indexOf(x) < 0 });
 		var deleted = oldVal.filter(function(x) { return newVal.indexOf(x) < 0 });
 
-		console.log(oldVal);
-		console.log(newVal);
-		console.log(added);
-		console.log(deleted);
-
+		console.log(relationship,
+			oldVal,
+			newVal,
+			added,
+			deleted);
+		
 		for (var i = 0; i < added.length; i++) {
-			app.updateDB(added[i], 'add');
+			app.updateDB(added[i], 'add', relationship);
 		}
 
 		for (var i = 0; i < deleted.length; i++) {
-			app.updateDB(deleted[i], 'remove');
+			app.updateDB(deleted[i], 'remove', relationship);
 		}
 
 		$input.val( newVal.join( ',' ) );
 	};
 
-	app.updateDB = function(id, operation) {
+	app.updateDB = function(id, operation, relationship) {
 		var data = {
 			'action': 'bs_many_to_many',
 			'_ajax_nonce': BS_MANY_TO_MANY_L10N.nonce,
 			'operation': operation,
-			'type': app.relationship_type,
+			'type': relationship,
 			'from': app.from,
 			'to': id
 		};

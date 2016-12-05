@@ -58,7 +58,8 @@ class Groups {
 								'description' => 'All songs sung in this group.',
 								'options' => array(
 									'connection' => 'group_songs',
-									'hide_other_connected' => true
+									'hide_other_connected' => true,
+									'filter_boxes' => true
 								)
 							)
 						)

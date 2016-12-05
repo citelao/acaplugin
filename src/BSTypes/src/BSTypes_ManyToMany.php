@@ -166,7 +166,7 @@ class BSTypes_ManyToMany {
 		$count = 0;
 
 		// Wrap our lists
-		echo '<div class="many-to-many-wrap widefat" data-type="' . $field->options( 'connection' ) .'" data-fieldname="'. $field_type->_name() .'">';
+		echo '<div class="many-to-many-wrap widefat" data-type="' . $field->options( 'connection' ) .'" data-fieldname="'. $field_type->_name() .'" data-hideconnected="' . $field->options( 'hide_other_connected' ) . '">';
 
 		// Open our retrieved, or found posts, list
 		echo '<div class="retrieved-wrap column-wrap">';
