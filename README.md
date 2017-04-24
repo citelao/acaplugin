@@ -23,6 +23,8 @@ for you (locally, of course) and install our dependencies.
 
 ## TODO
 
+- Registration
+	- Make registration not kill all your data if there's an error
 - Songboard
 	- Fix many-to-many field with multiple fields
 	- Repeating fields & required
