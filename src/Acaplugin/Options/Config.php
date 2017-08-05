@@ -138,6 +138,14 @@ class Config {
 			'type' => 'wysiwyg',
 			// 'attributes' => $callback_attributes
 		) );
+
+		$cmb->add_field( array(
+			'name' => __( 'Test email', $this->prefix ),
+			'desc' => __( 'Send a test message to an address.', $this->prefix ),
+			'id'   => 'registration_messagef',
+			'type' => 'email_test',
+			// 'attributes' => $callback_attributes
+		) );
 	}
 
 	public function settings_notices( $object_id, $updated ) {
