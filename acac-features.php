@@ -25,8 +25,6 @@ add_action( 'bstypes_init', 'acaplugin_register_types' );
 function acaplugin_register_types() {
 	global $prefix;
 
-	Acaplugin\Fields\Email_Test::get_instance($prefix);
-
 	$auditionees = new Acaplugin\Types\Auditionees($prefix);
 	$groups = new Acaplugin\Types\Groups($prefix);
 	$songs = new Acaplugin\Types\Songs($prefix);

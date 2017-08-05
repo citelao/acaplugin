@@ -113,7 +113,10 @@ class Config {
 <ul>
 	<li><code>name</code></li>
 	<li><code>pre</code></li>
-</ul>';
+</ul>
+<h4>Testing</h4>
+<p>If you want to test this new email, save the form below and do a test registration.</p>
+<p>This was the most hassle-free way of setting it up. Sorry if it\'s a bit harder -- Ben</p>';
 
 		$cmb->add_field( array(
 			'name' => __( 'Registration email', $this->prefix ),
@@ -136,14 +139,6 @@ class Config {
 			'desc' => __( 'Message of the email new auditionees receive.', $this->prefix ),
 			'id'   => 'registration_message',
 			'type' => 'wysiwyg',
-			// 'attributes' => $callback_attributes
-		) );
-
-		$cmb->add_field( array(
-			'name' => __( 'Test email', $this->prefix ),
-			'desc' => __( 'Send a test message to an address.', $this->prefix ),
-			'id'   => 'registration_messagef',
-			'type' => 'email_test',
 			// 'attributes' => $callback_attributes
 		) );
 	}
