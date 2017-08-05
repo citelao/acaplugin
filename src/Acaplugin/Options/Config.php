@@ -105,9 +105,35 @@ class Config {
 			// 'attributes' => $callback_attributes
 		) );
 
+		$registration_description = '
+<p>This lets you configure the email new auditionees receive when they register.</p>
+<p>You can use some special <a href="http://www.wpbeginner.com/glossary/shortcodes/">shortcodes</a> to add personal information to the email. They are listed below.</p>
+<p>Since some of them depend on the information above (callback dates, e.g.), save the form once before editing the content below.</p>
+<h4>Available shortcodes:</h4>
+<ul>
+	<li><code>name</code></li>
+	<li><code>pre</code></li>
+</ul>';
+
 		$cmb->add_field( array(
-			'name' => __( 'Registration message', $this->prefix ),
-			'desc' => __( 'What dates are callbacks? NOTE: Changing this while auditions are open may hide data from admin page.', $this->prefix ),
+			'name' => __( 'Registration email', $this->prefix ),
+			'desc' => __( $registration_description, $this->prefix ),
+			'id'   => 'registration_email_info',
+			'type' => 'title',
+			// 'attributes' => $callback_attributes
+		) );
+
+		$cmb->add_field( array(
+			'name' => __( 'Registration email subject', $this->prefix ),
+			'desc' => __( 'Subject of the email new auditionees receive', $this->prefix ),
+			'id'   => 'registration_subject',
+			'type' => 'text',
+			// 'attributes' => $callback_attributes
+		) );
+
+		$cmb->add_field( array(
+			'name' => __( 'Registration email message', $this->prefix ),
+			'desc' => __( 'Message of the email new auditionees receive.', $this->prefix ),
 			'id'   => 'registration_message',
 			'type' => 'wysiwyg',
 			// 'attributes' => $callback_attributes
