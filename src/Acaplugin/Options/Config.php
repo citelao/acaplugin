@@ -76,6 +76,38 @@ class Config {
 			),
 		) );
 
+		$plugin_info = '
+<p>
+	This plugin does everything you need to run Wash U a cappella auditions.
+	You can read a documented overview TODO here.
+</p>
+<p>
+	Besides adding auditionees, groups, and songs to Wordpress, it also adds
+	the registration and preference forms that auditionees need to choose their
+	groups. They can be rendered using the <code>[acac_registration]</code> and
+	<code>[acac_prefs]</code> shortcodes, respectively.
+</p>
+<p>
+	I\'d like to think that the process (and the documentation provided) are
+	enough to get you through the hell of WashU auditions, but as long as this
+	message is on this website, I can be reached in an emergency. Contact
+	info should be on my website at 
+	<a href="http://ben.stolovitz.com/">ben.stolovitz.com</a>.
+</p>
+<p>
+	Good luck! <br />
+	— Ben
+</p>
+';
+
+		$cmb->add_field( array(
+			'name' => __( 'Preparing for auditions', $this->prefix ),
+			'desc' => __( $plugin_info, $this->prefix ),
+			'id'   => 'plugin_info',
+			'type' => 'title',
+			// 'attributes' => $callback_attributes
+		) );
+
 		$cmb->add_field( array(
 			'name' => __( 'Auditions stage', $this->prefix ),
 			'desc' => __( 'What stage are auditions?', $this->prefix ),
