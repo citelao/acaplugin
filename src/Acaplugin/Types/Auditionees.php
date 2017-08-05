@@ -33,11 +33,13 @@ class Auditionees {
 			)
 		);
 		
-		$callback_dates = get_option( 'acac_config' )['callback_dates'];
-		if( ! $callback_dates ) {
+		if( ! get_option( 'acac_config' ) ||
+			! array_key_exists( 'callback_dates', get_option( 'acac_config' )) ||
+			! get_option( 'acac_config' )['callback_dates'] ) {
 			add_action( 'admin_notices', array( $this, 'warn_no_callback_dates' ) );
 			return;
 		}
+		$callback_dates = get_option( 'acac_config' )['callback_dates'];
 
 		foreach ( $callback_dates as $key => $date ) {
 			$date = strtotime($date);
