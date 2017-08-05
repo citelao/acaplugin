@@ -17,7 +17,6 @@ class Registration {
 	private $type = 'auditionee';
 
 	private $email_subject = 'Thank you for registering with ACAC!';
-	// TODO hardcoded callback dates
 	private $email_message = '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,6 +78,22 @@ class Registration {
 		add_shortcode( 'acac_registration', array( $this, 'show_form' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'cmb2_after_init', array( $this, 'submit_form' ) );
+
+		$message_exists = array_key_exists( 'registration_message', get_option( 'acac_config' )) &&
+			get_option( 'acac_config' )['registration_message'];
+		$subject_exists = array_key_exists( 'registration_subject', get_option( 'acac_config' )) &&
+			get_option( 'acac_config' )['registration_subject'];
+		if( ! get_option( 'acac_config' ) || ! $message_exists || ! $subject_exists ) {
+			if( ! $message_exists ) {
+				add_action( 'admin_notices', array( $this, 'warn_no_registration_email_message' ) );
+			}
+			if( ! $subject_exists ) {
+				add_action( 'admin_notices', array( $this, 'warn_no_registration_email_subject' ) );	
+			}
+			return;
+		}
+		$this->email_message = wpautop( get_option( 'acac_config' )['registration_message'] );
+		$this->email_subject = get_option( 'acac_config' )['registration_subject'];
 	}
 
 	public function enqueue_scripts() {
@@ -191,6 +206,26 @@ class Registration {
 		$message = 'There are no callback dates defined! '
 			. 'Fix this in the "Manage Auditions" section.';
 
+		$this->warn_admin($class, $message);
+	}
+
+	public function warn_no_registration_email_message() {
+		$class = 'notice notice-error';
+		$message = 'There is no registration email message defined! '
+			. 'Fix this in the "Manage Auditions" section.';
+
+		$this->warn_admin($class, $message);
+	}
+
+	public function warn_no_registration_email_subject() {
+		$class = 'notice notice-error';
+		$message = 'There is no registration email subject defined! '
+			. 'Fix this in the "Manage Auditions" section.';
+
+		$this->warn_admin($class, $message);
+	}
+
+	public function warn_admin($class, $message) {
 		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 	}
 
@@ -357,21 +392,26 @@ class Registration {
 				$this->type,
 				'residence'
 			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'conflict-09-05'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'conflict-09-06'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'conflict-09-07'
-			) ] )
+			// sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
+			// 	$this->prefix,
+			// 	$this->type,
+			// 	'conflict-09-05'
+			// ) ] ),
+			// sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
+			// 	$this->prefix,
+			// 	$this->type,
+			// 	'conflict-09-06'
+			// ) ] ),
+			// sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
+			// 	$this->prefix,
+			// 	$this->type,
+			// 	'conflict-09-07'
+			// )
+			// ] )
+			'TODO conflicts',
+			'f',
+			'g'
+			 
 		);
 		wp_mail( $to, $subject, $message, array(
 			'Content-type: text/html; charset=UTF-8'

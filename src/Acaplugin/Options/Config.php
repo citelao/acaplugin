@@ -170,7 +170,7 @@ class Config {
 			'name' => __( 'Registration email message', $this->prefix ),
 			'desc' => __( 'Message of the email new auditionees receive.', $this->prefix ),
 			'id'   => 'registration_message',
-			'type' => 'wysiwyg',
+			'type' => 'wysiwyg'
 			// 'attributes' => $callback_attributes
 		) );
 	}
