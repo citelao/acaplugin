@@ -160,8 +160,12 @@ class Registration {
 			'description' => 'Please write any (potential) conflicts you have on these dates. We use this to help plan your callback schedule.'
 		) );
 
-		// TODO null fallback
 		$callback_dates = get_option( 'acac_config' )['callback_dates'];
+		if( ! $callback_dates ) {
+			add_action( 'admin_notices', array( $this, 'warn_no_callback_dates' ) );
+			return;
+		}
+
 		foreach ( $callback_dates as $key => $date ) {
 			$date = strtotime($date);
 
@@ -178,6 +182,14 @@ class Registration {
 				'type' => 'textarea'
 			);
 		}
+	}
+
+	public function warn_no_callback_dates() {
+		$class = 'notice notice-error';
+		$message = 'There are no callback dates defined! '
+			. 'Fix this in the "Manage Auditions" section.';
+
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 	}
 
 	public function show_form() {
