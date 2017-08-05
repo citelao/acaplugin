@@ -104,6 +104,14 @@ class Config {
 			'repeatable' => true,
 			// 'attributes' => $callback_attributes
 		) );
+
+		$cmb->add_field( array(
+			'name' => __( 'Registration message', $this->prefix ),
+			'desc' => __( 'What dates are callbacks? NOTE: Changing this while auditions are open may hide data from admin page.', $this->prefix ),
+			'id'   => 'registration_message',
+			'type' => 'wysiwyg',
+			// 'attributes' => $callback_attributes
+		) );
 	}
 
 	public function settings_notices( $object_id, $updated ) {
