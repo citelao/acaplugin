@@ -397,7 +397,7 @@ class BSType {
 		if ( is_admin() && 
 			 $pagenow == 'edit.php' &&
 			 $_GET['post_type'] == $this->get_id() &&
-			 $_GET['s'] != '' ) {
+			 array_key_exists('s', $_GET) ) {
 			$join .= "LEFT JOIN {$wpdb->postmeta} ON " . 
 				"{$wpdb->posts}.ID = {$wpdb->postmeta}.post_id";
 		}
@@ -409,7 +409,7 @@ class BSType {
 		if ( is_admin() && 
 			 $pagenow == 'edit.php' &&
 			 $_GET['post_type'] == $this->get_id() &&
-			 $_GET['s'] != '' ) {    
+			 array_key_exists('s', $_GET) ) {    
 			 $where = preg_replace(
 				"/\(\s*{$wpdb->posts}.post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
 				"({$wpdb->posts}.post_title LIKE $1) OR ({$wpdb->postmeta}.meta_value LIKE $1)",
@@ -423,7 +423,7 @@ class BSType {
 		if ( is_admin() && 
 			 $pagenow == 'edit.php' &&
 			 $_GET['post_type'] == $this->get_id() &&
-			 $_GET['s'] != '' ) {    
+			 array_key_exists('s', $_GET) ) {    
 			 return 'DISTINCT';
 		}
 
