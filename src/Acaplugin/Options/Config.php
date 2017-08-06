@@ -149,13 +149,12 @@ class Config {
 	<li><code>telephone</code></li>
 	<li><code>residence</code></li>';
 
-	if( ! get_option( 'acac_config' ) ||
-		! array_key_exists( 'callback_dates', get_option( 'acac_config' )) ||
-		! get_option( 'acac_config' )['callback_dates'] ) {
-		add_action( 'admin_notices', array( $this, 'warn_no_callback_dates' ) );
-		return;
+	$callback_dates = array();
+	if( get_option( 'acac_config' ) &&
+		array_key_exists( 'callback_dates', get_option( 'acac_config' )) &&
+		get_option( 'acac_config' )['callback_dates'] ) {
+		$callback_dates = get_option( 'acac_config' )['callback_dates'];
 	}
-	$callback_dates = get_option( 'acac_config' )['callback_dates'];
 
 	foreach ( $callback_dates as $key => $date ) {
 		$date = strtotime($date);
