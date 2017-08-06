@@ -10,5 +10,4 @@ composer.phar:
 
 clean:
 	rm composer.phar
-	rm composer.lock
 	rm -r vendor
