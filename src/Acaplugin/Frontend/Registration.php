@@ -194,10 +194,10 @@ class Registration {
 				'type' => 'textarea'
 			) );
 
-			$conflicts['conflict-' . date('m-d', $date)] = array(
-				'name' => 'Conflicts on ' . $nice_date,
-				'type' => 'textarea'
-			);
+			// $conflicts['conflict-' . date('m-d', $date)] = array(
+			// 	'name' => 'Conflicts on ' . $nice_date,
+			// 	'type' => 'textarea'
+			// );
 		}
 	}
 
@@ -343,7 +343,10 @@ class Registration {
 		) );
 
 		// Send confirmation email:
-		$this->send_confirmation($sanitized_values);
+		$was_sent = $this->send_confirmation($sanitized_values);
+		if( ! $was_sent ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'send_error', __( 'Could not sent the email. This is our fault, not yours.' ) ) );
+		}
 
 		/*
 		 * Redirect back to the form page with a query variable with the new post ID.
@@ -360,60 +363,18 @@ class Registration {
 			$this->type,
 			'email'
 		) ];
-		$subject = $this->email_subject;
-		$message = sprintf($this->email_message,
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'first_name'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'first_name'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'last_name'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'email'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'telephone'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'residence'
-			) ] ),
-			// sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-			// 	$this->prefix,
-			// 	$this->type,
-			// 	'conflict-09-05'
-			// ) ] ),
-			// sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-			// 	$this->prefix,
-			// 	$this->type,
-			// 	'conflict-09-06'
-			// ) ] ),
-			// sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-			// 	$this->prefix,
-			// 	$this->type,
-			// 	'conflict-09-07'
-			// )
-			// ] )
-			'TODO conflicts',
-			'f',
-			'g'
-			 
-		);
-		wp_mail( $to, $subject, $message, array(
+
+		foreach ($values as $key => $field) {
+			$shortcode_name = \BSTypes_Util::get_field_name_from_field_id( $this->prefix, $this->type, $key );
+			add_shortcode($shortcode_name, function( $atts ) use ( $field ) {
+				return sanitize_text_field( $field );
+			});
+		}
+
+		$subject = do_shortcode( $this->email_subject );
+		$message = do_shortcode( $this->email_message );
+
+		return wp_mail( $to, $subject, $message, array(
 			'Content-type: text/html; charset=UTF-8'
 		) );
 	}

@@ -143,9 +143,26 @@ class Config {
 <p>Since some of them depend on the information above (callback dates, e.g.), save the form once before editing the content below.</p>
 <h4>Available shortcodes:</h4>
 <ul>
-	<li><code>name</code></li>
-	<li><code>pre</code></li>
-</ul>
+	<li><code>first_name</code></li>
+	<li><code>last_name</code></li>
+	<li><code>email</code></li>
+	<li><code>telephone</code></li>
+	<li><code>residence</code></li>';
+
+	if( ! get_option( 'acac_config' ) ||
+		! array_key_exists( 'callback_dates', get_option( 'acac_config' )) ||
+		! get_option( 'acac_config' )['callback_dates'] ) {
+		add_action( 'admin_notices', array( $this, 'warn_no_callback_dates' ) );
+		return;
+	}
+	$callback_dates = get_option( 'acac_config' )['callback_dates'];
+
+	foreach ( $callback_dates as $key => $date ) {
+		$date = strtotime($date);
+		$registration_description .= '<li><code>conflict-' . date( 'm-d', $date ) . '</code></li>';
+	}
+
+	$registration_description .= '</ul>
 <h4>Testing</h4>
 <p>If you want to test this new email, save the form below and do a test registration.</p>
 <p>This was the most hassle-free way of setting it up. Sorry if it\'s a bit harder -- Ben</p>';
