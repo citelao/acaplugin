@@ -79,7 +79,7 @@ class Config {
 		$plugin_info = '
 <p>
 	This plugin does everything you need to run Wash U a cappella auditions.
-	You can read a documented overview TODO here.
+	You can read a documented overview <a href="https://github.com/citelao/acaplugin/blob/master/How%20to%20run%20auditions.md">on GitHub</a>.
 </p>
 <p>
 	Besides adding auditionees, groups, and songs to Wordpress, it also adds
