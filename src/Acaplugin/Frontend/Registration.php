@@ -35,30 +35,15 @@ class Registration {
 		the ACAC website.
 	</p>
 
-	<p>
-		ACAC will send you a notification email about callbacks early Monday
-		morning (September 5th). If you are called back, the individual groups
-		will contact you with more information—including callback times.
-	</p>
-
 	<p><strong>Registration details</strong></p>
 
-	<p>Please verify your registration details below:</p>
-
-	<ul>
-		<li><strong>First name:</strong> %s</li>
-		<li><strong>Last name:</strong> %s</li>
-		<li><strong>Email:</strong> %s</li>
-		<li><strong>Phone:</strong> %s</li>
-		<li><strong>Residence:</strong> %s</li>
-		<li><strong>Conflicts on Monday, September 5:</strong> %s</li>
-		<li><strong>Conflicts on Tuesday, September 6:</strong> %s</li>
-		<li><strong>Conflicts on Wednesday, September 7:</strong> %s</li>
-	</ul>
+	<p>
+		Unfortunately, the program ACAC uses to manage auditions is not
+		configured properly. You should see your registration details here.
+	</p>
 
 	<p>
-		Email acacpresident@gmail.com (or reply to this message) if there is
-		an error or something changes.
+		Email acacpresident@gmail.com (or reply to this message) to let us know!
 	</p>
 
 	<p>Thank you for auditioning for a cappella at Wash U!</p>
