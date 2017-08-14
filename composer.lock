@@ -1,0 +1,425 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "dd1d90ebb4bc40d4e5db6aefa411e7d3",
+    "content-hash": "79fc6e357f12cd4027a8e3d7a4a09e9f",
+    "packages": [
+        {
+            "name": "composer/installers",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "a3595c5272a6f247228abb20076ed27321e4aae9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/a3595c5272a6f247228abb20076ed27321e4aae9",
+                "reference": "a3595c5272a6f247228abb20076ed27321e4aae9",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0"
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.0.*@dev",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Hurad",
+                "ImageCMS",
+                "MODX Evo",
+                "Mautic",
+                "OXID",
+                "RadPHP",
+                "SMF",
+                "Thelia",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "joomla",
+                "kohana",
+                "laravel",
+                "lithium",
+                "magento",
+                "mako",
+                "mediawiki",
+                "modulework",
+                "moodle",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "puppet",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "symfony",
+                "typo3",
+                "wordpress",
+                "zend",
+                "zikula"
+            ],
+            "time": "2016-07-05 06:18:20"
+        },
+        {
+            "name": "mustache/mustache",
+            "version": "v2.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bobthecow/mustache.php.git",
+                "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/a3f6d55996dd28b58f3a909d474189a3c1aa693f",
+                "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~1.11",
+                "phpunit/phpunit": "~3.7|~4.0|~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Mustache": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Justin Hileman",
+                    "email": "justin@justinhileman.info",
+                    "homepage": "http://justinhileman.com"
+                }
+            ],
+            "description": "A Mustache implementation in PHP.",
+            "homepage": "https://github.com/bobthecow/mustache.php",
+            "keywords": [
+                "mustache",
+                "templating"
+            ],
+            "time": "2016-07-31 06:18:27"
+        },
+        {
+            "name": "origgami/cmb2-grid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/origgami/CMB2-grid.git",
+                "reference": "5f67007a369da954ce9e5f8cabd9a9a5bdb3943c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/origgami/CMB2-grid/zipball/5f67007a369da954ce9e5f8cabd9a9a5bdb3943c",
+                "reference": "5f67007a369da954ce9e5f8cabd9a9a5bdb3943c",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "v1.1.0"
+            },
+            "type": "wordpress-plugin",
+            "support": {
+                "source": "https://github.com/origgami/CMB2-grid/tree/master",
+                "issues": "https://github.com/origgami/CMB2-grid/issues"
+            },
+            "time": "2016-08-25 20:21:17"
+        },
+        {
+            "name": "scribu/lib-posts-to-posts",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scribu/wp-lib-posts-to-posts.git",
+                "reference": "a695438e455587fa228e993d05b4431cde99af1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scribu/wp-lib-posts-to-posts/zipball/a695438e455587fa228e993d05b4431cde99af1b",
+                "reference": "a695438e455587fa228e993d05b4431cde99af1b",
+                "shasum": ""
+            },
+            "require": {
+                "scribu/scb-framework": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "A library for many-to-many relationships in WordPress",
+            "homepage": "https://github.com/scribu/wp-lib-posts-to-posts",
+            "time": "2016-02-15 12:08:59"
+        },
+        {
+            "name": "scribu/posts-to-posts",
+            "version": "1.6.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scribu/wp-posts-to-posts.git",
+                "reference": "f1e6fd3099172d741ee5efd8048f0a54dc3a1eba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scribu/wp-posts-to-posts/zipball/f1e6fd3099172d741ee5efd8048f0a54dc3a1eba",
+                "reference": "f1e6fd3099172d741ee5efd8048f0a54dc3a1eba",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "mustache/mustache": "~2.6",
+                "scribu/lib-posts-to-posts": "dev-master"
+            },
+            "type": "wordpress-plugin",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "homepage": "http://wordpress.org/plugins/posts-to-posts",
+            "support": {
+                "source": "https://github.com/scribu/wp-posts-to-posts/tree/1.6.5",
+                "issues": "https://github.com/scribu/wp-posts-to-posts/issues"
+            },
+            "time": "2015-10-13 13:12:40"
+        },
+        {
+            "name": "scribu/scb-framework",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scribu/wp-scb-framework.git",
+                "reference": "95b23ac342fce16bf5eb8d939ac5a361b94b104b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/95b23ac342fce16bf5eb8d939ac5a361b94b104b",
+                "reference": "95b23ac342fce16bf5eb8d939ac5a361b94b104b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "."
+                ],
+                "files": [
+                    "load-composer.php",
+                    "Util.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Cristi Burcă",
+                    "homepage": "http://scribu.net/"
+                }
+            ],
+            "description": "A set of useful classes for faster plugin development",
+            "homepage": "https://github.com/scribu/wp-scb-framework",
+            "keywords": [
+                "wordpress"
+            ],
+            "time": "2015-10-25 20:19:41"
+        },
+        {
+            "name": "seravo/wp-custom-bulk-actions",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seravo/wp-custom-bulk-actions.git",
+                "reference": "9a9aba44924a5b36bc0228febf0b6432b345eef7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seravo/wp-custom-bulk-actions/zipball/9a9aba44924a5b36bc0228febf0b6432b345eef7",
+                "reference": "9a9aba44924a5b36bc0228febf0b6432b345eef7",
+                "shasum": ""
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Onni Hakala",
+                    "email": "onni@seravo.fi",
+                    "homepage": "https://github.com/onnimonni"
+                }
+            ],
+            "description": "Custom bulk actions for any type of posts in WordPress.",
+            "homepage": "https://github.com/Seravo/wp-custom-bulk-actions",
+            "keywords": [
+                "bulk action",
+                "custom",
+                "posts",
+                "wordpress"
+            ],
+            "time": "2015-08-06 08:26:21"
+        },
+        {
+            "name": "webdevstudios/cmb2",
+            "version": "v2.2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WebDevStudios/CMB2.git",
+                "reference": "17d60c71f9f6b27f0e1ab2bbbaae2e5da2ffa7b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WebDevStudios/CMB2/zipball/17d60c71f9f6b27f0e1ab2bbbaae2e5da2ffa7b9",
+                "reference": "17d60c71f9f6b27f0e1ab2bbbaae2e5da2ffa7b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">5.2.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "WebDevStudios",
+                    "email": "contact@webdevstudios.com",
+                    "homepage": "https://github.com/WebDevStudios",
+                    "role": "Developer"
+                }
+            ],
+            "description": "CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.",
+            "homepage": "https://github.com/WebDevStudios/CMB2",
+            "keywords": [
+                "metabox",
+                "plugin",
+                "wordpress"
+            ],
+            "time": "2016-06-28 01:27:39"
+        },
+        {
+            "name": "webdevstudios/cmb2-attached-posts",
+            "version": "v1.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WebDevStudios/cmb2-attached-posts.git",
+                "reference": "6e7d78549585ee70ced4c9d75452436c8a40544c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WebDevStudios/cmb2-attached-posts/zipball/6e7d78549585ee70ced4c9d75452436c8a40544c",
+                "reference": "6e7d78549585ee70ced4c9d75452436c8a40544c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">5.2.4"
+            },
+            "suggest": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "WebDevStudios",
+                    "email": "contact@webdevstudios.com",
+                    "homepage": "https://github.com/WebDevStudios",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Custom field for CMB2 for creating post relationships.",
+            "homepage": "https://github.com/WebDevStudios/CMB2",
+            "keywords": [
+                "attached",
+                "metabox",
+                "plugin",
+                "post",
+                "relationship",
+                "wordpress"
+            ],
+            "time": "2016-08-31 03:02:11"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "origgami/cmb2-grid": 20,
+        "scribu/lib-posts-to-posts": 20,
+        "scribu/scb-framework": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.3"
+    },
+    "platform-dev": []
+}

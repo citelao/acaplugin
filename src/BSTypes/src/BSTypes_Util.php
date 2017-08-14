@@ -9,6 +9,10 @@ class BSTypes_Util {
 		return "_{$prefix}_{$type}_{$field}";
 	}
 
+	public static function get_field_name_from_field_id( $prefix, $type, $id ) {
+		return mb_substr($id, mb_strlen(self::get_field_id($prefix, $type, '')));
+	}
+
 	// TODO also generate labels for post_updated_messages. Yup. We need another hook.
 	public static function get_labels( /* string */ $singular, /* string */ $plural ) {
 		$singular = lcfirst($singular);

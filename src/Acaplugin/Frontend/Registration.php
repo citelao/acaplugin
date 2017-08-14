@@ -17,7 +17,6 @@ class Registration {
 	private $type = 'auditionee';
 
 	private $email_subject = 'Thank you for registering with ACAC!';
-	// TODO hardcoded callback dates
 	private $email_message = '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,30 +35,15 @@ class Registration {
 		the ACAC website.
 	</p>
 
-	<p>
-		ACAC will send you a notification email about callbacks early Monday
-		morning (September 5th). If you are called back, the individual groups
-		will contact you with more information—including callback times.
-	</p>
-
 	<p><strong>Registration details</strong></p>
 
-	<p>Please verify your registration details below:</p>
-
-	<ul>
-		<li><strong>First name:</strong> %s</li>
-		<li><strong>Last name:</strong> %s</li>
-		<li><strong>Email:</strong> %s</li>
-		<li><strong>Phone:</strong> %s</li>
-		<li><strong>Residence:</strong> %s</li>
-		<li><strong>Conflicts on Monday, September 5:</strong> %s</li>
-		<li><strong>Conflicts on Tuesday, September 6:</strong> %s</li>
-		<li><strong>Conflicts on Wednesday, September 7:</strong> %s</li>
-	</ul>
+	<p>
+		Unfortunately, the program ACAC uses to manage auditions is not
+		configured properly. You should see your registration details here.
+	</p>
 
 	<p>
-		Email acacpresident@gmail.com (or reply to this message) if there is
-		an error or something changes.
+		Email acacpresident@gmail.com (or reply to this message) to let us know!
 	</p>
 
 	<p>Thank you for auditioning for a cappella at Wash U!</p>
@@ -79,6 +63,22 @@ class Registration {
 		add_shortcode( 'acac_registration', array( $this, 'show_form' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'cmb2_after_init', array( $this, 'submit_form' ) );
+
+		$message_exists = array_key_exists( 'registration_message', get_option( 'acac_config' )) &&
+			get_option( 'acac_config' )['registration_message'];
+		$subject_exists = array_key_exists( 'registration_subject', get_option( 'acac_config' )) &&
+			get_option( 'acac_config' )['registration_subject'];
+		if( ! get_option( 'acac_config' ) || ! $message_exists || ! $subject_exists ) {
+			if( ! $message_exists ) {
+				add_action( 'admin_notices', array( $this, 'warn_no_registration_email_message' ) );
+			}
+			if( ! $subject_exists ) {
+				add_action( 'admin_notices', array( $this, 'warn_no_registration_email_subject' ) );	
+			}
+			return;
+		}
+		$this->email_message = wpautop( get_option( 'acac_config' )['registration_message'] );
+		$this->email_subject = get_option( 'acac_config' )['registration_subject'];
 	}
 
 	public function enqueue_scripts() {
@@ -160,8 +160,14 @@ class Registration {
 			'description' => 'Please write any (potential) conflicts you have on these dates. We use this to help plan your callback schedule.'
 		) );
 
-		// TODO null fallback
+		if( ! get_option( 'acac_config' ) ||
+			! array_key_exists( 'callback_dates', get_option( 'acac_config' )) ||
+			! get_option( 'acac_config' )['callback_dates'] ) {
+			add_action( 'admin_notices', array( $this, 'warn_no_callback_dates' ) );
+			return;
+		}
 		$callback_dates = get_option( 'acac_config' )['callback_dates'];
+
 		foreach ( $callback_dates as $key => $date ) {
 			$date = strtotime($date);
 
@@ -173,11 +179,39 @@ class Registration {
 				'type' => 'textarea'
 			) );
 
-			$conflicts['conflict-' . date('m-d', $date)] = array(
-				'name' => 'Conflicts on ' . $nice_date,
-				'type' => 'textarea'
-			);
+			// $conflicts['conflict-' . date('m-d', $date)] = array(
+			// 	'name' => 'Conflicts on ' . $nice_date,
+			// 	'type' => 'textarea'
+			// );
 		}
+	}
+
+	public function warn_no_callback_dates() {
+		$class = 'notice notice-error';
+		$message = 'There are no callback dates defined! '
+			. 'Fix this in the "Manage Auditions" section.';
+
+		$this->warn_admin($class, $message);
+	}
+
+	public function warn_no_registration_email_message() {
+		$class = 'notice notice-error';
+		$message = 'There is no registration email message defined! '
+			. 'Fix this in the "Manage Auditions" section.';
+
+		$this->warn_admin($class, $message);
+	}
+
+	public function warn_no_registration_email_subject() {
+		$class = 'notice notice-error';
+		$message = 'There is no registration email subject defined! '
+			. 'Fix this in the "Manage Auditions" section.';
+
+		$this->warn_admin($class, $message);
+	}
+
+	public function warn_admin($class, $message) {
+		printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 	}
 
 	public function show_form() {
@@ -294,7 +328,10 @@ class Registration {
 		) );
 
 		// Send confirmation email:
-		$this->send_confirmation($sanitized_values);
+		$was_sent = $this->send_confirmation($sanitized_values);
+		if( ! $was_sent ) {
+			return $cmb->prop( 'submission_error', new \WP_Error( 'send_error', __( 'Could not sent the email. This is our fault, not yours.' ) ) );
+		}
 
 		/*
 		 * Redirect back to the form page with a query variable with the new post ID.
@@ -311,55 +348,18 @@ class Registration {
 			$this->type,
 			'email'
 		) ];
-		$subject = $this->email_subject;
-		$message = sprintf($this->email_message,
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'first_name'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'first_name'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'last_name'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'email'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'telephone'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'residence'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'conflict-09-05'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'conflict-09-06'
-			) ] ),
-			sanitize_text_field( $values[ \BSTypes_Util::get_field_id( 
-				$this->prefix,
-				$this->type,
-				'conflict-09-07'
-			) ] )
-		);
-		wp_mail( $to, $subject, $message, array(
+
+		foreach ($values as $key => $field) {
+			$shortcode_name = \BSTypes_Util::get_field_name_from_field_id( $this->prefix, $this->type, $key );
+			add_shortcode($shortcode_name, function( $atts ) use ( $field ) {
+				return sanitize_text_field( $field );
+			});
+		}
+
+		$subject = do_shortcode( $this->email_subject );
+		$message = do_shortcode( $this->email_message );
+
+		return wp_mail( $to, $subject, $message, array(
 			'Content-type: text/html; charset=UTF-8'
 		) );
 	}

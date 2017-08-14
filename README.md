@@ -8,6 +8,9 @@ This plugin sets up all content for the ACAC site.
 	- **Auditionee**
 	- **Group**
 	- **Song**
+2. Adds registration forms (and confirmation emails!)
+3. Adds pref cards
+4. Adds admin interface for sorting and managing auditionees.
 
 ## Install
 
@@ -21,15 +24,23 @@ for you (locally, of course) and install our dependencies.
 2. Activate this plugin.
 3. Install [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) to make sure emails go through.
 
+## Usage
+
+Usage is documented in `How to run auditions.md`.
+
+## Changelog
+
+See `CHANGELOG.md`.
+
 ## TODO
 
 - Songboard
 	- Fix many-to-many field with multiple fields
 	- Repeating fields & required
 - Auditions
-	- Signup response body needs to be modifiable
-	- Document the process for next webdev
-	- Document required plugins for running the show
+	- [x] Signup response body needs to be modifiable
+	- [x] Document the process for next webdev
+	- [x] Document required plugins for running the show
 	- Proper filtering for all fields
 	- Unify dropdown/selection interface for fields in Groups.
 - BSTypes

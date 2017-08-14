@@ -76,6 +76,38 @@ class Config {
 			),
 		) );
 
+		$plugin_info = '
+<p>
+	This plugin does everything you need to run Wash U a cappella auditions.
+	You can read a documented overview <a href="https://github.com/citelao/acaplugin/blob/master/How%20to%20run%20auditions.md">on GitHub</a>.
+</p>
+<p>
+	Besides adding auditionees, groups, and songs to Wordpress, it also adds
+	the registration and preference forms that auditionees need to choose their
+	groups. They can be rendered using the <code>[acac_registration]</code> and
+	<code>[acac_prefs]</code> shortcodes, respectively.
+</p>
+<p>
+	I\'d like to think that the process (and the documentation provided) are
+	enough to get you through the hell of WashU auditions, but as long as this
+	message is on this website, I can be reached in an emergency. Contact
+	info should be on my website at 
+	<a href="http://ben.stolovitz.com/">ben.stolovitz.com</a>.
+</p>
+<p>
+	Good luck! <br />
+	— Ben
+</p>
+';
+
+		$cmb->add_field( array(
+			'name' => __( 'Preparing for auditions', $this->prefix ),
+			'desc' => __( $plugin_info, $this->prefix ),
+			'id'   => 'plugin_info',
+			'type' => 'title',
+			// 'attributes' => $callback_attributes
+		) );
+
 		$cmb->add_field( array(
 			'name' => __( 'Auditions stage', $this->prefix ),
 			'desc' => __( 'What stage are auditions?', $this->prefix ),
@@ -102,6 +134,59 @@ class Config {
 			'id'   => 'callback_dates',
 			'type' => 'text_date',
 			'repeatable' => true,
+			// 'attributes' => $callback_attributes
+		) );
+
+		$registration_description = '
+<p>This lets you configure the email new auditionees receive when they register.</p>
+<p>You can use some special <a href="http://www.wpbeginner.com/glossary/shortcodes/">shortcodes</a> to add personal information to the email. They are listed below.</p>
+<p>Since some of them depend on the information above (callback dates, e.g.), save the form once before editing the content below.</p>
+<h4>Available shortcodes:</h4>
+<ul>
+	<li><code>first_name</code></li>
+	<li><code>last_name</code></li>
+	<li><code>email</code></li>
+	<li><code>telephone</code></li>
+	<li><code>residence</code></li>';
+
+	$callback_dates = array();
+	if( get_option( 'acac_config' ) &&
+		array_key_exists( 'callback_dates', get_option( 'acac_config' )) &&
+		get_option( 'acac_config' )['callback_dates'] ) {
+		$callback_dates = get_option( 'acac_config' )['callback_dates'];
+	}
+
+	foreach ( $callback_dates as $key => $date ) {
+		$date = strtotime($date);
+		$registration_description .= '<li><code>conflict-' . date( 'm-d', $date ) . '</code></li>';
+	}
+
+	$registration_description .= '</ul>
+<h4>Testing</h4>
+<p>If you want to test this new email, save the form below and do a test registration.</p>
+<p>This was the most hassle-free way of setting it up. Sorry if it\'s a bit harder -- Ben</p>';
+
+		$cmb->add_field( array(
+			'name' => __( 'Registration email', $this->prefix ),
+			'desc' => __( $registration_description, $this->prefix ),
+			'id'   => 'registration_email_info',
+			'type' => 'title',
+			// 'attributes' => $callback_attributes
+		) );
+
+		$cmb->add_field( array(
+			'name' => __( 'Registration email subject', $this->prefix ),
+			'desc' => __( 'Subject of the email new auditionees receive', $this->prefix ),
+			'id'   => 'registration_subject',
+			'type' => 'text',
+			// 'attributes' => $callback_attributes
+		) );
+
+		$cmb->add_field( array(
+			'name' => __( 'Registration email message', $this->prefix ),
+			'desc' => __( 'Message of the email new auditionees receive.', $this->prefix ),
+			'id'   => 'registration_message',
+			'type' => 'wysiwyg'
 			// 'attributes' => $callback_attributes
 		) );
 	}

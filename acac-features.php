@@ -3,7 +3,7 @@
 Plugin Name: Acaplugin
 Plugin URI: https://github.com/citelao/acaplugin
 Description: Add all content features necessary to run the ACAC site.
-Version: 0.0
+Version: 1.0
 Author: Ben Stolovitz
 Author URI: http://ben.stolovitz.com
 License: Proprietary
@@ -13,7 +13,7 @@ if( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 } else {
 	die( 'In order for Acaplugin to work, you must install its dependencies. '
-		. 'Please run the `make` command in ' . __DIR__ );
+		. 'Please run the `make` command in ' . __DIR__ . "\n");
 }
 
 $prefix = 'acac';
