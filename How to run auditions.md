@@ -60,7 +60,7 @@ You will receive emails throughout the day from people who messed up registratio
 5. In the same menu, set the auditions stage to stage 1---allow registration, but don't let groups view callbacks.
 5. Customize the registration form page as needed (it exists as a standard Wordpress page; the content should include the shortcode `[acac_registration]` to render the registration form).
 6. Test your newly written registration confirmation email and registration process by doing a test registration. The site uses the notoriously unreliable `wp_mail` function to send email, but this can be made very reliable by using something like the `WP Mail SMTP` plugin. It should already be configured on the main website, but otherwise you will have to set it up to send from `acac@su.wustl.edu`, for example.
-7. Share the registration URL with all the groups (`acac.wustl.edu/register`); make sure that they know to force new auditionees to register.
+7. Share the registration URL with all the groups (`acac.wustl.edu/register`); make sure that they know to force new auditionees to register. There is a sample instructional email included in `docs/Instructions for groups.md`. There are some notes to you (`Dev note`s) that you can remove.
 8. Reset passwords for all the groups that forgot them.
 
 ### Step 2. Schedule callbacks
