@@ -10,13 +10,13 @@ Send me one email account for your group so I can make a website account.
 
 # How do I use the site right now?
 
-Send new auditionees to [acac.wustl.edu/register](acac.wustl.edu/register). This is a private link, so don't go around spreading it to everyone.
+Send new auditionees to [acac.wustl.edu/register](https://acac.wustl.edu/register). This is a private link, so don't go around spreading it to everyone.
 
 I will make accounts for each group so they can maintain callbacks.
 
 # How do we choose callbacks?
 
-1. Log in at [acac.wustl.edu/wp-admin](acac.wustl.edu/wp-admin) with the account I made for you group (send me an email address you want!)
+1. Log in at [acac.wustl.edu/wp-admin](https://acac.wustl.edu/wp-admin) with the account I made for you group (send me an email address you want!)
 2. Go to **Groups**. You should see your group.
 3. Click **Edit** for that group.
 4. There should be a section called **Callbacks**.
