@@ -9,16 +9,18 @@ If any part of this guide is unclear or incorrect, please contact Ben Stolovitz 
 
 This guide should give a step-by-step guide to running a cappella auditions *and* provide a brief technical overview of the systems at play.
 
-The ACAC website consists of a standard Wordpress install plus two custom plugins:
+The ACAC website consists of a standard Wordpress install plus two custom add-ons (one plugin and one theme):
 
 1. ACAC Theme
 2. ACAC Features
 
 ### ACAC Theme
 
-The **ACAC Theme** is a basic Wordpress theme; it makes the pages you write look like ACAC pages. 
+The **ACAC Theme** is a basic Wordpress theme; it makes the pages you write look like ACAC pages.
 
-It has custom behavior on the home page: instead of displaying the page content (where you would normally write a page), it supports several arbitrary *sections*. If you try editing the page, you will see below the WYSIWYG editor a form to edit the sections in use. They support HTML, which I use to make the buttons look pretty.
+It has custom behavior on the home page: instead of displaying the page content (where you would normally write a page), it supports several arbitrary *sections*. If you try editing the page, you will see a form to edit the sections in use, below the WYSIWYG editor. They support HTML, which I use to make the buttons look pretty.
+
+The theme should warn you if you've set it up incorrectly (not using a static front page, etc).
 
 Many of the pages are blank expect for some text and a **shortcode** (text surrounded by brackets---like `[acac_prefs]`). These are codes that **ACAC Features** uses to render auditionee-facing forms, like the pref cards and registration pages.
 
