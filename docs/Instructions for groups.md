@@ -1,10 +1,17 @@
+This is the note I sent to all groups before auditions started.
+
+Every group should have a group account setup, but if they don't, you need to set one up for them.
+
+* **If a group has an account**: they do not need the **Action Required** step.
+* **If a group does not have an account**: they need to follow the **Action Required** step (and you have to setup an account for them).
+
+---
+
 Hello everyone!
 
 The ACAC website is green!
 
 # ACTION REQUIRED
-
-(Dev note: this action is only necessary if groups do not have accounts)
 
 Send me one email account for your group so I can make a website account.
 

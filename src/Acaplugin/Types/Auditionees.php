@@ -116,7 +116,7 @@ class Auditionees {
 		}
 		$groups['preferences_submitted'] = array(
 			'name' => 'Preferences Submitted',
-			'desc' => 'Checked if the auditionee has submitted their preferences.',
+			'desc' => 'Checked if the auditionee has submitted their preferences. Uncheck to allow the auditionee to submit preferences again.',
 			'type' => 'checkbox'
 		);
 

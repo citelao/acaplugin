@@ -396,6 +396,7 @@ class BSType {
 		global $pagenow, $wpdb;
 		if ( is_admin() && 
 			 $pagenow == 'edit.php' &&
+			 array_key_exists('post_type', $_GET) &&
 			 $_GET['post_type'] == $this->get_id() &&
 			 array_key_exists('s', $_GET) ) {
 			$join .= "LEFT JOIN {$wpdb->postmeta} ON " . 
@@ -408,6 +409,7 @@ class BSType {
 		global $pagenow, $wpdb;
 		if ( is_admin() && 
 			 $pagenow == 'edit.php' &&
+			 array_key_exists('post_type', $_GET) &&
 			 $_GET['post_type'] == $this->get_id() &&
 			 array_key_exists('s', $_GET) ) {    
 			 $where = preg_replace(
@@ -422,6 +424,7 @@ class BSType {
 		global $pagenow, $wpdb;
 		if ( is_admin() && 
 			 $pagenow == 'edit.php' &&
+			 array_key_exists('post_type', $_GET) &&
 			 $_GET['post_type'] == $this->get_id() &&
 			 array_key_exists('s', $_GET) ) {    
 			 return 'DISTINCT';
