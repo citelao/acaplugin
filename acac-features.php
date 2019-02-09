@@ -3,7 +3,7 @@
 Plugin Name: Acaplugin
 Plugin URI: https://github.com/citelao/acaplugin
 Description: Add all content features necessary to run the ACAC site.
-Version: 1.0
+Version: 1.0.1
 Author: Ben Stolovitz
 Author URI: http://ben.stolovitz.com
 License: Proprietary
