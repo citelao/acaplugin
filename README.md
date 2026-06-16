@@ -20,9 +20,19 @@ Luckily for all of us, they have made it play *very* nicely with composer.
 The makefile in this repository will automatically download `composer.phar`
 for you (locally, of course) and install our dependencies.
 
-1. `make` in this directory.
+1. `make` in this directory to install dependencies into `vendor/`.
 2. Activate this plugin.
 3. Install [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) to make sure emails go through.
+
+## Deploy
+
+To upload to WordPress via the admin UI:
+
+1. `make dist` — builds `acac-features.zip` in this directory.
+2. In WordPress admin, go to **Plugins → Add New Plugin → Upload Plugin**.
+3. Upload the zip and click **Install Now**, then **Activate**.
+
+On subsequent deploys, deactivate and delete the old plugin first, then re-upload.
 
 ## Usage
 
