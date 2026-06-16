@@ -34,6 +34,10 @@ To upload to WordPress via the admin UI:
 
 On subsequent deploys, deactivate and delete the old plugin first, then re-upload.
 
+### Local development
+
+A Podman/Docker Compose setup lives in `contrib/docker-host/`. Run `podman compose up -d` from that directory to start a local WordPress at http://localhost:8080 with the plugin mounted live.
+
 ## Usage
 
 Usage is documented in `How to run auditions.md`.
