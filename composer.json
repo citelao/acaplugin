@@ -20,8 +20,8 @@
     ],
     "require": {
         "php": ">=5.3",
-        "composer/installers": "v1.1.*",
-        "origgami/CMB2-grid": "dev-master",
+        "composer/installers": "^1.1 || ^2.0",
+        "origgami/cmb2-grid": "dev-master",
         "scribu/posts-to-posts": "^1.6.5",
         "scribu/lib-posts-to-posts": "dev-master",
         "scribu/scb-framework": "dev-master",
@@ -31,15 +31,20 @@
     },
     "autoload": {
         "files": [
-            "vendor/seravo/wp-custom-bulk-actions/wp-custom-bulk-actions.php",
+            "vendor/seravo/wp-custom-bulk-actions/custom-bulk-actions.php",
             "vendor/scribu/posts-to-posts/posts-to-posts.php",
             "vendor/webdevstudios/cmb2/init.php",
             "vendor/webdevstudios/cmb2-attached-posts/cmb2-attached-posts-field.php",
-            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php",
+            "vendor/origgami/cmb2-grid/Cmb2GridPlugin.php",
             "src/BSTypes/init.php"
         ],
         "psr-4": {
             "Acaplugin\\": "src/Acaplugin"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
         }
     },
     "extra" : {

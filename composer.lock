@@ -1,42 +1,45 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "dd1d90ebb4bc40d4e5db6aefa411e7d3",
-    "content-hash": "79fc6e357f12cd4027a8e3d7a4a09e9f",
+    "content-hash": "96349cc1af22f4a5ef0a79ad5a545d40",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.1.0",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "a3595c5272a6f247228abb20076ed27321e4aae9"
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/a3595c5272a6f247228abb20076ed27321e4aae9",
-                "reference": "a3595c5272a6f247228abb20076ed27321e4aae9",
+                "url": "https://api.github.com/repos/composer/installers/zipball/d20a64ed3c94748397ff5973488761b22f6d3f19",
+                "reference": "d20a64ed3c94748397ff5973488761b22f6d3f19",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0"
+                "composer-plugin-api": "^1.0 || ^2.0"
             },
             "replace": {
                 "roundcube/plugin-installer": "*",
                 "shama/baton": "*"
             },
             "require-dev": {
-                "composer/composer": "1.0.*@dev",
-                "phpunit/phpunit": "4.1.*"
+                "composer/composer": "1.6.* || ^2.0",
+                "composer/semver": "^1 || ^3",
+                "phpstan/phpstan": "^0.12.55",
+                "phpstan/phpstan-phpunit": "^0.12.16",
+                "symfony/phpunit-bridge": "^4.2 || ^5",
+                "symfony/process": "^2.3"
             },
             "type": "composer-plugin",
             "extra": {
                 "class": "Composer\\Installers\\Plugin",
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-main": "1.x-dev"
                 }
             },
             "autoload": {
@@ -60,67 +63,112 @@
             "keywords": [
                 "Craft",
                 "Dolibarr",
+                "Eliasis",
                 "Hurad",
                 "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
                 "MODX Evo",
+                "MantisBT",
                 "Mautic",
+                "Maya",
                 "OXID",
+                "Plentymarkets",
+                "Porto",
                 "RadPHP",
                 "SMF",
+                "Starbug",
                 "Thelia",
+                "Whmcs",
                 "WolfCMS",
                 "agl",
                 "aimeos",
                 "annotatecms",
+                "attogram",
                 "bitrix",
                 "cakephp",
                 "chef",
+                "cockpit",
                 "codeigniter",
                 "concrete5",
                 "croogo",
                 "dokuwiki",
                 "drupal",
+                "eZ Platform",
                 "elgg",
                 "expressionengine",
                 "fuelphp",
                 "grav",
                 "installer",
+                "itop",
                 "joomla",
+                "known",
                 "kohana",
                 "laravel",
+                "lavalite",
                 "lithium",
                 "magento",
+                "majima",
                 "mako",
                 "mediawiki",
+                "miaoxing",
                 "modulework",
+                "modx",
                 "moodle",
+                "osclass",
+                "pantheon",
                 "phpbb",
                 "piwik",
                 "ppi",
+                "processwire",
                 "puppet",
+                "pxcms",
+                "reindex",
                 "roundcube",
                 "shopware",
                 "silverstripe",
+                "sydes",
+                "sylius",
                 "symfony",
+                "tastyigniter",
                 "typo3",
                 "wordpress",
+                "yawik",
                 "zend",
                 "zikula"
             ],
-            "time": "2016-07-05 06:18:20"
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/v1.12.0"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-09-13T08:19:44+00:00"
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.11.1",
+            "version": "v2.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f"
+                "reference": "e62b7c3849d22ec55f3ec425507bf7968193a6cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/a3f6d55996dd28b58f3a909d474189a3c1aa693f",
-                "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/e62b7c3849d22ec55f3ec425507bf7968193a6cb",
+                "reference": "e62b7c3849d22ec55f3ec425507bf7968193a6cb",
                 "shasum": ""
             },
             "require": {
@@ -153,7 +201,11 @@
                 "mustache",
                 "templating"
             ],
-            "time": "2016-07-31 06:18:27"
+            "support": {
+                "issues": "https://github.com/bobthecow/mustache.php/issues",
+                "source": "https://github.com/bobthecow/mustache.php/tree/v2.14.2"
+            },
+            "time": "2022-08-23T13:07:01+00:00"
         },
         {
             "name": "origgami/cmb2-grid",
@@ -161,23 +213,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/origgami/CMB2-grid.git",
-                "reference": "5f67007a369da954ce9e5f8cabd9a9a5bdb3943c"
+                "reference": "eef4d3f6bd34b70266d774f549ffcdb9c708ba5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/origgami/CMB2-grid/zipball/5f67007a369da954ce9e5f8cabd9a9a5bdb3943c",
-                "reference": "5f67007a369da954ce9e5f8cabd9a9a5bdb3943c",
+                "url": "https://api.github.com/repos/origgami/CMB2-grid/zipball/eef4d3f6bd34b70266d774f549ffcdb9c708ba5e",
+                "reference": "eef4d3f6bd34b70266d774f549ffcdb9c708ba5e",
                 "shasum": ""
             },
             "require": {
-                "composer/installers": "v1.1.0"
+                "composer/installers": ">=v1.1.0"
             },
+            "default-branch": true,
             "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
             "support": {
-                "source": "https://github.com/origgami/CMB2-grid/tree/master",
-                "issues": "https://github.com/origgami/CMB2-grid/issues"
+                "issues": "https://github.com/origgami/CMB2-grid/issues",
+                "source": "https://github.com/origgami/CMB2-grid/tree/master"
             },
-            "time": "2016-08-25 20:21:17"
+            "time": "2023-12-07T18:38:34+00:00"
         },
         {
             "name": "scribu/lib-posts-to-posts",
@@ -196,6 +250,7 @@
             "require": {
                 "scribu/scb-framework": "dev-master"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -208,7 +263,10 @@
             ],
             "description": "A library for many-to-many relationships in WordPress",
             "homepage": "https://github.com/scribu/wp-lib-posts-to-posts",
-            "time": "2016-02-15 12:08:59"
+            "support": {
+                "source": "https://github.com/scribu/wp-lib-posts-to-posts/tree/master"
+            },
+            "time": "2016-02-15T12:08:59+00:00"
         },
         {
             "name": "scribu/posts-to-posts",
@@ -238,7 +296,7 @@
                 "source": "https://github.com/scribu/wp-posts-to-posts/tree/1.6.5",
                 "issues": "https://github.com/scribu/wp-posts-to-posts/issues"
             },
-            "time": "2015-10-13 13:12:40"
+            "time": "2015-10-13T13:12:40+00:00"
         },
         {
             "name": "scribu/scb-framework",
@@ -246,22 +304,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scribu/wp-scb-framework.git",
-                "reference": "95b23ac342fce16bf5eb8d939ac5a361b94b104b"
+                "reference": "d35d5126c6d323711dd14b9d97aaa927eaaba123"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/95b23ac342fce16bf5eb8d939ac5a361b94b104b",
-                "reference": "95b23ac342fce16bf5eb8d939ac5a361b94b104b",
+                "url": "https://api.github.com/repos/scribu/wp-scb-framework/zipball/d35d5126c6d323711dd14b9d97aaa927eaaba123",
+                "reference": "d35d5126c6d323711dd14b9d97aaa927eaaba123",
                 "shasum": ""
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "."
-                ],
                 "files": [
                     "load-composer.php",
                     "Util.php"
+                ],
+                "classmap": [
+                    "."
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -279,20 +338,25 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2015-10-25 20:19:41"
+            "support": {
+                "issues": "https://github.com/scribu/wp-scb-framework/issues",
+                "source": "https://github.com/scribu/wp-scb-framework",
+                "wiki": "https://github.com/scribu/wp-scb-framework/wiki"
+            },
+            "time": "2020-03-15T20:51:58+00:00"
         },
         {
             "name": "seravo/wp-custom-bulk-actions",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seravo/wp-custom-bulk-actions.git",
-                "reference": "9a9aba44924a5b36bc0228febf0b6432b345eef7"
+                "reference": "b31da03919186b1065616743a54995b7e4f29d4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seravo/wp-custom-bulk-actions/zipball/9a9aba44924a5b36bc0228febf0b6432b345eef7",
-                "reference": "9a9aba44924a5b36bc0228febf0b6432b345eef7",
+                "url": "https://api.github.com/repos/Seravo/wp-custom-bulk-actions/zipball/b31da03919186b1065616743a54995b7e4f29d4a",
+                "reference": "b31da03919186b1065616743a54995b7e4f29d4a",
                 "shasum": ""
             },
             "type": "wordpress-plugin",
@@ -315,27 +379,33 @@
                 "posts",
                 "wordpress"
             ],
-            "time": "2015-08-06 08:26:21"
+            "support": {
+                "issues": "https://github.com/Seravo/wp-custom-bulk-actions/issues",
+                "source": "https://github.com/Seravo/wp-custom-bulk-actions/tree/master"
+            },
+            "abandoned": true,
+            "time": "2018-04-01T20:16:31+00:00"
         },
         {
             "name": "webdevstudios/cmb2",
-            "version": "v2.2.2.1",
+            "version": "v2.12.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WebDevStudios/CMB2.git",
-                "reference": "17d60c71f9f6b27f0e1ab2bbbaae2e5da2ffa7b9"
+                "url": "https://github.com/CMB2/CMB2.git",
+                "reference": "9a3686d42539ee3c1113bd09623f4ffbbee94397"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WebDevStudios/CMB2/zipball/17d60c71f9f6b27f0e1ab2bbbaae2e5da2ffa7b9",
-                "reference": "17d60c71f9f6b27f0e1ab2bbbaae2e5da2ffa7b9",
+                "url": "https://api.github.com/repos/CMB2/CMB2/zipball/9a3686d42539ee3c1113bd09623f4ffbbee94397",
+                "reference": "9a3686d42539ee3c1113bd09623f4ffbbee94397",
                 "shasum": ""
             },
             "require": {
-                "php": ">5.2.4"
+                "php": ">7.4"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "^9.6",
+                "yoast/phpunit-polyfills": "^1.1"
             },
             "suggest": {
                 "composer/installers": "~1.0"
@@ -343,9 +413,15 @@
             "type": "wordpress-plugin",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "Justin Sternberg",
+                    "email": "justin@dsgnwrks.pro",
+                    "homepage": "https://dsgnwrks.pro",
+                    "role": "Developer"
+                },
                 {
                     "name": "WebDevStudios",
                     "email": "contact@webdevstudios.com",
@@ -354,26 +430,31 @@
                 }
             ],
             "description": "CMB2 is a metabox, custom fields, and forms library for WordPress that will blow your mind.",
-            "homepage": "https://github.com/WebDevStudios/CMB2",
+            "homepage": "https://github.com/CMB2/CMB2",
             "keywords": [
                 "metabox",
                 "plugin",
                 "wordpress"
             ],
-            "time": "2016-06-28 01:27:39"
+            "support": {
+                "issues": "https://github.com/CMB2/CMB2/issues",
+                "source": "http://wordpress.org/support/plugin/cmb2"
+            },
+            "abandoned": "cmb2/cmb2",
+            "time": "2026-05-31T02:21:57+00:00"
         },
         {
             "name": "webdevstudios/cmb2-attached-posts",
-            "version": "v1.2.4",
+            "version": "v1.2.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WebDevStudios/cmb2-attached-posts.git",
-                "reference": "6e7d78549585ee70ced4c9d75452436c8a40544c"
+                "url": "https://github.com/CMB2/cmb2-attached-posts.git",
+                "reference": "556701d8f032931838c524ddc55c40b177a0e1a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WebDevStudios/cmb2-attached-posts/zipball/6e7d78549585ee70ced4c9d75452436c8a40544c",
-                "reference": "6e7d78549585ee70ced4c9d75452436c8a40544c",
+                "url": "https://api.github.com/repos/CMB2/cmb2-attached-posts/zipball/556701d8f032931838c524ddc55c40b177a0e1a8",
+                "reference": "556701d8f032931838c524ddc55c40b177a0e1a8",
                 "shasum": ""
             },
             "require": {
@@ -405,7 +486,11 @@
                 "relationship",
                 "wordpress"
             ],
-            "time": "2016-08-31 03:02:11"
+            "support": {
+                "issues": "https://github.com/WebDevStudios/cmb2-attached-posts/issues",
+                "source": "https://github.com/WebDevStudios/cmb2-attached-posts/"
+            },
+            "time": "2017-11-09T18:44:20+00:00"
         }
     ],
     "packages-dev": [],
@@ -421,5 +506,6 @@
     "platform": {
         "php": ">=5.3"
     },
-    "platform-dev": []
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
