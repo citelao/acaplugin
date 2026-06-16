@@ -64,11 +64,10 @@ class Registration {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'cmb2_after_init', array( $this, 'submit_form' ) );
 
-		$message_exists = array_key_exists( 'registration_message', get_option( 'acac_config' )) &&
-			get_option( 'acac_config' )['registration_message'];
-		$subject_exists = array_key_exists( 'registration_subject', get_option( 'acac_config' )) &&
-			get_option( 'acac_config' )['registration_subject'];
-		if( ! get_option( 'acac_config' ) || ! $message_exists || ! $subject_exists ) {
+		$config = get_option( 'acac_config' );
+		$message_exists = is_array( $config ) && array_key_exists( 'registration_message', $config ) && $config['registration_message'];
+		$subject_exists = is_array( $config ) && array_key_exists( 'registration_subject', $config ) && $config['registration_subject'];
+		if( ! $config || ! $message_exists || ! $subject_exists ) {
 			if( ! $message_exists ) {
 				add_action( 'admin_notices', array( $this, 'warn_no_registration_email_message' ) );
 			}
@@ -77,8 +76,8 @@ class Registration {
 			}
 			return;
 		}
-		$this->email_message = wpautop( get_option( 'acac_config' )['registration_message'] );
-		$this->email_subject = get_option( 'acac_config' )['registration_subject'];
+		$this->email_message = wpautop( $config['registration_message'] );
+		$this->email_subject = $config['registration_subject'];
 	}
 
 	public function enqueue_scripts() {
@@ -245,7 +244,8 @@ class Registration {
 	}
 
 	public function submit_form() {
-		$stage = get_option( 'acac_config' )['stage'];
+		$config = get_option( 'acac_config' );
+		$stage = is_array( $config ) ? $config['stage'] : null;
 		if( $stage != 'auditions' ) {
 			return;
 		}

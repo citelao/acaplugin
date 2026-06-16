@@ -125,7 +125,8 @@ class Prefs {
 	}
 
 	public function submit_form() {
-		$stage = get_option( 'acac_config' )['stage'];
+		$config = get_option( 'acac_config' );
+		$stage = is_array( $config ) ? $config['stage'] : null;
 		if( $stage != 'callbacks' ) {
 			return;
 		}
