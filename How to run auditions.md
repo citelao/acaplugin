@@ -61,7 +61,7 @@ You will receive emails throughout the day from people who messed up registratio
     2. Set their role to `author`.
     3. Add a new `Group` for this a cappella group (in the `Groups` menu).
     4. Set this `Group`'s author to the newly-created author. This lets this user (and only this user and administrators like you) access this group-management page.
-3. In the `Manage Auditions` menu on the Wordpress admin (`acac.wustl.edu/wp-admin`), configure the callback dates so that new auditionees are prompted to list conflicts for the right days.
+3. In the `Manage Auditions` menu on the Wordpress admin (`acac.wustl.edu/wp-admin`), configure the callback dates so that new auditionees are prompted to list conflicts for the right days. **Note:** the `Auditionees` menu item will not appear in the admin sidebar until at least one callback date is set.
 4. In the same menu, set the registration subject and message that appear in their confirmation email. You can use shortcodes (like `[first_name]`) to include registration information in the response.
 5. In the same menu, set the auditions stage to stage 1---allow registration, but don't let groups view callbacks.
 6. Customize the registration form page as needed (it exists as a standard Wordpress page; the content should include the shortcode `[acac_registration]` to render the registration form).
