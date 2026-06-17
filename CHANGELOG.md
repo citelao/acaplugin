@@ -1,3 +1,9 @@
+# 1.1.0
+- Added: local Docker/Podman dev environment in `contrib/docker-host/`
+- Added: `make dist` target to build a deployable zip
+- Fixed: PHP 8 compatibility — `array_key_exists` crash on fresh install with no config
+- Fixed: updated Composer dependencies to work with modern Composer
+
 # 1.0.1
 - Added: old example emails are in `docs/emails/`
 - Changed: documentation now explains the built-in export feature
